@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SUNUP — Joy Run Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF6EF;
+    --paper:#FFFCF9;
+    --ink:#141118;
+    --ink-60:rgba(20,17,24,.62);
+    --ink-35:rgba(20,17,24,.38);
+    --ink-12:rgba(20,17,24,.13);
+    --violet:#5B3DF5;
+    --lime:#C9F24A;
+    --tangerine:#FF7A3D;
+
+    --gutter:clamp(20px,4vw,56px);
+    --gap:clamp(18px,2vw,40px);
+    --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px;
+    --s6:32px; --s7:48px; --s8:64px; --s9:96px;
+    --ease:cubic-bezier(.16,1,.3,1);
+    --display:"Syne","Syne Fallback",Georgia,sans-serif;
+    --ui:"Manrope","Helvetica Neue",Arial,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:var(--ui);
+    font-size:16px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  ::selection{background:var(--lime);color:var(--ink)}
+  :focus-visible{outline:2px solid var(--violet);outline-offset:3px;border-radius:4px}
+
+  /* ============ TICKER ============ */
+  .ticker{
+    background:var(--violet);
+    color:var(--cream);
+    min-height:46px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:clamp(10px,2vw,22px);
+    padding:7px var(--gutter);
+    font-size:13px;
+    font-weight:500;
+    letter-spacing:.02em;
+    flex-wrap:wrap;
+    text-align:center;
+  }
+  .ticker .dot{width:6px;height:6px;border-radius:50%;background:var(--lime);flex:none;animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.7)}}
+  .ticker .cd{font-variant-numeric:tabular-nums;font-weight:700;letter-spacing:.06em}
+  .ticker .cd b{font-weight:800;color:var(--lime)}
+  .ticker .join{
+    font-weight:700;
+    text-decoration:underline;
+    text-underline-offset:4px;
+    text-decoration-thickness:1.5px;
+    transition:color .25s ease;
+  }
+  .ticker .join:hover{color:var(--lime)}
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;
+    padding:clamp(40px,7vh,84px) var(--gutter) clamp(80px,10vh,124px);
+  }
+  .rail{
+    position:absolute;
+    left:calc(var(--gutter) - 34px);
+    top:50%;
+    transform:translateY(-50%) rotate(180deg);
+    writing-mode:vertical-rl;
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:.34em;
+    text-transform:uppercase;
+    color:var(--ink-35);
+    user-select:none;
+    display:none;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    gap:var(--gap);
+    align-items:stretch;
+  }
+  .hero-main{grid-column:1 / 9;min-width:0;display:flex;flex-direction:column}
+  .hero-side{
+    grid-column:9 / 13;
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    gap:clamp(24px,4vh,48px);
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity .8s .5s var(--ease),transform .8s .5s var(--ease);
+  }
+  .lead{
+    margin:0;
+    font-size:clamp(15px,1.1vw,17.5px);
+    line-height:1.62;
+    color:var(--ink-60);
+    text-align:right;
+    max-width:34ch;
+    align-self:flex-end;
+  }
+  .lead b{color:var(--ink);font-weight:800}
+  .hero-meta{text-align:right}
+
+  .chip{
+    display:inline-flex;
+    align-self:flex-start;
+    align-items:center;
+    gap:8px;
+    padding:7px 15px;
+    border-radius:999px;
+    background:var(--ink);
+    color:var(--cream);
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    opacity:0;
+    transform:translateY(14px);
+    transition:opacity .7s .1s var(--ease),transform .7s .1s var(--ease);
+  }
+  .chip i{width:7px;height:7px;border-radius:50%;background:var(--lime);display:block}
+
+  h1{
+    margin:clamp(20px,3vh,34px) 0 0;
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(44px,7vw,112px);
+    line-height:.92;
+    letter-spacing:-.035em;
+  }
+  .hero-foot{margin-top:auto}
+  .mask{display:block;overflow:hidden;padding-bottom:.14em;margin-bottom:-.1em}
+  .mask > span{display:block;transform:translateY(110%);transition:transform 1s var(--ease)}
+  .hl{position:relative;color:var(--violet);white-space:nowrap}
+  .hl::after{
+    content:"";
+    position:absolute;
+    left:-.02em;right:-.02em;bottom:.04em;
+    height:.08em;
+    background:var(--lime);
+    border-radius:99px;
+    transform:rotate(-.7deg) scaleX(0);
+    transform-origin:left center;
+    transition:transform .7s .95s var(--ease);
+  }
+
+  .rule{height:1px;background:var(--ink-12);margin:clamp(28px,4.5vh,52px) 0 clamp(20px,2.6vh,28px)}
+
+  .stats{display:flex;flex-wrap:wrap;gap:clamp(18px,3vw,44px)}
+  .stat{display:flex;align-items:baseline;gap:9px}
+  .stat .val{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(24px,2.4vw,36px);
+    letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums;
+  }
+  .stat .lbl{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-60)}
+  .stat + .stat{padding-left:clamp(18px,3vw,44px);border-left:1px solid var(--ink-12)}
+
+  /* meta */
+  .meta-label{font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-35)}
+  .meta-date{
+    margin:10px 0 2px;
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(22px,2.2vw,32px);
+    letter-spacing:-.02em;
+    line-height:1.1;
+  }
+  .meta-place{margin:0;font-size:14px;color:var(--ink-60)}
+  .meta-wave{
+    margin:8px 0 0;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:5px 12px;
+    border-radius:999px;
+    background:rgba(91,61,245,.1);
+    color:var(--violet);
+    font-size:12.5px;
+    font-weight:800;
+    letter-spacing:.04em;
+  }
+  .meta-wave i{width:6px;height:6px;border-radius:50%;background:var(--violet);display:block}
+  .cta{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    margin-top:20px;
+    padding:15px 27px;
+    border-radius:999px;
+    background:var(--ink);
+    color:var(--cream);
+    font-size:14.5px;
+    font-weight:800;
+    letter-spacing:-.01em;
+    box-shadow:0 12px 28px -16px rgba(20,17,24,.75);
+    transition:background .3s ease,color .3s ease,transform .35s var(--ease);
+  }
+  .cta svg{transition:transform .4s var(--ease)}
+  .cta:hover{background:var(--violet);color:#fff;transform:translateY(-2px)}
+  .cta:hover svg{transform:translateX(6px)}
+
+  body.ready .hero-side{opacity:1;transform:translateY(0)}
+  body.ready .chip{opacity:1;transform:translateY(0)}
+  body.ready .mask > span{transform:translateY(0)}
+  body.ready .mask:nth-of-type(2) > span{transition-delay:.08s}
+  body.ready .mask:nth-of-type(3) > span{transition-delay:.16s}
+  body.ready .hl::after{transform:rotate(-.7deg) scaleX(1)}
+
+  /* ============ BAND ============ */
+  .band-wrap{position:relative}
+  .band{
+    position:relative;
+    height:clamp(340px,52vh,620px);
+    overflow:hidden;
+    background:#2A1B2E;
+    clip-path:inset(0 100% 0 0);
+    transition:clip-path 1.15s .25s var(--ease);
+  }
+  body.ready .band{clip-path:inset(0 0 0 0)}
+  .band-inner{position:absolute;inset:-4%;transition:transform .9s var(--ease);will-change:transform}
+  .band-inner img{width:100%;height:100%;object-fit:cover;object-position:center 58%;display:block}
+  .band::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg,rgba(20,17,24,.16),transparent 34%,rgba(20,17,24,.22));
+    pointer-events:none;
+  }
+  .place-chip{
+    position:absolute;
+    right:var(--gutter);
+    bottom:22px;
+    z-index:4;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:10px 18px;
+    border-radius:999px;
+    background:rgba(255,252,249,.94);
+    backdrop-filter:blur(6px);
+    color:var(--ink);
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:.02em;
+    opacity:0;
+    transform:translateY(14px);
+    transition:opacity .7s .95s var(--ease),transform .7s .95s var(--ease);
+  }
+  .place-chip i{width:7px;height:7px;border-radius:50%;background:var(--tangerine);display:block}
+  body.ready .place-chip{opacity:1;transform:translateY(0)}
+
+  .badge{
+    position:absolute;
+    left:var(--gutter);
+    top:0;
+    width:clamp(112px,12vw,168px);
+    aspect-ratio:1;
+    transform:translate(-26%,-50%) scale(.5);
+    opacity:0;
+    z-index:6;
+    transition:opacity .6s .8s var(--ease),transform .9s .8s var(--ease);
+  }
+  body.ready .badge{opacity:1;transform:translate(-26%,-50%) scale(1)}
+  .badge .scallop{
+    position:absolute;
+    inset:0;
+    width:100%;height:100%;
+    animation:spin 16s linear infinite;
+    filter:drop-shadow(0 14px 26px rgba(20,17,24,.3));
+  }
+  .badge .label{
+    position:absolute;
+    inset:0;
+    display:grid;
+    place-content:center;
+    text-align:center;
+    font-size:clamp(10px,1vw,13.5px);
+    font-weight:800;
+    line-height:1.2;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink);
+    pointer-events:none;
+  }
+  .badge:hover .scallop{animation-duration:5s}
+  .badge.pop{animation:pop .55s var(--ease)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes pop{
+    0%{transform:translate(-26%,-50%) scale(1)}
+    40%{transform:translate(-26%,-50%) scale(1.15)}
+    100%{transform:translate(-26%,-50%) scale(1)}
+  }
+
+  /* ============ WAVES ============ */
+  .waves{
+    padding:clamp(56px,8vh,104px) var(--gutter) clamp(30px,4vh,54px);
+    opacity:0;
+    transform:translateY(30px);
+    transition:opacity .9s var(--ease),transform .9s var(--ease);
+  }
+  .waves.in{opacity:1;transform:translateY(0)}
+  .waves-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-bottom:clamp(24px,3.4vh,40px);
+  }
+  .waves-head h2{
+    margin:0;
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(30px,3.6vw,54px);
+    letter-spacing:-.03em;
+    line-height:1;
+  }
+  .waves-head span{font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-35)}
+
+  .row{
+    position:relative;
+    display:grid;
+    width:100%;
+    text-align:left;
+    grid-template-columns:auto 1fr auto auto;
+    align-items:center;
+    gap:clamp(14px,3vw,44px);
+    padding:clamp(20px,3vh,32px) clamp(4px,1vw,14px);
+    border-top:1px solid var(--ink-12);
+    overflow:hidden;
+  }
+  .row:last-child{border-bottom:1px solid var(--ink-12)}
+  .row::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:var(--lime);
+    transform:scaleX(0);
+    transform-origin:left center;
+    transition:transform .55s var(--ease),background .3s ease;
+    z-index:0;
+  }
+  .row:hover::before{transform:scaleX(1)}
+  .row > *{position:relative;z-index:1;transition:transform .45s var(--ease),color .3s ease}
+  .row:hover .r-name{transform:translateX(clamp(6px,1vw,16px))}
+  .row:hover .r-arrow{transform:translateX(8px) rotate(-45deg)}
+  .r-code{
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-35);
+    min-width:74px;
+  }
+  .r-name{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(24px,3vw,44px);
+    letter-spacing:-.025em;
+    line-height:1;
+  }
+  .r-meta{
+    font-size:13px;
+    font-weight:700;
+    color:var(--ink-60);
+    white-space:nowrap;
+    display:flex;
+    gap:clamp(10px,2vw,26px);
+  }
+  .r-arrow{
+    width:44px;height:44px;
+    border-radius:50%;
+    border:1.5px solid var(--ink-12);
+    display:grid;place-items:center;
+    flex:none;
+    transition:transform .45s var(--ease),background .3s ease,border-color .3s ease,color .3s ease;
+  }
+  .row:hover .r-arrow{background:var(--ink);border-color:var(--ink);color:var(--cream)}
+
+  .row.is-selected::before{transform:scaleX(1);background:var(--violet)}
+  .row.is-selected .r-code{color:rgba(255,246,239,.72)}
+  .row.is-selected .r-name{color:#fff}
+  .row.is-selected .r-meta{color:rgba(255,246,239,.82)}
+  .row.is-selected .r-arrow{background:var(--lime);border-color:var(--lime);color:var(--ink);transform:translateX(0) rotate(0)}
+
+  /* ============ CITIES MARQUEE ============ */
+  .cities{
+    padding:clamp(30px,5vh,64px) 0 clamp(44px,7vh,88px);
+    overflow:hidden;
+    opacity:0;
+    transform:translateY(26px);
+    transition:opacity .9s var(--ease),transform .9s var(--ease);
+  }
+  .cities.in{opacity:1;transform:translateY(0)}
+  .cities-track{display:flex;width:max-content;animation:slide 34s linear infinite}
+  .cities:hover .cities-track{animation-play-state:paused}
+  .cities-group{
+    display:flex;
+    align-items:center;
+    gap:.42em;
+    padding-right:.42em;
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(42px,7.2vw,104px);
+    line-height:1;
+    letter-spacing:-.035em;
+    white-space:nowrap;
+  }
+  .cities-group em{font-style:normal;color:var(--violet)}
+  .cities-group .sep{color:var(--tangerine);font-size:.7em;transform:translateY(-.1em)}
+  @keyframes slide{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+
+  /* ============ RESPONSIVE ============ */
+  @media (min-width:1180px){ .rail{display:block} .hero{padding-left:calc(var(--gutter) + 30px)} }
+  @media (max-width:900px){
+    .hero-grid{grid-template-columns:1fr}
+    .hero-main,.hero-side{grid-column:1 / -1}
+    .hero-side{gap:clamp(22px,4vh,36px);margin-top:clamp(28px,5vh,44px)}
+    .lead{text-align:left;align-self:flex-start;max-width:46ch}
+    .hero-meta{text-align:left}
+    .stat + .stat{padding-left:clamp(14px,4vw,24px)}
+    .badge{left:auto;right:var(--gutter);transform:translate(8%,-50%) scale(.5)}
+    body.ready .badge{transform:translate(8%,-50%) scale(1)}
+    @keyframes pop{
+      0%{transform:translate(8%,-50%) scale(1)}
+      40%{transform:translate(8%,-50%) scale(1.15)}
+      100%{transform:translate(8%,-50%) scale(1)}
+    }
+  }
+  @media (max-width:640px){
+    .row{grid-template-columns:auto 1fr auto;gap:14px}
+    .r-meta{display:none}
+    .r-code{min-width:0}
+    .stat + .stat{border-left:0;padding-left:0}
+    .stats{gap:18px 26px}
+    .ticker{font-size:12px}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
+  }
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker" role="region" aria-label="Countdown to next start">
+  <span class="dot" aria-hidden="true"></span>
+  <span>Next start in <span class="cd" id="cd">—</span></span>
+  <a class="join" href="#">Save your spot</a>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <span class="rail">EST. 2019 · CITY SERIES</span>
+
+  <div class="hero-grid">
+    <div class="hero-main">
+      <span class="chip"><i></i> Season 03 / Jakarta</span>
+
+      <h1>
+        <span class="mask"><span>Run first.</span></span>
+        <span class="mask"><span>Brag <span class="hl">later.</span></span></span>
+        <span class="mask"><span>Repeat weekly.</span></span>
+      </h1>
+
+      <div class="hero-foot">
+        <div class="rule"></div>
+
+        <div class="stats">
+          <div class="stat"><span class="val">5K</span><span class="lbl">Main route</span></div>
+          <div class="stat"><span class="val" data-count="3">0</span><span class="lbl">Waves</span></div>
+          <div class="stat"><span class="val" data-count="1240">0</span><span class="lbl">Runners</span></div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="hero-side">
+      <p class="lead">A sunrise lap around the city. One route, three waves, one rule: <b>beat the sun up.</b></p>
+
+      <div class="hero-meta">
+        <span class="meta-label">Next start</span>
+        <p class="meta-date">Saturday, June 14</p>
+        <p class="meta-place">Sudirman Field · 06:30 AM</p>
+        <p class="meta-wave" id="metaWave"><i></i><span>Wave A · 06:30 AM</span></p>
+        <a class="cta" id="cta" href="#">
+          <span id="ctaLabel">Claim your bib</span>
+          <svg width="17" height="17" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M3 9h11M9.5 4l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </aside>
+  </div>
+</header>
+
+<!-- IMAGE BAND -->
+<div class="band-wrap">
+  <button class="badge" id="badge" aria-label="Season 03, June 14">
+    <svg class="scallop" viewBox="0 0 200 200" aria-hidden="true">
+      <circle cx="100" cy="100" r="66" fill="#C9F24A"/>
+      <circle cx="100" cy="100" r="80" fill="none" stroke="#C9F24A" stroke-width="28" stroke-linecap="round" stroke-dasharray="0.1 25.03"/>
+    </svg>
+    <span class="label">Season 03<br>Jun 14</span>
+  </button>
+
+  <div class="band" id="band">
+    <div class="band-inner" id="bandInner">
+      <img src="assets/run-hero.jpg" alt="A running group silhouetted against a glowing sunrise sky" width="1920" height="1278">
+    </div>
+
+    <div class="place-chip"><i></i> Sudirman Field · <span id="chipTime">06:30 AM</span></div>
+  </div>
+</div>
+
+<!-- WAVES -->
+<section class="waves" id="waves">
+  <div class="waves-head">
+    <h2>Pick your wave.</h2>
+    <span>Three starts · June 14</span>
+  </div>
+
+  <div role="radiogroup" aria-label="Choose your wave">
+    <button type="button" class="row is-selected" role="radio" aria-checked="true"
+            data-wave="Wave A" data-time="06:30 AM">
+      <span class="r-code">Wave A</span>
+      <span class="r-name">Sunrise Chase</span>
+      <span class="r-meta"><span>06:30</span><span>5 km</span><span>240 spots</span></span>
+      <span class="r-arrow">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M3 9h11M9.5 4l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </button>
+
+    <button type="button" class="row" role="radio" aria-checked="false"
+            data-wave="Wave B" data-time="07:00 AM">
+      <span class="r-code">Wave B</span>
+      <span class="r-name">Easy Breezy</span>
+      <span class="r-meta"><span>07:00</span><span>5 km</span><span>600 spots</span></span>
+      <span class="r-arrow">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M3 9h11M9.5 4l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </button>
+
+    <button type="button" class="row" role="radio" aria-checked="false"
+            data-wave="Wave C" data-time="07:30 AM">
+      <span class="r-code">Wave C</span>
+      <span class="r-name">Family Jog</span>
+      <span class="r-meta"><span>07:30</span><span>2.5 km</span><span>400 spots</span></span>
+      <span class="r-arrow">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M3 9h11M9.5 4l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </button>
+  </div>
+</section>
+
+<!-- CITIES -->
+<section class="cities" id="cities" aria-label="Series cities">
+  <div class="cities-track">
+    <div class="cities-group">
+      <span>Jakarta</span><span class="sep">✦</span>
+      <span>Bandung</span><span class="sep">✦</span>
+      <em>Yogyakarta</em><span class="sep">✦</span>
+      <span>Surabaya</span><span class="sep">✦</span>
+      <span>Denpasar</span><span class="sep">✦</span>
+      <em>Makassar</em><span class="sep">✦</span>
+    </div>
+    <div class="cities-group" aria-hidden="true">
+      <span>Jakarta</span><span class="sep">✦</span>
+      <span>Bandung</span><span class="sep">✦</span>
+      <em>Yogyakarta</em><span class="sep">✦</span>
+      <span>Surabaya</span><span class="sep">✦</span>
+      <span>Denpasar</span><span class="sep">✦</span>
+      <em>Makassar</em><span class="sep">✦</span>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* entrance */
+  function ready(){ document.body.classList.add('ready'); }
+  if (document.readyState === 'complete') requestAnimationFrame(ready);
+  else window.addEventListener('load', function(){ requestAnimationFrame(ready); });
+  setTimeout(ready, 800);
+
+  /* countdown — next Saturday 06:30 */
+  var cd = document.getElementById('cd');
+  function nextStart(){
+    var d = new Date();
+    d.setHours(6,30,0,0);
+    var add = (6 - d.getDay() + 7) % 7;
+    if (add === 0 && Date.now() > d.getTime()) add = 7;
+    d.setDate(d.getDate() + add);
+    return d;
+  }
+  var target = nextStart();
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function tick(){
+    var ms = target.getTime() - Date.now();
+    if (ms <= 0){ target = nextStart(); ms = target.getTime() - Date.now(); }
+    var s = Math.floor(ms / 1000);
+    var d = Math.floor(s / 86400);
+    var h = Math.floor(s % 86400 / 3600);
+    var m = Math.floor(s % 3600 / 60);
+    var sec = s % 60;
+    cd.innerHTML = '<b>' + d + '</b>d <b>' + pad(h) + '</b>:<b>' + pad(m) + '</b>:<b>' + pad(sec) + '</b>';
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  /* count-up stats */
+  function countUp(el){
+    var end = parseInt(el.getAttribute('data-count'), 10);
+    if (reduce){ el.textContent = end.toLocaleString('en-US'); return; }
+    var start = performance.now(), dur = 1500, done = false;
+    function finish(){ if (done) return; done = true; el.textContent = end.toLocaleString('en-US'); }
+    function step(now){
+      if (done) return;
+      var p = Math.min((now - start) / dur, 1);
+      var e = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(end * e).toLocaleString('en-US');
+      if (p < 1) requestAnimationFrame(step); else finish();
+    }
+    requestAnimationFrame(step);
+    setTimeout(finish, dur + 600);
+  }
+
+  /* reveal on scroll */
+  var counters = document.querySelectorAll('[data-count]');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (!en.isIntersecting) return;
+      var t = en.target;
+      if (t.hasAttribute('data-count')) countUp(t);
+      else t.classList.add('in');
+      io.unobserve(t);
+    });
+  }, {threshold:.25});
+  counters.forEach(function(c){ io.observe(c); });
+  ['waves','cities'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) io.observe(el);
+  });
+
+  /* wave picker — drives meta + CTA + band chip */
+  var rows = document.querySelectorAll('.row');
+  var metaWave = document.querySelector('#metaWave span');
+  var chipTime = document.getElementById('chipTime');
+  var ctaLabel = document.getElementById('ctaLabel');
+  rows.forEach(function(row){
+    row.addEventListener('click', function(){
+      rows.forEach(function(r){ r.classList.remove('is-selected'); r.setAttribute('aria-checked','false'); });
+      row.classList.add('is-selected');
+      row.setAttribute('aria-checked','true');
+      var wave = row.getAttribute('data-wave');
+      var time = row.getAttribute('data-time');
+      metaWave.textContent = wave + ' · ' + time;
+      chipTime.textContent = time;
+      ctaLabel.textContent = 'Claim bib — ' + wave;
+    });
+  });
+
+  /* CTA micro-feedback */
+  var cta = document.getElementById('cta');
+  if (cta){
+    cta.addEventListener('click', function(e){
+      e.preventDefault();
+      var prev = ctaLabel.textContent;
+      ctaLabel.textContent = 'Bib saved ✓';
+      setTimeout(function(){ ctaLabel.textContent = prev; }, 1800);
+    });
+  }
+
+  /* band parallax */
+  var band = document.getElementById('band');
+  var inner = document.getElementById('bandInner');
+  if (band && inner && !reduce && window.matchMedia('(hover:hover)').matches){
+    var raf = null, tx = 0, ty = 0;
+    band.addEventListener('pointermove', function(e){
+      var r = band.getBoundingClientRect();
+      tx = ((e.clientX - r.left) / r.width - .5) * -30;
+      ty = ((e.clientY - r.top) / r.height - .5) * -16;
+      if (!raf) raf = requestAnimationFrame(apply);
+    });
+    band.addEventListener('pointerleave', function(){ tx = 0; ty = 0; if (!raf) raf = requestAnimationFrame(apply); });
+    function apply(){
+      raf = null;
+      inner.style.transform = 'scale(1.06) translate3d(' + tx.toFixed(2) + 'px,' + ty.toFixed(2) + 'px,0)';
+    }
+  }
+
+  /* badge pop */
+  var badge = document.getElementById('badge');
+  if (badge){
+    badge.addEventListener('click', function(){
+      badge.classList.remove('pop');
+      void badge.offsetWidth;
+      badge.classList.add('pop');
+    });
+  }
+})();
+</script>
+</body>
+</html>
