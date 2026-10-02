@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section Library — Curated Reusable UI Sections</title>
+    <meta name="description" content="A curated collection of reusable UI sections for websites, prototypes, and creative experiments.">
+    <meta name="theme-color" content="#F7F4EF">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Palette ------------------------------------------------------------
+           Coral and lavender are display/fill accents: on ivory they measure
+           3.14:1 and 3.84:1, so they are never used for small text. The
+           -deep variants clear 4.5:1 and carry any small accent label. */
+        :root {
+            --ivory: #F7F4EF;
+            --ink: #171214;
+            --plum: #24191B;
+            --coral: #E85D4A;
+            --coral-deep: #C43C25;
+            --lav: #8B6FAE;
+            --lav-deep: #7D5F9F;
+            --gray: #6B6160;
+            --white: #FFFFFF;
+            --line: rgba(23, 18, 20, 0.16);
+            --line-soft: rgba(23, 18, 20, 0.08);
+            --shadow: 4px 4px 0 rgba(23, 18, 20, 0.10);
+            --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+            --sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --mono: 'SF Mono', ui-monospace, 'Cascadia Mono', Menlo, monospace;
+            --shell: 1200px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--sans);
+            background: var(--ivory);
+            color: var(--ink);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* One measure for header, hero, strip, library and footer */
+        .shell {
+            width: 100%;
+            max-width: var(--shell);
+            margin: 0 auto;
+            padding: 0 44px;
+        }
+
+        /* Keyboard focus: near-black ring with a coral offset, on every target */
+        a:focus-visible {
+            outline: 2px solid var(--ink);
+            outline-offset: 3px;
+        }
+
+        /* Header ------------------------------------------------------------- */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--ivory);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            height: 74px;
+        }
+
+        .wordmark {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            font-family: var(--serif);
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: -0.01em;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        /* Solid coral square: a printed mark rather than a soft pastel dot */
+        .wordmark-dot {
+            width: 9px;
+            height: 9px;
+            background: var(--coral);
+            flex-shrink: 0;
+        }
+
+        .site-nav {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 9px 14px;
+            border-radius: 999px;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--gray);
+            text-decoration: none;
+            white-space: nowrap;
+            transition: color 0.24s ease;
+        }
+
+        /* Rule wipes in from the left rather than a generic background tint */
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 6px;
+            height: 2px;
+            background: var(--coral);
+            transform: scaleX(0);
+            transform-origin: left center;
+            transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .nav-link:hover {
+            color: var(--ink);
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
+
+        .nav-github {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 16px;
+            border: 1px solid var(--ink);
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--ink);
+            text-decoration: none;
+            white-space: nowrap;
+            transition: background 0.26s ease, color 0.26s ease, transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .nav-github:hover {
+            background: var(--ink);
+            color: var(--ivory);
+            transform: translateY(-1px);
+        }
+
+        /* Hero --------------------------------------------------------------- */
+        /* The pastel wash fields are gone. Colour now appears as hard geometric
+           accents - a coral block, a lavender rule - rather than soft fields,
+           so the page reads as print rather than as a gradient background. */
+        .hero {
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--line);
+            background: var(--ivory);
+        }
+
+        /* 12-column editorial grid: the headline runs wider than the copy,
+           so the type sits deliberately instead of as one centred block. */
+        .hero-inner {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            padding-top: 96px;
+            padding-bottom: 104px;
+        }
+
+        .hero-copy {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            column-gap: 24px;
+            max-width: 1040px;
+        }
+
+        /* Masthead rule, peach through lavender, fading out */
+        .hero-copy::before {
+            content: '';
+            grid-column: 1 / -1;
+            height: 1px;
+            margin-bottom: 46px;
+            background: linear-gradient(90deg, var(--peach) 0%, var(--lavender) 46%, rgba(184, 169, 201, 0) 100%);
+        }
+
+        /* Eyebrow is a plain label - no rule, and kept dark enough to read */
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            grid-column: 1 / -1;
+            margin-bottom: 26px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--plum);
+        }
+
+        /* Slow, shallow breath on the coral dot */
+        @keyframes dot-breathe {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.38); opacity: 0.7; }
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--coral);
+            flex-shrink: 0;
+            animation: dot-breathe 3.8s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            grid-column: 1 / 11;
+            margin-bottom: 6px;
+            font-family: var(--serif);
+            font-size: 76px;
+            font-weight: 400;
+            line-height: 1.02;
+            letter-spacing: -0.015em;
+            color: var(--plum);
+        }
+
+        /* Italic second phrase carries the editorial voice, and warms to full
+           plum as the hero is hovered */
+        .hero h1 em {
+            font-style: italic;
+            color: var(--gray);
+            transition: color 500ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .hero:hover h1 em { color: var(--coral-deep); }
+
+        .hero-sub {
+            grid-column: 1 / 8;
+            margin-bottom: 40px;
+            font-size: 18px;
+            line-height: 1.68;
+            color: var(--gray);
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            grid-column: 1 / 8;
+            gap: 12px;
+            margin-bottom: 0;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 28px;
+            border: 1px solid transparent;
+            border-radius: 999px;
+            font-family: var(--sans);
+            font-size: 14.5px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+        }
+
+        .btn-primary {
+            background: var(--plum);
+            color: var(--ivory);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 34px rgba(36, 25, 27, 0.28);
+        }
+
+        .btn-arrow {
+            line-height: 1;
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .btn-primary:hover .btn-arrow {
+            transform: translateX(5px);
+        }
+
+        /* Editorial footer band: a hairline separates the type from the
+           supporting count, so the air below reads as framed, not empty. */
+        .hero-meta {
+            grid-column: 1 / -1;
+            margin: 68px 0 0;
+            padding-top: 24px;
+            border-top: 1px solid var(--line);
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            color: var(--gray);
+        }
+
+        /* Latest-section strip ------------------------------------------------ */
+        .preview-bar {
+            background: var(--plum);
+            color: var(--ivory);
+        }
+
+        .preview-bar-inner {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding-top: 17px;
+            padding-bottom: 17px;
+        }
+
+        .preview-bar span {
+            font-size: 13.5px;
+            color: rgba(247, 244, 239, 0.74);
+        }
+
+        .preview-bar strong {
+            font-weight: 700;
+            color: var(--ivory);
+        }
+
+        .preview-bar a {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--peach);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .preview-bar a:hover { color: var(--coral); }
+
+        /* Library index (slim, sits below the hero) -------------------------- */
+        .library {
+            padding-top: 84px;
+            padding-bottom: 96px;
+            scroll-margin-top: 96px;
+        }
+
+        .library-head {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 38px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .section-eyebrow {
+            margin-bottom: 13px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gray);
+        }
+
+        .section-title {
+            font-family: var(--serif);
+            font-size: 42px;
+            font-weight: 400;
+            line-height: 1.05;
+            letter-spacing: -0.01em;
+            color: var(--plum);
+        }
+
+        .section-subtitle {
+            max-width: 40ch;
+            font-size: 14.5px;
+            line-height: 1.6;
+            color: var(--gray);
+        }
+
+        /* Grid -------------------------------------------------------------- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 18px 20px 16px;
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: 13px;
+            color: inherit;
+            text-decoration: none;
+            transition: border-color 0.25s ease, box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1), transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* Accent stays a small drawn-in rule, never a card fill */
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 20px;
+            width: 0;
+            height: 2px;
+            background: var(--coral);
+            transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(36, 25, 27, 0.20);
+            box-shadow: 0 16px 34px rgba(36, 25, 27, 0.09);
+        }
+
+        .card:hover::after { width: 36px; }
+
+        .card:focus-visible {
+            box-shadow: 0 0 0 6px rgba(232, 143, 135, 0.35);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            margin-bottom: 12px;
+        }
+
+        .card-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: rgba(243, 200, 190, 0.42);
+            font-size: 15px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-family: var(--serif);
+            font-size: 21px;
+            font-weight: 400;
+            line-height: 1.15;
+            color: var(--plum);
+        }
+
+        .card-desc {
+            flex: 1;
+            font-size: 12.5px;
+            line-height: 1.6;
+            color: var(--gray);
+        }
+
+        .card-foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 13px;
+            border-top: 1px solid var(--line-soft);
+        }
+
+        .card-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            white-space: nowrap;
+            color: var(--gray);
+        }
+
+        .card-arrow {
+            font-size: 15px;
+            line-height: 1;
+            color: var(--gray);
+            transition: color 0.25s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .card:hover .card-arrow {
+            color: var(--coral);
+            transform: translateX(4px);
+        }
+
+        /* Queued categories stay legible - quiet and deliberate, never broken */
+        .card.is-empty {
+            background: linear-gradient(rgba(243, 200, 190, 0.17), rgba(243, 200, 190, 0.17)), var(--white);
+        }
+
+        .card.is-empty::after { background: var(--lavender); }
+
+        .card.is-empty:hover {
+            transform: translateY(-2px);
+            border-color: var(--line);
+            box-shadow: 0 10px 24px rgba(36, 25, 27, 0.05);
+        }
+
+        .card.is-empty .card-icon {
+            background: rgba(184, 169, 201, 0.34);
+        }
+
+        .card.is-empty .card-title { color: var(--gray); }
+
+        .card.is-empty .card-count::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--lavender);
+            flex-shrink: 0;
+        }
+
+        .card.is-empty:hover .card-arrow {
+            color: var(--gray);
+            transform: translateX(3px);
+        }
+
+        /* Responsive ---------------------------------------------------------- */
+        @media (max-width: 1080px) {
+            .hero h1 { font-size: 60px; }
+        }
+
+        /* The asymmetric grid needs real width; below that the 11 column gaps
+           would cost more than the columns, so it collapses to one measure. */
+        @media (max-width: 900px) {
+            .shell { padding: 0 30px; }
+            .hero-copy { max-width: none; column-gap: 20px; }
+            .hero h1 { grid-column: 1 / -1; font-size: 60px; }
+            .hero-sub, .hero-actions { grid-column: 1 / 9; }
+            .section-title { font-size: 36px; }
+            .grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+        }
+
+        @media (max-width: 720px) {
+            .header-inner { height: 66px; }
+            .wordmark { font-size: 22px; }
+            .hero-inner { padding-top: 72px; padding-bottom: 78px; }
+            .hero h1 { font-size: 48px; }
+            .hero-sub { font-size: 16.5px; margin-bottom: 32px; }
+            .hero-sub, .hero-actions { grid-column: 1 / -1; }
+            .hero-meta { margin-top: 52px; padding-top: 20px; }
+            .library { padding-top: 60px; padding-bottom: 70px; }
+            .library-head { margin-bottom: 28px; }
+            .section-title { font-size: 32px; }
+        }
+
+        @media (max-width: 560px) {
+            .shell { padding: 0 22px; }
+            .nav-link, .nav-github { font-size: 12.5px; padding: 8px 12px; }
+            .nav-github { padding: 8px 11px; }
+            .hero h1 { font-size: 41px; }
+            .btn { width: 100%; justify-content: center; }
+            .hero-meta { font-size: 12.5px; }
+            .grid { grid-template-columns: 1fr; }
+            .footer-inner { justify-content: center; text-align: center; }
+        }
+
+        @media (max-width: 430px) {
+            .wordmark { font-size: 20px; }
+            .nav-link { padding: 7px 11px; }
+            /* Icon-only GitHub; the full label stays available to screen readers */
+            .nav-github-label { display: none; }
+            .nav-github { padding: 8px 10px; }
+            .hero h1 { font-size: 36px; }
+            .hero-copy::before { margin-bottom: 34px; }
+        }
+
+        /* Narrowest phones: let the nav drop to its own row rather than overrun */
+        @media (max-width: 360px) {
+            .header-inner {
+                flex-wrap: wrap;
+                height: auto;
+                padding-top: 14px;
+                padding-bottom: 14px;
+            }
+            .site-nav { width: 100%; }
+            .nav-github-label { display: inline; }
+            .hero h1 { font-size: 33px; }
+        }
+
+        /* Honour the OS motion preference: keep the look, drop the movement */
+        @media (prefers-reduced-motion: reduce) {
+            .hero::before,
+            .hero::after,
+            .hero-eyebrow::before,
+            .nav-link::after,
+            .nav-github,
+            .btn,
+            .btn-arrow,
+            .hero h1 em {
+                transition-duration: 0.01ms;
+                animation-duration: 0.01ms;
+                animation-iteration-count: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="shell header-inner">
+            <a href="/" class="wordmark">
+                Section Library
+                <span class="wordmark-dot" aria-hidden="true"></span>
+            </a>
+            <nav class="site-nav" aria-label="Primary">
+                <a href="#categories" class="nav-link">Browse Library</a>
+                <a href="https://github.com/farahardianii/section-library" class="nav-github" target="_blank" rel="noopener" aria-label="Section Library on GitHub">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    <span class="nav-github-label">GitHub</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+
+    <section class="hero">
+        <div class="shell hero-inner">
+            <div class="hero-copy">
+                <p class="hero-eyebrow">UI Section Library</p>
+                <h1>Build better pages, <em>one section at a time.</em></h1>
+                <p class="hero-sub">A curated collection of reusable UI sections for websites, prototypes, and creative experiments.</p>
+                <div class="hero-actions">
+                    <a href="#categories" class="btn btn-primary">Browse Library <span class="btn-arrow" aria-hidden="true">&rarr;</span></a>
+                </div>
+                <p class="hero-meta">14 reusable sections across 8 categories</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="preview-bar">
+        <div class="shell preview-bar-inner">
+            <span>Latest section added: <strong>SUNUP Joy Run</strong> in Hero</span>
+            <a href="./sections/hero/sunup-joy-run/index.html">
+                Preview now &rarr;
+            </a>
+        </div>
+    </div>
+
+    <section class="library shell" id="categories">
+        <div class="library-head">
+            <div>
+                <p class="section-eyebrow">The Library</p>
+                <h2 class="section-title">Browse Library</h2>
+            </div>
+            <p class="section-subtitle">17 categories, 16 sections. Pick a category to see what is inside.</p>
+        </div>
+        <div class="grid">
+            <a href="./sections/features/" class="card">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#11088;</span>
+                    <h3 class="card-title">Features</h3>
+                </span>
+                <p class="card-desc">Feature showcases, value propositions, and service cards with rich interactions.</p>
+                <span class="card-foot">
+                    <span class="card-count">2 sections</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/hero/" class="card">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#127775;</span>
+                    <h3 class="card-title">Hero</h3>
+                </span>
+                <p class="card-desc">Landing page heroes, first impressions, and bold introductory sections.</p>
+                <span class="card-foot">
+                    <span class="card-count">6 sections</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/testimonial/" class="card is-empty">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#128172;</span>
+                    <h3 class="card-title">Testimonial</h3>
+                </span>
+                <p class="card-desc">Customer reviews, social proof, and trust-building quote sections.</p>
+                <span class="card-foot">
+                    <span class="card-count">Coming soon</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/about/" class="card">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#128100;</span>
+                    <h3 class="card-title">About</h3>
+                </span>
+                <p class="card-desc">Company story, mission, vision, and team introduction sections.</p>
+                <span class="card-foot">
+                    <span class="card-count">1 section</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/pricing/" class="card is-empty">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#128176;</span>
+                    <h3 class="card-title">Pricing</h3>
+                </span>
+                <p class="card-desc">Pricing tables, plans comparison, and subscription tiers.</p>
+                <span class="card-foot">
+                    <span class="card-count">Coming soon</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/contact/" class="card is-empty">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#9993;</span>
+                    <h3 class="card-title">Contact</h3>
+                </span>
+                <p class="card-desc">Contact forms, location info, and get-in-touch sections.</p>
+                <span class="card-foot">
+                    <span class="card-count">Coming soon</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/footer/" class="card is-empty">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#9634;</span>
+                    <h3 class="card-title">Footer</h3>
+                </span>
+                <p class="card-desc">Website footers with links, newsletter, and site info.</p>
+                <span class="card-foot">
+                    <span class="card-count">Coming soon</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/navbar/" class="card is-empty">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#9776;</span>
+                    <h3 class="card-title">Navbar</h3>
+                </span>
+                <p class="card-desc">Navigation bars, menus, and header components.</p>
+                <span class="card-foot">
+                    <span class="card-count">Coming soon</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/cta/" class="card">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#128170;</span>
+                    <h3 class="card-title">CTA</h3>
+                </span>
+                <p class="card-desc">Call-to-action banners and conversion-focused sections.</p>
+                <span class="card-foot">
+                    <span class="card-count">1 section</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/faq/" class="card">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#10067;</span>
+                    <h3 class="card-title">FAQ</h3>
+                </span>
+                <p class="card-desc">Frequently asked questions and accordion-style sections.</p>
+                <span class="card-foot">
+                    <span class="card-count">1 section</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/team/" class="card">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#128107;</span>
+                    <h3 class="card-title">Team</h3>
+                </span>
+                <p class="card-desc">Team member showcases and leadership profiles.</p>
+                <span class="card-foot">
+                    <span class="card-count">1 section</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/blog/" class="card">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#128240;</span>
+                    <h3 class="card-title">Blog</h3>
+                </span>
+                <p class="card-desc">Blog post previews, article cards, and content grids.</p>
+                <span class="card-foot">
+                    <span class="card-count">1 section</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/stats/" class="card is-empty">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#128200;</span>
+                    <h3 class="card-title">Stats</h3>
+                </span>
+                <p class="card-desc">Statistics, metrics, counters, and achievements showcase.</p>
+                <span class="card-foot">
+                    <span class="card-count">Coming soon</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/gallery/" class="card is-empty">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#127912;</span>
+                    <h3 class="card-title">Gallery</h3>
+                </span>
+                <p class="card-desc">Image galleries, portfolios, and media showcases.</p>
+                <span class="card-foot">
+                    <span class="card-count">Coming soon</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/newsletter/" class="card is-empty">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#128236;</span>
+                    <h3 class="card-title">Newsletter</h3>
+                </span>
+                <p class="card-desc">Email signup forms and subscription prompts.</p>
+                <span class="card-foot">
+                    <span class="card-count">Coming soon</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/process/" class="card">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#128260;</span>
+                    <h3 class="card-title">Process</h3>
+                </span>
+                <p class="card-desc">Step-by-step workflows, how-it-works, and timeline sections.</p>
+                <span class="card-foot">
+                    <span class="card-count">1 section</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/comparison/" class="card is-empty">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#128260;</span>
+                    <h3 class="card-title">Comparison</h3>
+                </span>
+                <p class="card-desc">Product comparisons, feature tables, and vs-style sections.</p>
+                <span class="card-foot">
+                    <span class="card-count">Coming soon</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/hero/sunup-joy-run/" class="card">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#128286;</span>
+                    <h3 class="card-title">SUNUP Joy Run Club</h3>
+                </span>
+                <p class="card-desc">Hero section for a running club website, featuring hero imagery, signup forms, and event announcements.</p>
+                <span class="card-foot">
+                    <span class="card-count">1 section</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+            <a href="./sections/hero/destinations-slider/" class="card">
+                <span class="card-top">
+                    <span class="card-icon" aria-hidden="true">&#127775;</span>
+                    <h3 class="card-title">Destinations Hero Slider</h3>
+                </span>
+                <p class="card-desc">Hero section showcasing travel destinations with image galleries and interactive elements.</p>
+                <span class="card-foot">
+                    <span class="card-count">1 section</span>
+                    <span class="card-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+            </a>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="shell footer-inner">
+            <span class="footer-brand">Section Library</span>
+            <p>Open source under MIT License &middot; Built with vanilla HTML/CSS/JS</p>
+        </div>
+    </footer>
+</body>
+</html>
