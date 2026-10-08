@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Section Detail — Galerie Meridian</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #fafafa;
+            --text: #16161a;
+            --muted: #55555d;
+            --panel: #ffffff;
+            --border: #e0e0e0;
+            --accent: #9e451f;
+            --accent-dark: #7b351a;
+            --gutter: clamp(24px, 4vw, 64px);
+            --radius: 12px;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; }
+
+        html { font-size: 16px; }
+
+        body {
+            font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* ===== Page Shell ===== */
+        .page-shell { max-width: 1000px; margin: 0 auto; padding: var(--gutter); }
+
+        /* ===== Header / Back Button ===== */
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .back-link {
+            color: var(--muted);
+            font-size: 14px;
+            transition: color 0.2s var(--ease);
+        }
+
+        .back-link:hover { color: var(--text); }
+
+        .back-link svg { width: 16px; height: 16px; fill: current; }
+
+        /* ===== Section Banner ===== */
+        .section-banner {
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .section-banner img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+
+        @media (max-width: 640px) {
+            .section-banner img { height: 250px; }
+        }
+
+        /* ===== Section Info ===== */
+        .section-info {
+            margin-bottom: 32px;
+        }
+
+        .section-info .category-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            background: #f5f5f0;
+            border-radius: 999px;
+            margin-bottom: 16px;
+        }
+
+        .section-info h1 {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: clamp(32px, 4vw, 44px);
+            font-weight: 500;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+            margin-bottom: 12px;
+        }
+
+        .section-info .meta {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .section-info .meta span { margin-right: 24px; }
+
+        /* ===== Description ===== */
+        .section-desc {
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        /* ===== Actions ===== */
+        .actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--radius);
+            transition: all 0.2s var(--ease);
+            cursor: pointer;
+        }
+
+        .action-btn--preview {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .action-btn--preview:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px -2px rgba(22, 22, 26, 0.1);
+        }
+
+        .action-btn--copy {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .action-btn--copy:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+        }
+
+        .action-btn--back {
+            background: transparent;
+            color: var(--muted);
+            padding: 12px 20px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .action-btn--back:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        /* ===== Code Copy Modal ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .modal h3 {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 24px;
+        }
+
+        .modal .code {
+            background: #f5f5f0;
+            border-radius: var(--radius);
+            padding: 24px;
+            font-family: "SF Mono", "Monaco", "Inconsolata", monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-x: auto;
+            color: var(--text);
+        }
+
+        .modal .code pre {
+            margin: 0;
+            padding: 12px;
+            overflow-x: auto;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-close:hover { color: var(--text); }
+
+        /* ===== Reduced motion ===== */
+        @media (prefers-reduced-motion: reduce) {
+            .action-btn:hover { transform: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== Page Shell ===== -->
+    <div class="page-shell">
+
+        <!-- ===== Header / Back ===== -->
+        <header class="page-header">
+            <a href="library.html" class="back-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="current" stroke-width="1.5">
+                    <path d="M15 18l-6-6-6 6"/><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                Back to Library
+            </a>
+        </header>
+
+        <!-- ===== Section Banner ===== -->
+        <figure class="section-banner">
+            <img src="https://picsum.photos/seed/meridian-ink/800/600.jpg" alt="Galerie Meridian section preview" />
+        </figure>
+
+        <!-- ===== Section Info ===== -->
+        <section class="section-info">
+            <span class="category-badge">Hero</span>
+            <h1>Galerie Meridian</h1>
+            <div class="meta">
+                <span>Category: Hero</span>
+                <span>8 sections</span>
+            </div>
+        </section>
+
+        <!-- ===== Description ===== -->
+        <p class="section-desc">
+            Editorial hero gallery with monochromatic palette and asymmetric layout. Features a rotating gallery with radial badge and progress indicator. Designed in a premium-minimal aesthetic with serif display typography and a singular accent color.
+        </p>
+
+        <!-- ===== Actions ===== -->
+        <div class="actions">
+            <button class="action-btn action-btn--preview" onclick="window.open('Hero Section.html', '_blank')">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <path d="M9 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Preview Section
+            </button>
+
+            <button class="action-btn action-btn--copy" onclick="copySectionCode('Hero Section.html')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="9" y="9" width="9" height="9" rx="2" ry="2"/><path d="M5 15l7-7 7 7"/></svg>
+                Copy Code
+            </button>
+
+            <button class="action-btn action-btn--back" onclick="window.history.back()">
+                Back
+            </button>
+        </div>
+
+        <!-- ===== Copy Code Modal ===== -->
+        <div class="modal-overlay" id="copyModal" role="dialog" aria-modal="true" aria-label="Copy section code">
+            <div class="modal" role="document">
+                <button class="modal-close" aria-label="Close" onclick="closeCopyModal()">&times;</button>
+                <h3>Copy Section Code</h3>
+                <div class="code">
+                    <pre><code><!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Galerie Meridian</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600&1,400;1,500&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #f7f7f5;
+            --text: #16161a;
+            --muted: #55555d;
+            --panel: #ececea;
+            --btn-bg: #16161a;
+            --btn-fg: #f7f7f5;
+            --line: rgba(22, 22, 26, 0.14);
+            --skel: #e3e3e0;
+            --shadow: 0 18px 40px -18px rgba(22, 22, 26, 0.35);
+            --tint: rgba(22, 22, 26, 0.035);
+            --accent: #9e451f;
+        }
+    </style>
+</head>
+<body>
+    <!-- section content -->
+</body>
+</html></code></pre>
+                </div>
+                <button class="modal-close" aria-label="Close" onclick="closeCopyModal()">Close</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Copy code functionality
+        function copySectionCode(filename) {
+            // Read the file and copy its content - for demo, copy a representative snippet
+            const code = `<!-- ${filename} section -->
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>${filename}</title>
+</head>
+<body>
+    <!-- Section content -->
+</body>
+</html>`;
+
+            navigator.clipboard.writeText(code).then(() => {
+                showCopyModal();
+            });
+        }
+
+        function showCopyModal() {
+            const modal = document.getElementById('copyModal');
+            modal.classList.add('active');
+            // Focus trap could be added here
+        }
+
+        function closeCopyModal() {
+            const modal = document.getElementById('copyModal');
+            modal.classList.remove('active');
+        }
+
+        // Close modal on overlay click
+        document.getElementById('copyModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('copyModal')) {
+                closeCopyModal();
+            }
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeCopyModal();
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Section Library — Curated reusable HTML/CSS/JS sections</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #fafafa;
+            --text: #16161a;
+            --muted: #55555d;
+            --panel: #ffffff;
+            --border: #e0e0e0;
+            --accent: #9e451f;
+            --accent-dark: #7b351a;
+            --gutter: clamp(24px, 4vw, 64px);
+            --radius: 12px;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; }
+
+        html { font-size: 16px; }
+
+        body {
+            font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* ---------------- Header / Mast ---------------- */
+        .mast {
+            padding: var(--gutter) 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mast-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--gutter);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: clamp(28px, 4vw, 36px);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+        }
+
+        .nav {
+            display: flex;
+            gap: 16px;
+        }
+
+        .nav a {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--muted);
+            transition: color 0.2s var(--ease);
+        }
+
+        .nav a:hover { color: var(--text); }
+
+        /* ---------------- Hero ---------------- */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--gutter) 0;
+        }
+
+        .hero h1 {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: clamp(40px, 6vw, 72px);
+            font-weight: 500;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            color: var(--muted);
+            font-size: 18px;
+            margin-bottom: 24px;
+        }
+
+        /* ---------------- Stats ---------------- */
+        .stats {
+            display: flex;
+            gap: 32px;
+            margin-top: 48px;
+            margin-bottom: 48px;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 48px;
+            font-weight: 500;
+            color: var(--accent);
+            line-height: 1.1;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 4px;
+        }
+
+        /* ---------------- Browse CTA ---------------- */
+        .cta-primary {
+            display: inline-block;
+            margin-top: 48px;
+            padding: 16px 32px;
+            font-family: "Inter", ui-sans-serif, system-serif, sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            color: var(--bg);
+            background: var(--accent);
+            border-radius: 999px;
+            transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -8px var(--accent);
+        }
+
+        .cta-primary:active { transform: translateY(0); }
+
+        /* ---------------- Section Previews ---------------- */
+        .previews {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--gutter) 0;
+        }
+
+        .previews h2 {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: clamp(24px, 3vw, 32px);
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            margin-bottom: 32px;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .preview-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+        }
+
+        .preview-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px -8px rgba(22, 22, 26, 0.15);
+        }
+
+        .preview-card .thumb {
+            height: 180px;
+            background: #f5f5f5;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-card .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .preview-card .info {
+            padding: 20px 24px;
+        }
+
+        .preview-card .category {
+            font-size: 11px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .preview-card .name {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .preview-card .desc {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* ---------------- Reduced motion ---------------- */
+        @media (prefers-reduced-motion: reduce) {
+            .preview-card:hover { transform: none; box-shadow: none; }
+            .cta-primary:hover { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================ MAST ============================ -->
+    <header class="mast">
+        <div class="mast-inner">
+            <h1 class="logo">Section Library</h1>
+            <nav class="nav">
+                <a href="#library">Browse Library</a>
+                <a href="#">Docs</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ============================ HERO ============================ -->
+    <main class="hero">
+        <div class="max-width-inner">
+            <h1>A curated library of reusable<br />HTML/CSS/JS sections</h1>
+            <p>Build faster with pre-designed sections you can preview, copy, and use in your projects.</p>
+
+            <a href="#library" class="cta-primary">Browse Library</a>
+        </div>
+    </main>
+
+    <!-- ============================ STATS ============================ -->
+    <section class="stats">
+        <div class="stat">
+            <div class="stat-value">17</div>
+            <div class="stat-label">Categories</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">80+</div>
+            <div class="stat-label">Sections</div>
+        </div>
+    </section>
+
+    <!-- ============================ PREVIEWS ============================ -->
+    <section class="previews" id="library">
+        <h2>Featured Sections</h2>
+        <div class="preview-grid">
+            <!-- Hero Section -->
+            <article class="preview-card">
+                <div class="thumb" style="background: #f0f0f0;">
+                    <img src="https://picsum.photos/seed/meridian-ink/400/600.jpg" alt="Galerie Meridian hero section" />
+                </div>
+                <div class="info">
+                    <span class="category">Hero</span>
+                    <h3 class="name">Galerie Meridian</h3>
+                    <p class="desc">Editorial hero gallery with monochromatic palette and asymmetric layout. Rotating gallery with radial badge and progress indicator.</p>
+                </div>
+            </article>
+
+            <!-- CTA Section -->
+            <article class="preview-card">
+                <div class="thumb" style="background: #f5ead0;">
+                    <img src="https://picsum.photos/seed/cta/400/600.jpg" alt="CTA section" />
+                </div>
+                <div class="info">
+                    <span class="category">CTA</span>
+                    <h3 class="name">CTA Section</h3>
+                    <p class="desc">Indonesian food-themed hiring section with radial tile layout and breathing room from tiles.</p>
+                </div>
+            </article>
+
+            <!-- Feature Section -->
+            <article class="preview-card">
+                <div class="thumb" style="background: #f0f0f0;">
+                    <img src="https://picsum.photos/seed/feature1/400/600.jpg" alt="Feature section" />
+                </div>
+                <div class="info">
+                    <span class="category">Features</span>
+                    <h3 class="name">Crafted with Care</h3>
+                    <p class="desc">Modern team workflow section with animated capsules, connector lines, and particle burst effects on interaction.</p>
+                </div>
+            </article>
+
+            <!-- Team Section -->
+            <article class="preview-card">
+                <div class="thumb" style="background: #f5f5f5;">
+                    <img src="https://picsum.photos/seed/team/400/600.jpg" alt="Team section" />
+                </div>
+                <div class="info">
+                    <span class="category">Team</span>
+                    <h3 class="name">Team Section</h3>
+                    <p class="desc">Profile grid with department filtering, radial card layout, and sticky sidebar navigation.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- ============================ FOOTER ============================ -->
+    <footer class="mast" style="border-top: 1px solid var(--border); padding: var(--gutter) 0;">
+        <div class="mast-inner">
+            <p style="color: var(--muted); font-size: 14px;">•••</p>
+            <div class="nav" style="justify-content: center; gap: 32px;">
+                <a style="color: var(--muted);" href="#">Privacy</a>
+                <a style="color: var(--muted);" href="#">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Minimal entrance animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const heroH1 = document.querySelector('.hero h1');
+            if (heroH1) {
+                heroH1.style.opacity = '0';
+                heroH1.style.transform = 'translateY(16px)';
+                setTimeout(() => {
+                    heroH1.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    heroH1.style.opacity = '1';
+                    heroH1.style.transform = 'translateY(0)';
+                }, 100);
+            }
+        });
+    </script>
+
+</body>
+</html>
