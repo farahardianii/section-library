@@ -17,7 +17,7 @@
 
   const categories = [
     { key: "all", name: "All Sections", icon: "grid" },
-    { key: "hero", name: "Hero", icon: "sparkles", count: 7 },
+    { key: "hero", name: "Hero", icon: "sparkles", count: 6 },
     { key: "features", name: "Features", icon: "layers", count: 2 },
     { key: "about", name: "About", icon: "compass", count: 1 },
     { key: "cta", name: "CTA", icon: "zap", count: 1 },
@@ -93,17 +93,6 @@
       file: "Hero Section/Hero Section 4.html",
       link: "Hero Section/Hero Section 4.html",
       tags: ["Fashion", "E-commerce", "Editorial", "Bold"]
-    },
-    {
-      id: "minimalist-hero",
-      key: "hero",
-      name: "Minimalist Modern Hero",
-      description: "Clean startup hero with refined typography, dual call-to-actions, and trust partner logos.",
-      category: "hero",
-      preview: "https://picsum.photos/seed/minimal/640/400.jpg",
-      file: "Hero Section/Minimalist Modern Hero.html",
-      link: "Hero Section/Minimalist Modern Hero.html",
-      tags: ["Minimalist", "Modern", "Clean", "Startup"]
     },
     {
       id: "axiom-neo-minimal",
