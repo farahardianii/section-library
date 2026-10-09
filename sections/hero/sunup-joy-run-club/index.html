@@ -234,7 +234,8 @@
   .band-wrap{position:relative}
   .band{
     position:relative;
-    height:clamp(340px,52vh,620px);
+    aspect-ratio:16/5;
+    min-height:clamp(300px,46vh,600px);
     overflow:hidden;
     background:#2A1B2E;
     clip-path:inset(0 100% 0 0);
@@ -242,7 +243,8 @@
   }
   body.ready .band{clip-path:inset(0 0 0 0)}
   .band-inner{position:absolute;inset:-4%;transition:transform .9s var(--ease);will-change:transform}
-  .band-inner img{width:100%;height:100%;object-fit:cover;object-position:center 58%;display:block}
+  .band-inner img,
+  .band-inner video{width:100%;height:100%;object-fit:cover;object-position:center 58%;display:block}
   .band::after{
     content:"";
     position:absolute;
@@ -530,7 +532,11 @@
 
   <div class="band" id="band">
     <div class="band-inner" id="bandInner">
-      <img src="assets/run-hero.jpg" alt="A running group silhouetted against a glowing sunrise sky" width="1920" height="1278">
+      <video
+        src="assets/Video%20Runn.mp4"
+        poster="assets/run-hero.jpg"
+        aria-label="A running group silhouetted against a glowing sunrise sky"
+        autoplay loop muted playsinline preload="metadata"></video>
     </div>
 
     <div class="place-chip"><i></i> Sudirman Field · <span id="chipTime">06:30 AM</span></div>
@@ -608,6 +614,18 @@
   if (document.readyState === 'complete') requestAnimationFrame(ready);
   else window.addEventListener('load', function(){ requestAnimationFrame(ready); });
   setTimeout(ready, 800);
+
+  /* hero video — ensure autoplay + respect reduced motion */
+  var video = document.querySelector('.band-inner video');
+  if (video){
+    if (reduce){
+      video.pause();
+      video.currentTime = 0;
+    } else {
+      var p = video.play();
+      if (p && p.catch) p.catch(function(){});
+    }
+  }
 
   /* countdown — next Saturday 06:30 */
   var cd = document.getElementById('cd');
