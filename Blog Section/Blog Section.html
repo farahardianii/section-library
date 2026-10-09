@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latest writing — Quiet Hours Journal</title>
+<meta name="description" content="Essays, measurements and post-mortems on attention, tools and the habits behind deep work. A new story every other Thursday.">
+<meta name="theme-color" content="#FAF7F1">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Latest writing — Quiet Hours Journal">
+<meta property="og:description" content="Essays, measurements and post-mortems on attention, tools and the habits behind deep work.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&h=630&fit=crop&crop=entropy&q=80&fm=jpg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2316130F'/><circle cx='16' cy='16' r='8' fill='none' stroke='%23C4501B' stroke-width='3' stroke-linecap='round' stroke-dasharray='34 50' transform='rotate(-90 16 16)'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Outfit:wght@300..700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF7F1;
+    --surface:#FFFDF9;
+    --ink:#16130F;
+    --muted:#6C6459;
+    --faint:#9B9285;
+    --line:#EBE4D8;
+    --line-strong:#DCD3C3;
+
+    --accent:#C4501B;
+    --accent-deep:#9C3F14;
+    --accent-tint:#E7B79E;
+    --sand:#EFE8DB;
+
+    /* 8px spacing scale */
+    --sp-1:4px;  --sp-2:8px;  --sp-3:12px; --sp-4:16px;
+    --sp-5:20px; --sp-6:24px; --sp-7:32px; --sp-8:40px;
+    --sp-9:48px; --sp-10:56px; --sp-11:64px; --sp-12:80px;
+    --sp-13:96px;
+
+    --r-lg:18px; --r-md:12px; --r-sm:5px;
+
+    --z-track:40; --z-skip:60;
+
+    --font-d:'Fraunces','Iowan Old Style',Georgia,serif;
+    --font-b:'Outfit','Avenir Next',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;scroll-behavior:smooth}
+  body{
+    font-family:var(--font-b);
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 700px at 6% -14%, #FFFDF9 0%, rgba(255,253,249,0) 62%),
+      radial-gradient(1000px 760px at 106% 6%, #F4EDE1 0%, rgba(244,237,225,0) 58%),
+      var(--bg);
+    line-height:1.6;
+  }
+  a{color:inherit}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+  .is-hidden{display:none!important}
+
+  .skip{
+    position:absolute;left:14px;top:-60px;z-index:var(--z-skip);
+    background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:var(--r-md);
+    font-size:.875rem;font-weight:600;text-decoration:none;transition:top .2s ease;
+  }
+  .skip:focus{top:14px}
+
+  .track{position:fixed;top:0;left:0;right:0;height:2px;background:rgba(22,19,15,.07);z-index:var(--z-track)}
+  .track i{display:block;height:100%;background:var(--accent);transform:scaleX(0);transform-origin:0 50%;transition:transform .1s linear}
+
+  /* ---------------- section shell ---------------- */
+  .journal{max-width:1200px;margin:0 auto;padding:var(--sp-11) var(--sp-7) var(--sp-13)}
+
+  /* section header */
+  .shead{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    gap:var(--sp-9);padding-bottom:var(--sp-7);
+  }
+  .eyebrow{
+    display:inline-flex;align-items:center;
+    font-size:.8125rem;font-weight:500;letter-spacing:.08em;
+    text-transform:lowercase;color:var(--faint);
+  }
+  h1{
+    margin-top:var(--sp-4);
+    font-family:var(--font-d);font-optical-sizing:auto;
+    font-size:clamp(2.1rem,4vw,3rem);
+    font-weight:600;letter-spacing:-.042em;line-height:1.03;
+    text-wrap:balance;
+  }
+  h1 .dot{color:var(--accent)}
+  .sintro{
+    margin-top:var(--sp-4);font-size:1.0625rem;line-height:1.65;
+    color:var(--muted);letter-spacing:-.01em;max-width:44ch;text-wrap:pretty;
+  }
+  .tlink{
+    display:inline-flex;align-items:center;gap:var(--sp-2);
+    background:none;border:0;padding:0;cursor:pointer;
+    font-family:inherit;font-size:.9375rem;font-weight:600;letter-spacing:-.01em;
+    color:var(--ink);text-decoration:none;white-space:nowrap;
+    border-bottom:1.5px solid var(--line-strong);
+    transition:color .22s ease,border-color .22s ease;
+  }
+  .tlink:hover{color:var(--accent);border-color:var(--accent)}
+  .tlink:active{transform:translateY(1px)}
+  .arw{display:inline-block;transition:transform .3s cubic-bezier(.22,1,.36,1)}
+  .tlink:hover .arw,.btn:hover .arw,.more:hover .arw{transform:translateX(4px)}
+
+  .btn{
+    display:inline-flex;align-items:center;gap:var(--sp-2);
+    padding:var(--sp-3) var(--sp-5);border:1px solid var(--line-strong);
+    border-radius:var(--r-md);background:var(--surface);color:var(--ink);
+    font-family:inherit;font-size:.9375rem;font-weight:600;letter-spacing:-.01em;
+    cursor:pointer;transition:background .22s ease,border-color .22s ease,color .22s ease,transform .16s ease;
+  }
+  .btn:hover{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+  .btn:active{transform:scale(.98);background:var(--accent-deep);border-color:var(--accent-deep);color:#FFF8F3}
+  .btn[disabled]{opacity:.5;cursor:default}
+  .btn[disabled]:hover{background:var(--surface);border-color:var(--line-strong);color:var(--ink)}
+
+  /* ---------------- tabs ---------------- */
+  .tabs{
+    display:flex;gap:4px;border-bottom:1px solid var(--line);
+    overflow-x:auto;scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{
+    position:relative;flex:0 0 auto;
+    background:none;border:0;padding:14px 14px;cursor:pointer;
+    font-family:inherit;font-size:.9375rem;font-weight:500;letter-spacing:-.01em;
+    color:var(--muted);white-space:nowrap;
+    transition:color .2s ease;
+  }
+  .tab:first-child{padding-left:0}
+  .tab:hover{color:var(--ink)}
+  .tab.is-active{color:var(--ink);font-weight:600}
+  .tab.is-active::after{
+    content:"";position:absolute;left:14px;right:14px;bottom:-1px;
+    height:2px;background:var(--accent);border-radius:2px;
+  }
+  .tab:first-child.is-active::after{left:0}
+  .tab .n{
+    margin-left:7px;font-size:.8125rem;font-weight:500;color:var(--faint);
+    font-variant-numeric:tabular-nums;
+  }
+
+  /* ---------------- featured ---------------- */
+  .feature{
+    display:grid;grid-template-columns:1.1fr .9fr;
+    gap:var(--sp-9);align-items:center;
+    margin-top:var(--sp-10);
+  }
+  .f-link{text-decoration:none;color:inherit;display:block}
+  .feature .media{
+    position:relative;aspect-ratio:4/3;overflow:hidden;
+    border-radius:var(--r-lg);background:var(--sand);
+  }
+  .feature .media img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .9s cubic-bezier(.22,1,.36,1)}
+  .f-link:hover .media img{transform:scale(1.035)}
+  .flag{
+    position:absolute;top:16px;left:16px;z-index:2;
+    font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:lowercase;
+    color:#FFF6EF;background:var(--accent);padding:6px 11px;border-radius:var(--r-sm);
+  }
+
+  .feature h2{
+    font-family:var(--font-d);font-optical-sizing:auto;
+    font-size:clamp(1.5rem,2.3vw,1.9375rem);font-weight:600;
+    line-height:1.16;letter-spacing:-.035em;text-wrap:balance;
+    transition:color .25s ease;
+  }
+  .f-link:hover h2{color:var(--accent)}
+  .feature .excerpt{
+    margin-top:var(--sp-4);font-size:1rem;line-height:1.7;
+    color:var(--muted);letter-spacing:-.005em;text-wrap:pretty;
+  }
+  .feature .foot{
+    margin-top:var(--sp-6);display:flex;align-items:center;gap:var(--sp-5);flex-wrap:wrap;
+  }
+  .more{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:.9375rem;font-weight:600;color:var(--ink);
+    text-decoration:none;transition:color .25s ease;
+  }
+  .more:hover{color:var(--accent)}
+
+  /* shared meta line */
+  .meta{display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap}
+  .cat{
+    font-size:.8125rem;font-weight:600;letter-spacing:.02em;
+    text-transform:lowercase;color:var(--accent);
+  }
+  .dotsep{width:3px;height:3px;border-radius:50%;background:var(--line-strong);flex:0 0 auto}
+  .date,.rt{font-size:.8125rem;color:var(--faint);letter-spacing:-.005em;font-variant-numeric:tabular-nums}
+  .feature .meta{margin-bottom:var(--sp-4)}
+  .feature .cat{font-size:.875rem}
+  .feature .date,.feature .rt{font-size:.875rem}
+
+  /* ---------------- divider label ---------------- */
+  .rule{
+    display:flex;align-items:center;gap:var(--sp-5);
+    margin:var(--sp-10) 0 var(--sp-6);
+  }
+  .rule span{
+    font-size:.8125rem;font-weight:500;letter-spacing:.1em;
+    text-transform:lowercase;color:var(--faint);white-space:nowrap;
+  }
+  .rule::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  /* ---------------- card grid ---------------- */
+  .cards{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+    column-gap:36px;row-gap:56px;
+  }
+  .card{display:flex;flex-direction:column;text-decoration:none;color:inherit;height:100%}
+  .thumb{
+    position:relative;aspect-ratio:16/10;overflow:hidden;
+    border-radius:var(--r-md);background:var(--sand);
+    border:1px solid var(--line);
+    transition:border-color .3s ease;
+  }
+  .thumb img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.22,1,.36,1)}
+  .card:hover .thumb{border-color:var(--accent-tint)}
+  .card:hover .thumb img{transform:scale(1.05)}
+  .card .meta{margin-top:var(--sp-5)}
+  .card h3{
+    margin-top:var(--sp-3);font-family:var(--font-d);font-weight:600;
+    font-size:1.1875rem;line-height:1.3;letter-spacing:-.028em;
+    text-wrap:balance;transition:color .25s ease;
+  }
+  .card:hover h3{color:var(--accent)}
+  .card .excerpt{
+    margin-top:var(--sp-3);font-size:.9688rem;line-height:1.6;
+    color:var(--muted);letter-spacing:-.005em;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .card .foot{
+    margin-top:auto;padding-top:var(--sp-5);
+    display:flex;align-items:center;gap:var(--sp-3);
+  }
+
+  /* skeletons */
+  .sk{
+    border-radius:var(--r-sm);
+    background:linear-gradient(90deg,#EDE6D9 25%,#F7F1E6 37%,#EDE6D9 63%);
+    background-size:400% 100%;animation:shimmer 1.35s ease-in-out infinite;
+  }
+  @keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+  .sk-card{display:block}
+  .sk-card .sk-thumb{aspect-ratio:16/10;border-radius:var(--r-md)}
+  .sk-card .sk-line{height:12px;margin-top:16px}
+  .sk-card .sk-line.w40{width:40%}
+  .sk-card .sk-line.w85{width:85%;height:20px}
+  .sk-card .sk-line.w60{width:60%}
+
+  /* empty */
+  .empty{
+    grid-column:1/-1;padding:72px 24px;text-align:center;
+    border:1px dashed var(--line-strong);border-radius:var(--r-lg);
+    background:rgba(255,253,249,.55);
+  }
+  .empty .ring{
+    width:44px;height:44px;margin:0 auto 20px;border-radius:50%;
+    border:3px solid var(--accent);border-right-color:var(--line-strong);
+    transform:rotate(-45deg);
+  }
+  .empty h3{font-family:var(--font-d);font-size:1.375rem;font-weight:600;letter-spacing:-.02em}
+  .empty p{margin-top:8px;font-size:.9375rem;color:var(--muted)}
+  .empty .tlink{margin-top:22px}
+
+  /* ---------------- bottom ---------------- */
+  .bottom{
+    margin-top:var(--sp-8);padding-top:var(--sp-5);
+    border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;
+    gap:var(--sp-4);flex-wrap:wrap;
+  }
+  .bottom .note{font-size:.875rem;color:var(--faint);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+
+  /* ---------------- footer ---------------- */
+  .sitefoot{border-top:1px solid var(--line);background:rgba(255,253,249,.5)}
+  .foot-in{
+    max-width:1200px;margin:0 auto;padding:var(--sp-7);
+    display:flex;justify-content:space-between;align-items:center;
+    gap:var(--sp-5);flex-wrap:wrap;font-size:.875rem;color:var(--faint);letter-spacing:-.01em;
+  }
+  .foot-in nav{display:flex;gap:var(--sp-6)}
+  .foot-in a{color:var(--muted);text-decoration:none;transition:color .2s ease}
+  .foot-in a:hover{color:var(--accent)}
+
+  /* ---------------- reveal ---------------- */
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .shead{animation:rise .65s cubic-bezier(.22,1,.36,1) both}
+  .tabs{animation:rise .65s .06s cubic-bezier(.22,1,.36,1) both}
+  .feature{animation:rise .7s .12s cubic-bezier(.22,1,.36,1) both}
+  .rule{animation:rise .7s .16s cubic-bezier(.22,1,.36,1) both}
+  .card:nth-child(1){animation:rise .65s .2s cubic-bezier(.22,1,.36,1) both}
+  .card:nth-child(2){animation:rise .65s .26s cubic-bezier(.22,1,.36,1) both}
+  .card:nth-child(3){animation:rise .65s .32s cubic-bezier(.22,1,.36,1) both}
+  .card--late{animation:rise .6s cubic-bezier(.22,1,.36,1) both}
+  .card--late:nth-child(5){animation-delay:.07s}
+  .card--late:nth-child(6){animation-delay:.14s}
+  .card--late:nth-child(7){animation-delay:.21s}
+  .feature.is-hidden + .rule{margin-top:0}
+
+  /* ---------------- responsive ---------------- */
+  @media (max-width:1040px){
+    .feature{grid-template-columns:1fr;gap:var(--sp-5);margin-top:var(--sp-8)}
+    .feature .media{aspect-ratio:16/9}
+    .feature .body{max-width:44rem}
+    .cards{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px;row-gap:48px}
+  }
+  @media (max-width:860px){
+    .journal{padding:56px 24px 88px}
+    .shead{flex-direction:column;align-items:flex-start;gap:var(--sp-5);padding-bottom:var(--sp-5)}
+    .rule{margin-top:var(--sp-8)}
+  }
+  @media (max-width:600px){
+    .cards{grid-template-columns:1fr;row-gap:44px}
+    .feature .media{aspect-ratio:4/3}
+    .foot-in{flex-direction:column;align-items:flex-start;gap:14px}
+    .bottom{flex-direction:column;align-items:flex-start;gap:18px}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="track"><i id="bar"></i></div>
+
+<main id="main">
+<section class="journal" aria-labelledby="page-title">
+
+  <!-- ===== section header ===== -->
+  <header class="shead">
+    <div>
+      <span class="eyebrow">quiet hours &middot; the notebook</span>
+      <h1 id="page-title">Latest writing<span class="dot">.</span></h1>
+      <p class="sintro">Essays, measurements and post-mortems on attention, tools and the habits behind deep work. A new story every other Thursday.</p>
+    </div>
+    <a class="tlink" href="/journal">View all posts <span class="arw" aria-hidden="true">&#8594;</span></a>
+  </header>
+
+  <!-- ===== category tabs ===== -->
+  <div class="tabs" id="tabs" role="tablist" aria-label="Filter stories by category">
+    <button class="tab is-active" type="button" data-filter="all" role="tab" aria-selected="true">All <span class="n">4</span></button>
+    <button class="tab" type="button" data-filter="research" role="tab" aria-selected="false">Research <span class="n">1</span></button>
+    <button class="tab" type="button" data-filter="attention" role="tab" aria-selected="false">Attention <span class="n">1</span></button>
+    <button class="tab" type="button" data-filter="habits" role="tab" aria-selected="false">Habits <span class="n">1</span></button>
+    <button class="tab" type="button" data-filter="design" role="tab" aria-selected="false">Design <span class="n">1</span></button>
+  </div>
+
+  <!-- ===== featured ===== -->
+  <article class="feature" data-cat="research">
+    <a class="f-link" href="/journal/interruption-log">
+      <div class="media">
+        <span class="flag">featured</span>
+        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&h=900&fit=crop&crop=entropy&q=80&fm=jpg" width="1200" height="900" fetchpriority="high" decoding="async" alt="Two colleagues reading printed charts and taking notes beside their laptops">
+      </div>
+    </a>
+
+    <div class="body">
+      <a class="f-link" href="/journal/interruption-log">
+        <div class="meta">
+          <span class="cat">research</span>
+          <span class="dotsep" aria-hidden="true"></span>
+          <time class="date" datetime="2026-09-14">Sep 14, 2026</time>
+          <span class="dotsep" aria-hidden="true"></span>
+          <span class="rt">9 min read</span>
+        </div>
+        <h2>What we found when we logged every interruption for 30 days</h2>
+        <p class="excerpt">We instrumented four phones and two laptops, then read the logs as a team. Interruption count turned out to be a poor predictor of a bad day. Interruption timing was not.</p>
+        <div class="foot">
+          <span class="more">Read the story <span class="arw" aria-hidden="true">&#8594;</span></span>
+        </div>
+      </a>
+    </div>
+  </article>
+
+  <!-- ===== divider ===== -->
+  <div class="rule"><span>earlier stories</span></div>
+
+  <!-- ===== grid ===== -->
+  <div class="cards" id="cards">
+
+    <a class="card" href="/journal/noisy-household" data-cat="design">
+      <div class="thumb">
+        <img src="https://images.unsplash.com/photo-1522199755839-a2bacb67c546?w=800&h=500&fit=crop&crop=entropy&q=80&fm=jpg" width="800" height="500" loading="lazy" decoding="async" alt="A lived-in home desk with a laptop, a copper mug, a plant and string lights">
+      </div>
+      <div class="meta">
+        <span class="cat">design</span>
+        <span class="dotsep" aria-hidden="true"></span>
+        <span class="rt">6 min read</span>
+      </div>
+      <h3>A desk setup that survives a noisy household</h3>
+      <p class="excerpt">Two roommates, one street-facing window, and a keyboard that announces itself. Here is what actually moved the needle.</p>
+      <div class="foot">
+        <time class="date" datetime="2026-09-08">Sep 8, 2026</time>
+      </div>
+    </a>
+
+    <a class="card" href="/journal/boredom-vs-rest" data-cat="attention">
+      <div class="thumb">
+        <img src="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=800&h=500&fit=crop&crop=entropy&q=80&fm=jpg" width="800" height="500" loading="lazy" decoding="async" alt="A cat asleep under a white duvet, the picture of proper rest">
+      </div>
+      <div class="meta">
+        <span class="cat">attention</span>
+        <span class="dotsep" aria-hidden="true"></span>
+        <span class="rt">5 min read</span>
+      </div>
+      <h3>The difference between boredom and rest</h3>
+      <p class="excerpt">Not every unfilled minute is recovery. A short test for telling which one you are actually getting.</p>
+      <div class="foot">
+        <time class="date" datetime="2026-09-01">Sep 1, 2026</time>
+      </div>
+    </a>
+
+    <a class="card" href="/journal/paper-to-do-list" data-cat="habits">
+      <div class="thumb">
+        <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=500&fit=crop&crop=entropy&q=80&fm=jpg" width="800" height="500" loading="lazy" decoding="async" alt="A hand ticking items off a hand-written checklist in a grid notebook">
+      </div>
+      <div class="meta">
+        <span class="cat">habits</span>
+        <span class="dotsep" aria-hidden="true"></span>
+        <span class="rt">7 min read</span>
+      </div>
+      <h3>Three weeks with a paper to-do list</h3>
+      <p class="excerpt">I moved everything onto a single index card. The card was never the hard part; the crossing out was.</p>
+      <div class="foot">
+        <time class="date" datetime="2026-08-26">Aug 26, 2026</time>
+      </div>
+    </a>
+
+    <div class="empty is-hidden" id="empty">
+      <div class="ring" aria-hidden="true"></div>
+      <h3 id="empty-title">Nothing filed here yet.</h3>
+      <p>We publish a new story every other Thursday. This category is still empty.</p>
+      <button class="tlink" type="button" data-reset>Show all stories <span class="arw" aria-hidden="true">&#8594;</span></button>
+    </div>
+  </div>
+
+  <!-- ===== bottom ===== -->
+  <div class="bottom" id="bottom">
+    <span class="note" id="shown">Showing 7 stories</span>
+    <button class="btn" type="button" id="loadMore">Load older stories <span class="arw" aria-hidden="true">&#8594;</span></button>
+  </div>
+
+</section>
+</main>
+
+<footer class="sitefoot">
+  <div class="foot-in">
+    <span>&copy; 2026 Quiet Hours Press &middot; Lisbon</span>
+    <nav aria-label="Legal">
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="/feed.xml">RSS</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* scroll progress */
+  var bar = document.getElementById('bar');
+  function tick(){
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.transform = 'scaleX(' + (h > 0 ? window.scrollY / h : 0) + ')';
+  }
+  addEventListener('scroll', tick, {passive:true});
+  addEventListener('resize', tick);
+  tick();
+
+  var tabs    = document.querySelectorAll('.tab');
+  var wrap    = document.getElementById('cards');
+  var feat    = document.querySelector('.feature');
+  var empty   = document.getElementById('empty');
+  var emptyT  = document.getElementById('empty-title');
+  var shown   = document.getElementById('shown');
+  var rule    = document.querySelector('.rule');
+  var active  = 'all';
+
+  function items(){
+    return [feat].concat(Array.prototype.slice.call(wrap.querySelectorAll('.card')));
+  }
+
+  function refreshCounts(){
+    var list = items();
+    tabs.forEach(function(t){
+      var f = t.dataset.filter;
+      var n = list.filter(function(el){ return f === 'all' || el.dataset.cat === f; }).length;
+      t.querySelector('.n').textContent = n;
+    });
+  }
+
+  function applyFilter(){
+    var list = items(), shownCount = 0, cardCount = 0;
+    list.forEach(function(el){
+      var ok = (active === 'all' || el.dataset.cat === active);
+      el.classList.toggle('is-hidden', !ok);
+      if (ok) shownCount++;
+      if (ok && el !== feat) cardCount++;
+    });
+    shown.textContent = 'Showing ' + shownCount + (shownCount === 1 ? ' story' : ' stories');
+    empty.classList.toggle('is-hidden', shownCount !== 0);
+    rule.classList.toggle('is-hidden', cardCount === 0);
+    if (shownCount === 0){
+      emptyT.textContent = 'Nothing filed under \u201C' + active + '\u201D yet.';
+    }
+    refreshCounts();
+  }
+
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.classList.remove('is-active'); t.setAttribute('aria-selected','false'); });
+      tab.classList.add('is-active');
+      tab.setAttribute('aria-selected','true');
+      active = tab.dataset.filter;
+      applyFilter();
+    });
+  });
+
+  empty.querySelector('[data-reset]').addEventListener('click', function(){ tabs[0].click(); });
+
+  /* ---- load older stories: skeleton -> content ---- */
+  var older = [
+    {
+      slug:'quieter-home-screen', cat:'design', label:'design', rt:'4 min read',
+      title:'A quieter home screen, in six small moves',
+      date:'Jul 29, 2026', iso:'2026-07-29',
+      img:'<img src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=800&h=500&fit=crop&crop=entropy&q=80&fm=jpg" width="800" height="500" loading="lazy" decoding="async" alt="A hand holding a phone showing a calm, sparsely populated home screen">'
+    },
+    {
+      slug:'missed-one-day', cat:'habits', label:'habits', rt:'5 min read',
+      title:'What a missed day does to a habit',
+      date:'Jul 22, 2026', iso:'2026-07-22',
+      img:'<img src="https://images.unsplash.com/photo-1506784365847-bbad939e9335?w=800&h=500&fit=crop&crop=entropy&q=80&fm=jpg" width="800" height="500" loading="lazy" decoding="async" alt="A bullet-journal calendar spread with days highlighted in yellow">'
+    },
+    {
+      slug:'thing-you-were-avoiding', cat:'attention', label:'attention', rt:'7 min read',
+      title:'Writing down the thing you were avoiding',
+      date:'Jul 15, 2026', iso:'2026-07-15',
+      img:'<img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&h=500&fit=crop&crop=entropy&q=80&fm=jpg" width="800" height="500" loading="lazy" decoding="async" alt="A fountain pen writing a line of text on ruled paper">'
+    }
+  ];
+
+  var loadBtn = document.getElementById('loadMore');
+  var bottom  = document.getElementById('bottom');
+  var loading = false;
+
+  function cardHTML(o){
+    return '<a class="card card--late" href="/journal/' + o.slug + '" data-cat="' + o.cat + '">' +
+             '<div class="thumb">' + o.img + '</div>' +
+             '<div class="meta"><span class="cat">' + o.label + '</span>' +
+             '<span class="dotsep" aria-hidden="true"></span>' +
+             '<span class="rt">' + o.rt + '</span></div>' +
+             '<h3>' + o.title + '</h3>' +
+             '<div class="foot"><time class="date" datetime="' + o.iso + '">' + o.date + '</time></div>' +
+           '</a>';
+  }
+
+  loadBtn.addEventListener('click', function(){
+    if (loading) return;
+    loading = true;
+    loadBtn.disabled = true;
+    loadBtn.firstChild.nodeValue = 'Loading ';
+
+    var sk = document.createElement('div');
+    sk.style.display = 'contents';
+    sk.innerHTML =
+      '<div class="sk-card"><div class="sk sk-thumb"></div><div class="sk sk-line w40"></div><div class="sk sk-line w85"></div><div class="sk sk-line w60"></div></div>' +
+      '<div class="sk-card"><div class="sk sk-thumb"></div><div class="sk sk-line w40"></div><div class="sk sk-line w85"></div><div class="sk sk-line w60"></div></div>' +
+      '<div class="sk-card"><div class="sk sk-thumb"></div><div class="sk sk-line w40"></div><div class="sk sk-line w85"></div><div class="sk sk-line w60"></div></div>';
+    wrap.insertBefore(sk, empty);
+
+    setTimeout(function(){
+      sk.remove();
+      older.forEach(function(o){
+        var tmp = document.createElement('div');
+        tmp.innerHTML = cardHTML(o);
+        wrap.insertBefore(tmp.firstElementChild, empty);
+      });
+      var done = document.createElement('span');
+      done.className = 'note';
+      done.textContent = 'That is every story in the archive.';
+      loadBtn.remove();
+      bottom.appendChild(done);
+      applyFilter();
+      loading = false;
+    }, 780);
+  });
+
+  refreshCounts();
+  applyFilter();
+})();
+</script>
+</body>
+</html>

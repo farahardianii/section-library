@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Destinations &#8212; Hero Slider</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  :root{
+    --accent:#F4C217;
+    --accent-soft:#FFE07A;
+    --white:#fff;
+    --ease:cubic-bezier(.65,0,.35,1);
+    --ease-out:cubic-bezier(.22,.7,.28,1);
+    --card-w:232px;
+    --card-h:402px;
+    --gap:22px;
+  }
+
+  html,body{height:100%}
+  html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+  body{
+    font-family:"Poppins",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+    background:#0c110d;color:#fff;overflow:hidden;
+  }
+
+  img{display:block;max-width:100%}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+  .stage{
+    position:relative;
+    width:100%;
+    height:100vh;height:100svh;
+    min-height:640px;
+    overflow:hidden;
+    isolation:isolate;
+  }
+
+  /* ---------------- background ---------------- */
+
+  .bg{position:absolute;inset:-28px;z-index:0;transition:transform 1.2s var(--ease-out)}
+  .bg-shot{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;object-position:50% 55%;
+    opacity:0;transform:scale(1.06);
+    transition:opacity 1s ease,transform 7s linear;
+  }
+  .bg-shot.is-active{opacity:1;transform:scale(1)}
+
+  .shade{
+    position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:
+      linear-gradient(90deg,rgba(6,10,8,.78) 0%,rgba(6,10,8,.52) 34%,rgba(6,10,8,.14) 60%,rgba(6,10,8,.46) 100%),
+      linear-gradient(180deg,rgba(6,10,8,.62) 0%,rgba(6,10,8,0) 26%,rgba(6,10,8,0) 58%,rgba(6,10,8,.7) 100%),
+      radial-gradient(120% 90% at 50% 50%,rgba(0,0,0,0) 40%,rgba(0,0,0,.4) 100%);
+  }
+
+  /* ---------------- copy ---------------- */
+
+  .copy{
+    position:absolute;z-index:20;
+    left:clamp(22px,4.6vw,78px);
+    top:0;bottom:clamp(112px,13vh,148px);
+    display:flex;flex-direction:column;justify-content:center;
+    max-width:min(560px,44vw);
+  }
+
+  .eyebrow{
+    font-size:clamp(15px,1.3vw,18px);font-weight:400;letter-spacing:.6px;
+    color:rgba(255,255,255,.94);
+  }
+
+  .title{
+    margin-top:16px;
+    font-family:"Anton",Impact,sans-serif;font-weight:400;
+    font-size:clamp(44px,6vw,92px);
+    line-height:1.04;letter-spacing:.5px;text-transform:uppercase;
+    text-shadow:0 12px 46px rgba(0,0,0,.4);
+  }
+  .title span{display:block}
+
+  .lead{
+    margin-top:28px;max-width:470px;
+    font-size:14px;font-weight:300;line-height:2.05;
+    color:rgba(255,255,255,.74);
+  }
+
+  .actions{
+    position:absolute;z-index:25;
+    left:clamp(22px,4.6vw,78px);
+    bottom:clamp(24px,4vh,44px);
+    height:52px;
+    display:flex;align-items:center;gap:24px;
+  }
+
+  .chat{
+    position:relative;
+    width:46px;height:46px;flex:none;border-radius:50%;
+    display:grid;place-items:center;
+    background:var(--accent);color:#151205;
+    box-shadow:0 12px 32px rgba(244,194,23,.36);
+    transition:transform .35s var(--ease-out);
+  }
+  .chat svg{width:20px;height:20px;fill:currentColor}
+  .chat:hover{transform:scale(1.08)}
+  .chat::after{
+    content:"";position:absolute;inset:0;border-radius:50%;
+    border:2px solid var(--accent);
+    animation:pulse 2.4s ease-out infinite;
+  }
+  @keyframes pulse{
+    0%{transform:scale(1);opacity:.75}
+    70%{transform:scale(1.65);opacity:0}
+    100%{transform:scale(1.65);opacity:0}
+  }
+
+  .ghost{
+    display:inline-flex;align-items:center;justify-content:center;
+    height:46px;padding:0 32px;border-radius:999px;
+    border:1px solid rgba(255,255,255,.5);
+    font-size:11.5px;font-weight:500;letter-spacing:2.4px;
+    text-transform:uppercase;text-decoration:none;color:#fff;
+    transition:background .4s var(--ease),color .4s var(--ease),border-color .4s var(--ease),transform .4s var(--ease-out);
+  }
+  .ghost:hover{
+    background:var(--accent);border-color:var(--accent);
+    color:#151205;transform:translateY(-3px);
+  }
+
+  .swap{transition:opacity .34s ease,transform .34s var(--ease-out)}
+  .swap.is-out{opacity:0;transform:translateY(16px)}
+
+  /* ---------------- card rail ---------------- */
+
+  .rail{
+    position:absolute;z-index:15;
+    right:0;top:50%;transform:translateY(-50%);
+    width:min(52vw,1080px);
+    padding:36px 0;
+    overflow:hidden;
+    touch-action:pan-y;
+  }
+
+  .track{
+    display:flex;gap:var(--gap);
+    will-change:transform;
+    transition:transform .85s var(--ease);
+  }
+
+  .card{
+    position:relative;flex:none;
+    width:var(--card-w);height:var(--card-h);
+    border-radius:20px;overflow:hidden;
+    cursor:pointer;
+    box-shadow:0 34px 70px rgba(0,0,0,.42);
+    filter:brightness(.78) saturate(.92);
+    transform:scale(.965);
+    transition:transform .7s var(--ease-out),filter .7s ease,box-shadow .7s ease;
+    scroll-snap-align:start;
+  }
+  .card.is-active{filter:brightness(1) saturate(1);transform:scale(1);box-shadow:0 40px 80px rgba(0,0,0,.5)}
+  .card:hover{transform:translateY(-12px) scale(1.015);filter:brightness(1) saturate(1)}
+
+  .card img{
+    position:absolute;inset:0;
+    width:100%;height:100%;object-fit:cover;
+    transition:transform 1.4s var(--ease-out);
+  }
+  .card:hover img{transform:scale(1.09)}
+
+  .card::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(to top,rgba(4,8,6,.82) 0%,rgba(4,8,6,.34) 38%,rgba(4,8,6,0) 66%);
+  }
+
+  .card figcaption{
+    position:absolute;left:0;right:0;bottom:0;z-index:2;
+    padding:0 20px 24px;
+  }
+  .card-sub{font-size:10.5px;font-weight:300;letter-spacing:.4px;color:rgba(255,255,255,.78);margin-bottom:6px}
+  .card-title{
+    font-size:13px;font-weight:600;letter-spacing:1.8px;
+    text-transform:uppercase;color:#fff;
+  }
+
+  /* ---------------- controls ---------------- */
+
+  .controls{
+    position:absolute;z-index:25;
+    right:clamp(20px,3.4vw,56px);bottom:clamp(24px,4vh,44px);
+    width:min(52vw,1080px);height:52px;
+    display:flex;align-items:center;gap:clamp(16px,2vw,30px);
+  }
+
+  .arrows{display:flex;align-items:center;gap:14px;flex:none}
+  .circle{
+    width:46px;height:46px;border-radius:50%;
+    display:grid;place-items:center;
+    border:1px solid rgba(255,255,255,.5);
+    color:#fff;
+    transition:background .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease),transform .35s var(--ease-out);
+  }
+  .circle svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .circle:hover{background:#fff;border-color:#fff;color:#12160f;transform:scale(1.07)}
+  .circle:active{transform:scale(.95)}
+
+  .bar{
+    flex:1;height:3px;border-radius:99px;overflow:hidden;
+    background:rgba(255,255,255,.42);
+  }
+  .bar i{
+    display:block;height:100%;width:0;
+    border-radius:99px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-soft));
+  }
+
+  .counter{
+    flex:none;min-width:66px;text-align:right;
+    font-family:"Anton",Impact,sans-serif;
+    font-size:clamp(36px,3.4vw,52px);
+    line-height:1;letter-spacing:1px;color:#fff;
+    transition:opacity .3s ease,transform .3s var(--ease-out);
+  }
+  .counter.is-pop{opacity:0;transform:translateY(12px)}
+
+  /* ---------------- responsive ---------------- */
+
+  @media (max-width:1180px){
+    .copy{max-width:min(500px,50vw)}
+  }
+
+  @media (max-width:900px){
+    body{overflow:auto}
+    .stage{height:auto;min-height:100svh;overflow:visible;padding-bottom:8px}
+
+    .bg,.shade{position:absolute;inset:0}
+
+    .copy{
+      position:relative;left:auto;top:auto;bottom:auto;
+      display:block;transform:none;
+      max-width:none;padding:64px 22px 0;
+    }
+    .title{font-size:clamp(42px,12vw,64px)}
+    .lead{max-width:none;margin-top:22px}
+
+    .actions{
+      position:relative;left:auto;bottom:auto;
+      height:auto;margin:34px 22px 0;
+    }
+
+    .rail{
+      position:relative;right:auto;top:auto;transform:none;
+      width:auto;margin-top:26px;padding:24px 22px 28px;
+      overflow-x:auto;overflow-y:hidden;
+      scroll-snap-type:x mandatory;
+      scrollbar-width:none;
+    }
+    .rail::-webkit-scrollbar{display:none}
+    .track{transition:none}
+    .card{filter:brightness(.9);transform:none}
+    .card.is-active{transform:none}
+
+    .controls{
+      position:relative;right:auto;bottom:auto;
+      width:auto;height:auto;margin:4px 22px 34px;
+    }
+    .circle{width:42px;height:42px}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms !important;transition-duration:.12s !important}
+  }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+
+  <div class="bg" id="bg">
+    <img class="bg-shot is-active" data-bg="0" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1920&q=80" alt="" onerror="this.onerror=null;this.src='https://picsum.photos/seed/fjordlandbg/1920/1080'">
+    <img class="bg-shot" data-bg="1" src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1920&q=80" alt="" onerror="this.onerror=null;this.src='https://picsum.photos/seed/ericeirabg/1920/1080'">
+    <img class="bg-shot" data-bg="2" src="https://images.unsplash.com/photo-1570939274717-7eda259b50ed?auto=format&fit=crop&w=1920&q=80" alt="" onerror="this.onerror=null;this.src='https://picsum.photos/seed/anatoliabg/1920/1080'">
+    <img class="bg-shot" data-bg="3" src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1920&q=80" alt="" onerror="this.onerror=null;this.src='https://picsum.photos/seed/banffbg/1920/1080'">
+    <img class="bg-shot" data-bg="4" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1920&q=80" alt="" onerror="this.onerror=null;this.src='https://picsum.photos/seed/hokkaidobg/1920/1080'">
+  </div>
+
+  <div class="shade"></div>
+
+  <section class="copy">
+    <p class="eyebrow swap" id="eyebrow">Curated escapes for 2026</p>
+    <h1 class="title swap" id="title"><span>Fjordland</span><span>Norway</span></h1>
+    <p class="lead swap" id="lead">Sail past silver cliffs and silent waterfalls where the light never quite leaves the sky. Seven days of slow travel, small boats and cabins carved into the shoreline.</p>
+  </section>
+
+  <div class="actions">
+    <button class="chat" aria-label="Chat">
+      <svg viewBox="0 0 24 24"><path d="M12 3C6.9 3 3 6.5 3 10.8c0 2.4 1.2 4.5 3.2 5.9L5.4 21l4.1-2.2c.8.2 1.6.3 2.5.3 5.1 0 9-3.5 9-7.8S17.1 3 12 3z"/></svg>
+    </button>
+    <a class="ghost" href="#">Explore The Route</a>
+  </div>
+
+  <div class="rail" id="rail">
+    <div class="track" id="track">
+      <figure class="card is-active" data-i="0">
+        <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=700&q=80" alt="Fjordland Norway" onerror="this.onerror=null;this.src='https://picsum.photos/seed/fjordland/600/1000'">
+        <figcaption>
+          <p class="card-sub">7 nights · small boat</p>
+          <h3 class="card-title">Fjordland</h3>
+        </figcaption>
+      </figure>
+
+      <figure class="card" data-i="1">
+        <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=700&q=80" alt="Ericeira Coast" onerror="this.onerror=null;this.src='https://picsum.photos/seed/ericeira/600/1000'">
+        <figcaption>
+          <p class="card-sub">5 nights · surf camp</p>
+          <h3 class="card-title">Ericeira Coast</h3>
+        </figcaption>
+      </figure>
+
+      <figure class="card" data-i="2">
+        <img src="https://images.unsplash.com/photo-1570939274717-7eda259b50ed?auto=format&fit=crop&w=700&q=80" alt="Anatolia Sky" onerror="this.onerror=null;this.src='https://picsum.photos/seed/anatolia/600/1000'">
+        <figcaption>
+          <p class="card-sub">4 nights · balloon ride</p>
+          <h3 class="card-title">Anatolia Sky</h3>
+        </figcaption>
+      </figure>
+
+      <figure class="card" data-i="3">
+        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=700&q=80" alt="Banff Range" onerror="this.onerror=null;this.src='https://picsum.photos/seed/banff/600/1000'">
+        <figcaption>
+          <p class="card-sub">6 nights · trail hike</p>
+          <h3 class="card-title">Banff Range</h3>
+        </figcaption>
+      </figure>
+
+      <figure class="card" data-i="4">
+        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=700&q=80" alt="Hokkaido Peaks" onerror="this.onerror=null;this.src='https://picsum.photos/seed/hokkaido/600/1000'">
+        <figcaption>
+          <p class="card-sub">8 nights · powder ski</p>
+          <h3 class="card-title">Hokkaido Peaks</h3>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="arrows">
+      <button class="circle" id="prev" aria-label="Previous">
+        <svg viewBox="0 0 24 24"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg>
+      </button>
+      <button class="circle" id="next" aria-label="Next">
+        <svg viewBox="0 0 24 24"><path d="M9.5 5.5L16 12l-6.5 6.5"/></svg>
+      </button>
+    </div>
+    <div class="bar"><i id="barFill"></i></div>
+    <div class="counter" id="counter">01</div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var AUTO = 6000;
+
+  var slides = [
+    {eyebrow:'Curated escapes for 2026', l1:'Fjordland', l2:'Norway',
+     lead:'Sail past silver cliffs and silent waterfalls where the light never quite leaves the sky. Seven days of slow travel, small boats and cabins carved into the shoreline.'},
+    {eyebrow:'Atlantic surf season', l1:'Ericeira', l2:'Coast',
+     lead:'Black sand, wind-combed dunes and swell that runs from dawn to dusk. Five nights in a cliff-side surf camp with boards, guides and grilled catch included.'},
+    {eyebrow:'Desert nights, open skies', l1:'Anatolia', l2:'Sky',
+     lead:'Drift over carved valleys at sunrise, then dine under a canopy of stars. Four nights of cave suites, market mornings and hot-air silence above the canyon.'},
+    {eyebrow:'Alpine trail collection', l1:'Banff', l2:'Range',
+     lead:'Turquoise lakes, larch ridgelines and trails that end at glacier viewpoints. Six days of guided hiking, lakeside lodges and long amber evenings.'},
+    {eyebrow:'Powder lines of the north', l1:'Hokkaido', l2:'Peaks',
+     lead:'Chase dry snow through birch forests and soak in steam at day\u2019s end. Eight nights of first tracks, backcountry guides and quiet mountain inns.'}
+  ];
+
+  var total = slides.length,
+      index = 0,
+      shift = 0,
+      timer = null,
+      dragging = false,
+      moved = false,
+      startX = 0,
+      baseShift = 0;
+
+  var track    = document.getElementById('track'),
+      rail     = document.getElementById('rail'),
+      bg       = document.getElementById('bg'),
+      bgs      = document.querySelectorAll('.bg-shot'),
+      cards    = document.querySelectorAll('.card'),
+      counter  = document.getElementById('counter'),
+      barFill  = document.getElementById('barFill'),
+      eyebrow  = document.getElementById('eyebrow'),
+      title    = document.getElementById('title'),
+      lead     = document.getElementById('lead'),
+      stage    = document.getElementById('stage');
+
+  function isDesktop(){ return window.matchMedia('(min-width: 901px)').matches; }
+
+  function stepSize(){
+    var w = cards[0].getBoundingClientRect().width;
+    var gap = parseFloat(getComputedStyle(track).gap) || 22;
+    return w + gap;
+  }
+
+  function maxShift(){
+    return Math.max(0, track.scrollWidth - rail.clientWidth);
+  }
+
+  function renderTrack(){
+    if(!isDesktop()){
+      track.style.transform = 'none';
+      var active = document.querySelector('.card.is-active');
+      if(active) active.scrollIntoView({behavior:'smooth', inline:'start', block:'nearest'});
+      return;
+    }
+    var step = stepSize();
+    shift = Math.min(index * step, maxShift());
+    track.style.transition = 'transform .85s cubic-bezier(.65,0,.35,1)';
+    track.style.transform = 'translate3d(' + (-shift) + 'px,0,0)';
+  }
+
+  function swap(el, html){
+    el.classList.add('is-out');
+    setTimeout(function(){
+      el.innerHTML = html;
+      el.classList.remove('is-out');
+    }, 320);
+  }
+
+  function paintProgress(instant){
+    if(instant){
+      barFill.style.transition = 'none';
+      barFill.style.width = (index / total * 100) + '%';
+      void barFill.offsetWidth;
+    }
+    barFill.style.transition = 'width ' + AUTO + 'ms linear';
+    barFill.style.width = ((index + 1) / total * 100) + '%';
+  }
+
+  function schedule(){
+    clearTimeout(timer);
+    timer = setTimeout(function(){ go(index + 1, false); }, AUTO);
+  }
+
+  function go(i, instant){
+    index = ((i % total) + total) % total;
+    var s = slides[index];
+
+    swap(eyebrow, s.eyebrow);
+    swap(title, '<span>' + s.l1 + '</span><span>' + s.l2 + '</span>');
+    swap(lead, s.lead);
+
+    bgs.forEach(function(b, k){ b.classList.toggle('is-active', k === index); });
+    cards.forEach(function(c, k){ c.classList.toggle('is-active', k === index); });
+
+    counter.classList.add('is-pop');
+    setTimeout(function(){
+      counter.textContent = (index + 1 < 10 ? '0' : '') + (index + 1);
+      counter.classList.remove('is-pop');
+    }, 200);
+
+    renderTrack();
+    paintProgress(!!instant);
+    schedule();
+  }
+
+  /* controls */
+  document.getElementById('next').addEventListener('click', function(){ go(index + 1, true); });
+  document.getElementById('prev').addEventListener('click', function(){ go(index - 1, true); });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight') go(index + 1, true);
+    if(e.key === 'ArrowLeft')  go(index - 1, true);
+  });
+
+  /* cards */
+  cards.forEach(function(card, k){
+    card.addEventListener('click', function(){
+      if(moved){ moved = false; return; }
+      if(k !== index) go(k, true);
+    });
+  });
+
+  /* drag */
+  rail.addEventListener('pointerdown', function(e){
+    if(!isDesktop()) return;
+    dragging = true; moved = false; dragDx = 0;
+    startX = e.clientX; baseShift = shift;
+    clearTimeout(timer);
+    track.style.transition = 'none';
+    rail.setPointerCapture(e.pointerId);
+  });
+
+  rail.addEventListener('pointermove', function(e){
+    if(!dragging) return;
+    var dx = e.clientX - startX;
+    dragDx = dx;
+    if(Math.abs(dx) > 6) moved = true;
+    var s = Math.max(0, Math.min(baseShift - dx, maxShift()));
+    shift = s;
+    track.style.transform = 'translate3d(' + (-s) + 'px,0,0)';
+  });
+
+  var dragDx = 0;
+
+  function endDrag(){
+    if(!dragging) return;
+    dragging = false;
+    if(dragDx < -60) go(index + 1, true);
+    else if(dragDx > 60) go(index - 1, true);
+    else go(index, true);
+    dragDx = 0;
+  }
+  rail.addEventListener('pointerup', endDrag);
+  rail.addEventListener('pointercancel', endDrag);
+
+  /* background parallax */
+  if(window.matchMedia('(pointer: fine)').matches){
+    stage.addEventListener('mousemove', function(e){
+      var x = (e.clientX / window.innerWidth  - .5) * -22;
+      var y = (e.clientY / window.innerHeight - .5) * -14;
+      bg.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+    });
+    stage.addEventListener('mouseleave', function(){ bg.style.transform = 'translate3d(0,0,0)'; });
+  }
+
+  window.addEventListener('resize', function(){ renderTrack(); });
+
+  go(0, true);
+})();
+</script>
+</body>
+</html>

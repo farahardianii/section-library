@@ -1,0 +1,906 @@
+<!doctype html>
+<!--
+  Section exploration: hero galeri "Galerie Meridian", konten orisinal.
+  Vanilla HTML/CSS/JS tanpa framework. Satu file, langsung dibuka di browser.
+  Tanpa navbar dan tanpa logo: hanya baris status buka di kanan atas.
+
+  Design read: hero galeri seni editorial, premium-minimal, monokrom,
+  serif display + sans netral.
+  Dials: DESIGN_VARIANCE 8 / MOTION_INTENSITY 6 / VISUAL_DENSITY 3.
+
+  Radius scale (dokumentasi): kontrol interaktif = pill penuh; media = 0 (sharp);
+  panel mengambang = 12px; badge = lingkaran.
+  Layout: asimetris kiri-berat (hero center dilarang di variance > 4),
+  rail eksibisi di kanan, karya digantung salon (tinggi bervariasi, caption
+  sejajar bawah di luar gambar), progres tipis posisi galeri.
+  Warna: monokrom off-black/off-white. Satu aksen terkunci (#9e451f light,
+  #e07345 dark) hanya untuk status hidup + state interaktif; sisanya warna karya.
+  Fonts: Playfair Display (display) + Outfit (UI). Self-host untuk produksi.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="light dark" />
+<title>Galerie Meridian - Hero Section Exploration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+<style>
+  /* ============================ TOKENS ============================ */
+  :root {
+    --bg: #f7f7f5;
+    --text: #16161a;
+    --muted: #55555d;
+    --panel: #ececea;
+    --btn-bg: #16161a;
+    --btn-fg: #f7f7f5;
+    --line: rgba(22, 22, 26, 0.14);
+    --skel: #e3e3e0;
+    --shadow: 0 18px 40px -18px rgba(22, 22, 26, 0.35);
+    --tint: rgba(22, 22, 26, 0.035);
+    --accent: #9e451f;
+
+    --gutter: clamp(18px, 4vw, 56px);
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --font-ui: "Outfit", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #101012;
+      --text: #f0efec;
+      --muted: #a2a2ab;
+      --panel: #1d1d20;
+      --btn-bg: #f0efec;
+      --btn-fg: #141416;
+      --line: rgba(240, 239, 236, 0.16);
+      --skel: #212124;
+      --shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.7);
+      --tint: rgba(240, 239, 236, 0.04);
+      --accent: #e07345;
+    }
+  }
+
+  /* ============================ BASE ============================ */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-ui);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  main { overflow-x: clip; }
+  img { display: block; }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+  .skip {
+    position: absolute; left: -9999px; top: 8px; z-index: 99;
+    background: var(--btn-bg); color: var(--btn-fg);
+    padding: 10px 16px; border-radius: 999px; font-size: 14px;
+  }
+  .skip:focus { left: 8px; }
+
+  /* ============================ SHELL ============================ */
+  .hero {
+    position: relative;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background:
+      radial-gradient(130% 75% at 50% -12%, var(--tint), transparent 62%),
+      var(--bg);
+  }
+
+  /* --------------- Masthead (tanpa navbar/logo: hanya status buka) --------------- */
+  .masthead {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+    padding: clamp(24px, 4.5vh, 44px) var(--gutter) 0;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .btn:active { transform: translateY(0) scale(0.97); }
+
+  /* ---------------------------- Copy (asimetris) ---------------------------- */
+  .copy {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(230px, 23vw, 320px);
+    column-gap: clamp(28px, 4vw, 64px);
+    row-gap: clamp(14px, 2.6vh, 30px);
+    align-items: end;
+    text-align: left;
+    padding: clamp(34px, 7vh, 84px) var(--gutter) 0;
+  }
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--muted);
+    opacity: 0;
+    animation: rise 0.8s var(--ease) 0.12s forwards;
+  }
+  .status-dot {
+    position: relative;
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .status-dot::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    animation: breathe 2.6s var(--ease) infinite;
+  }
+  @keyframes breathe {
+    0%   { transform: scale(0.5); opacity: 0.9; }
+    70%  { transform: scale(1.4); opacity: 0; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+  .display {
+    grid-column: 1 / -1;
+    margin: 0;
+    text-align: left;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.25rem, 5.6vw, 5.2rem);
+    line-height: 1.16;        /* italic display butuh >= 1.1 agar descender tak terpotong */
+    letter-spacing: -0.015em;
+    padding-bottom: 0.1em;    /* reserve descender */
+  }
+  .display em { font-style: italic; font-weight: 500; }
+
+  .display .w {
+    display: inline-block;
+    opacity: 0;
+    translate: 0 0.5em; /* properti 'translate' terpisah dari transform agar parallax .inl tidak bentrok */
+  }
+  .display.revealed .w {
+    animation: rise 0.85s var(--ease) forwards;
+    animation-delay: var(--d, 0ms);
+  }
+  @keyframes rise { to { opacity: 1; translate: 0 0; } }
+
+  /* Inline typography images */
+  .inl {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    margin: 0 0.14em;
+    bottom: 0.08em;
+    transform: translate(var(--px, 0), var(--py, 0));
+    transition: transform 0.6s var(--ease);
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--skel);
+  }
+  .inl img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.6s ease, transform 0.7s var(--ease);
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+  .inl img.loaded { opacity: 1; }
+  .inl:hover img { transform: scale(1.14) rotate(3deg); }
+  .inl-dot { width: max(0.95em, 30px); height: max(0.95em, 30px); border-radius: 50%; }
+  .inl-dot img { filter: grayscale(1) contrast(1.12); }
+  .inl-bar { width: max(2.3em, 64px); height: max(0.88em, 27px); }
+  .inl-bar img { filter: grayscale(1) contrast(1.05); }
+
+  .lede {
+    margin: 0;
+    max-width: 46ch;
+    font-size: clamp(13.5px, 1.05vw, 15.5px);
+    line-height: 1.65;
+    color: var(--muted);
+    opacity: 0;
+    animation: rise 0.9s var(--ease) 0.85s forwards;
+  }
+  .intro { grid-column: 1; align-self: end; }
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: clamp(14px, 2vw, 26px);
+    margin-top: clamp(18px, 2.6vh, 30px);
+    opacity: 0;
+    animation: rise 0.9s var(--ease) 1s forwards;
+  }
+
+  /* CTA magnetik: fisika mikro via var --mx/--my (hanya pointer presisi) */
+  .btn-magnet {
+    transform: translate(var(--mx, 0px), var(--my, 0px));
+    transition: transform 0.5s var(--ease), box-shadow 0.35s var(--ease);
+  }
+  .btn-magnet:hover { transform: translate(var(--mx, 0px), var(--my, 0px)) translateY(-2px); box-shadow: var(--shadow); }
+  .btn-magnet:active { transform: translate(var(--mx, 0px), var(--my, 0px)) scale(0.97); }
+
+  /* Rail eksibisi (kanan bawah, menyeimbangkan copy kiri) */
+  .rail {
+    grid-column: 2;
+    align-self: end;
+    margin: 0;
+    border-top: 1px solid var(--text);
+    padding-top: 13px;
+    opacity: 0;
+    animation: rise 0.9s var(--ease) 1.08s forwards;
+  }
+  .rail-kicker {
+    margin: 0 0 5px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .rail-title {
+    margin: 0 0 12px;
+    font-family: var(--font-display);
+    font-size: clamp(19px, 1.9vw, 23px);
+    font-weight: 500;
+    line-height: 1.25;
+  }
+  .rail-meta {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  /* -------------------------- Gallery -------------------------- */
+  .gallery { position: relative; margin-top: clamp(26px, 4.5vh, 56px); --cap-h: 26px; }
+  .track {
+    display: flex;
+    align-items: flex-end; /* gantung salon: dasar (caption) sejajar, puncak bervariasi */
+    gap: 14px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    cursor: grab;
+  }
+  .track::-webkit-scrollbar { display: none; }
+  .track.grabbing { cursor: grabbing; scroll-snap-type: none; }
+  .track:focus-visible { outline-offset: -4px; }
+
+  .art {
+    flex: 0 0 auto;
+    margin: 0;
+    scroll-snap-align: start;
+    opacity: 0;
+    transform: scale(0.9); /* tanpa translasi: track overflow-x akan memotongnya */
+    transition: opacity 0.85s var(--ease), transform 0.85s var(--ease);
+    transition-delay: var(--d, 0ms);
+    cursor: zoom-in;
+  }
+  .art.in { opacity: 1; transform: none; }
+  .frame {
+    overflow: hidden;
+    background: var(--skel);
+    border-radius: 0; /* media = sharp, sesuai shape lock */
+  }
+  .art img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.6s ease, transform 0.9s var(--ease);
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+  .art img.loaded { opacity: 1; }
+  .art:hover img, .art:focus-visible img { transform: scale(1.06); }
+
+  /* Caption galeri: di luar & di bawah karya (label dinding) */
+  .cap {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    height: var(--cap-h);
+    padding-top: 10px;
+    font-size: 11.5px;
+    line-height: 16px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .cap-i {
+    flex: none;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+    opacity: 0.42;
+    transition: color 0.3s ease, opacity 0.3s ease;
+  }
+  .art:hover .cap-i, .art:focus-visible .cap-i { color: var(--accent); opacity: 1; }
+  .cap-t { font-weight: 500; color: var(--text); overflow: hidden; text-overflow: ellipsis; }
+  .cap-m { margin-left: auto; padding-left: 12px; opacity: 0.8; }
+
+  /* Tinggi bervariasi per karya (salon hang) */
+  .art-1 .frame { aspect-ratio: 9 / 10; height: clamp(216px, 38vh, 420px); }
+  .art-1 img { filter: grayscale(1) contrast(1.18); }
+  .art-2 .frame { aspect-ratio: 23 / 25; height: clamp(196px, 34vh, 372px); }
+  .art-2 img { filter: sepia(0.42) saturate(0.85) brightness(1.04) contrast(1.02); }
+  .art-3 .frame { aspect-ratio: 26 / 25; height: clamp(232px, 41vh, 448px); }
+  .art-3 img { filter: saturate(1.3) contrast(1.07); }
+  .art-4 .frame { aspect-ratio: 11 / 12; height: clamp(204px, 36vh, 392px); }
+  .art-4 img { filter: grayscale(1) contrast(1.35) brightness(0.86); }
+  .art-5 .frame { aspect-ratio: 24 / 25; height: clamp(240px, 42vh, 456px); }
+  .art-5 img { filter: grayscale(1) contrast(1.1) brightness(1.05); }
+  .art-6 .frame { aspect-ratio: 25 / 24; height: clamp(210px, 37vh, 400px); }
+  .art-6 img { filter: sepia(0.2) saturate(0.9) contrast(1.05); }
+
+  /* Indikator posisi track (di luar gallery agar bottom badge tetap sejajar caption) */
+  .progress {
+    position: relative;
+    height: 2px;
+    margin: clamp(14px, 2vh, 22px) var(--gutter) 0;
+    background: var(--line);
+    overflow: hidden;
+  }
+  .progress-fill {
+    position: absolute;
+    inset: 0;
+    background: var(--text);
+    transform: scaleX(0.12);
+    transform-origin: left center;
+    transition: transform 0.18s linear;
+  }
+
+  /* ------------------------- Rotating badge ------------------------- */
+  .badge {
+    position: absolute;
+    left: clamp(20px, 5vw, 88px);
+    bottom: var(--cap-h, 26px); /* duduk tepat di dasar karya, di atas caption */
+    z-index: 5;
+    width: clamp(116px, 13vw, 184px);
+    aspect-ratio: 1;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
+  }
+  .badge:hover { transform: scale(1.06); box-shadow: var(--shadow); }
+  .badge:active { transform: scale(0.97); }
+  .badge-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    animation: spin 18s linear infinite;
+  }
+  .badge:hover .badge-ring { animation-duration: 5.5s; }
+  .badge-ring text { fill: currentColor; font-family: var(--font-ui); font-weight: 500; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .badge-arrow {
+    font-size: clamp(17px, 1.9vw, 25px);
+    line-height: 1;
+    transition: transform 0.5s var(--ease);
+  }
+  .badge:hover .badge-arrow { transform: translate(4px, -4px); }
+
+  /* -------------------------- Foot links -------------------------- */
+  .foot {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: clamp(22px, 3vw, 46px);
+    padding: 20px var(--gutter) clamp(20px, 3vh, 30px);
+  }
+  .ulink {
+    display: inline-block;
+    font-size: 13.5px;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    text-decoration-thickness: 1px;
+    transition: text-decoration-thickness 0.25s ease, transform 0.4s var(--ease), color 0.3s ease;
+  }
+  .ulink:hover { text-decoration-thickness: 2px; transform: translateY(-2px); color: var(--accent); }
+
+  /* --------------------------- Lightbox --------------------------- */
+  .lb {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: grid;
+    place-items: center;
+    padding: clamp(16px, 4vw, 48px);
+    background: var(--bg); /* fallback jika color-mix tak didukung */
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s var(--ease), visibility 0.4s;
+  }
+  .lb.open { opacity: 1; visibility: visible; }
+  .lb[hidden] { display: none; } /* author display:grid mengalahkan UA [hidden] */
+  .lb-frame {
+    position: relative;
+    max-width: min(1020px, 100%);
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transform: scale(0.96) translateY(12px);
+    transition: transform 0.5s var(--ease);
+  }
+  .lb.open .lb-frame { transform: none; }
+  .lb-frame img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: calc(100dvh - 170px);
+    object-fit: contain;
+    background: var(--skel);
+    border-radius: 0;
+  }
+  .lb-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .lb-title { font-weight: 500; color: var(--text); }
+  .lb-ctrl { display: flex; gap: 8px; }
+  .lb-btn {
+    display: grid;
+    place-items: center;
+    width: 42px; height: 42px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.35s var(--ease), border-color 0.3s ease;
+  }
+  .lb-btn:hover { background: var(--panel); border-color: var(--text); }
+  .lb-btn:active { transform: scale(0.94); }
+  .lb-close { position: absolute; top: clamp(14px, 3vw, 28px); right: clamp(14px, 3vw, 28px); z-index: 2; background: var(--bg); }
+
+  /* ============================ RESPONSIVE ============================ */
+  @media (max-width: 768px) {
+    /* Kolaps agresif ke single-column sesuai variance tinggi */
+    .copy { grid-template-columns: minmax(0, 1fr); }
+    .display, .intro, .rail { grid-column: 1; }
+    .rail { border-top-width: 1px; padding-top: 16px; }
+    .lede { max-width: none; }
+  }
+  @media (max-width: 640px) {
+    .masthead { flex-wrap: wrap; row-gap: 10px; }
+    .art .frame { height: clamp(190px, 34vh, 300px); }
+    .gallery { --cap-h: 24px; }
+    .cap { font-size: 11px; padding-top: 9px; line-height: 15px; }
+    .cap-m { display: none; }
+    .foot { justify-content: center; }
+    .badge { width: clamp(104px, 30vw, 140px); left: var(--gutter); }
+    .track { gap: 10px; }
+    .inl-dot { width: max(0.85em, 26px); height: max(0.85em, 26px); }
+    .inl-bar { width: max(2em, 52px); height: max(0.8em, 22px); }
+  }
+
+  /* ========================= REDUCED MOTION ========================= */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    .display .w, .lede, .art, .status, .intro, .rail, .cta-row { opacity: 1 !important; translate: none !important; transform: none !important; }
+    .status-dot::after { animation: none !important; opacity: 0; }
+    .progress-fill { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#track">Skip to gallery</a>
+
+<main>
+<section class="hero" aria-label="Galerie Meridian hero">
+
+  <!-- ============================ MASTHEAD (tanpa navbar) ============================ -->
+  <div class="masthead">
+    <p class="status"><span class="status-dot" aria-hidden="true"></span>Open today until 21:00</p>
+  </div>
+
+  <!-- ============================ COPY ============================ -->
+  <div class="copy">
+    <h1 class="display" id="headline">Every room keeps
+      <span class="inl inl-dot"><img src="https://picsum.photos/seed/meridian-figur/240/240?grayscale" alt="" width="240" height="240" /></span>
+      one<br />
+      <em>secret</em> the light forgot
+      <span class="inl inl-bar"><img src="https://picsum.photos/seed/meridian-smear/480/180?grayscale" alt="" width="480" height="180" /></span>
+    </h1>
+
+    <div class="intro">
+      <p class="lede">Rotating selections from the permanent collection, hung beside new commissions. Stay while the work keeps speaking.</p>
+      <div class="cta-row">
+        <a class="btn btn-magnet" href="#">Reserve</a>
+        <a class="ulink" href="#">Gallery map</a>
+      </div>
+    </div>
+
+    <aside class="rail" aria-label="Current exhibition">
+      <p class="rail-kicker">Current exhibition</p>
+      <p class="rail-title">Quiet Instruments</p>
+      <p class="rail-meta">Until 22 Nov &middot; East Wing, L2 &middot; Free, timed entry</p>
+    </aside>
+  </div>
+
+  <!-- ============================ GALLERY ============================ -->
+  <div class="gallery">
+    <div class="track" id="track" tabindex="0" role="region" aria-label="Exhibition gallery, drag or scroll horizontally">
+      <figure class="art art-1" data-title="Low Tide">
+        <div class="frame">
+          <img src="https://picsum.photos/seed/meridian-ink/900/1000" alt="Monochrome portrait built from loose ink gestures" width="900" height="1000" loading="eager" />
+        </div>
+        <figcaption class="cap"><span class="cap-i">01</span><span class="cap-t">Low Tide</span><span class="cap-m">Ink on paper</span></figcaption>
+      </figure>
+      <figure class="art art-2" data-title="Murmuration">
+        <div class="frame">
+          <img src="https://picsum.photos/seed/meridian-reeds/900/980" alt="Sepia field study of small birds among tall reeds" width="900" height="980" loading="eager" />
+        </div>
+        <figcaption class="cap"><span class="cap-i">02</span><span class="cap-t">Murmuration</span><span class="cap-m">Silver gelatin</span></figcaption>
+      </figure>
+      <figure class="art art-3" data-title="Paper Sun">
+        <div class="frame">
+          <img src="https://picsum.photos/seed/meridian-ember/940/900" alt="Tree dissolving into a burst of red and orange petals" width="940" height="900" loading="lazy" />
+        </div>
+        <figcaption class="cap"><span class="cap-i">03</span><span class="cap-t">Paper Sun</span><span class="cap-m">Pigment print</span></figcaption>
+      </figure>
+      <figure class="art art-4" data-title="After Hours">
+        <div class="frame">
+          <img src="https://picsum.photos/seed/meridian-veil/880/960" alt="Shadowed face half consumed by black brush texture" width="880" height="960" loading="lazy" />
+        </div>
+        <figcaption class="cap"><span class="cap-i">04</span><span class="cap-t">After Hours</span><span class="cap-m">Carbon pigment</span></figcaption>
+      </figure>
+      <figure class="art art-5" data-title="Static Bloom">
+        <div class="frame">
+          <img src="https://picsum.photos/seed/meridian-petal/960/920" alt="Close study of overlapping petals in cool grey tones" width="960" height="920" loading="lazy" />
+        </div>
+        <figcaption class="cap"><span class="cap-i">05</span><span class="cap-t">Static Bloom</span><span class="cap-m">Archival inkjet</span></figcaption>
+      </figure>
+      <figure class="art art-6" data-title="Long Room">
+        <div class="frame">
+          <img src="https://picsum.photos/seed/meridian-hall/1000/860" alt="Empty gallery corridor lit from one side" width="1000" height="860" loading="lazy" />
+        </div>
+        <figcaption class="cap"><span class="cap-i">06</span><span class="cap-t">Long Room</span><span class="cap-m">Chromogenic print</span></figcaption>
+      </figure>
+    </div>
+
+    <button class="badge" id="badge" type="button" aria-label="Look slowly, stay a while. View next artwork">
+      <svg class="badge-ring" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+        <defs>
+          <path id="badge-circle" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" />
+        </defs>
+        <text font-size="7.8" letter-spacing="5.2" textLength="238.8" lengthAdjust="spacing">
+          <textPath href="#badge-circle">LOOK SLOWLY STAY A WHILE</textPath>
+        </text>
+      </svg>
+      <span class="badge-arrow" aria-hidden="true">&#8599;</span>
+    </button>
+  </div>
+
+  <div class="progress" aria-hidden="true"><span class="progress-fill" id="progress-fill"></span></div>
+
+  <div class="foot">
+    <a class="ulink" href="#">Visitor Hours</a>
+    <a class="ulink" href="#">What&rsquo;s On Now</a>
+  </div>
+</section>
+</main>
+
+<!-- ============================ LIGHTBOX ============================ -->
+<div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="Artwork viewer" hidden>
+  <button class="lb-btn lb-close" id="lb-close" type="button" aria-label="Close viewer">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </button>
+  <div class="lb-frame">
+    <img id="lb-img" src="" alt="" />
+    <div class="lb-meta">
+      <span class="lb-title" id="lb-title"></span>
+      <span id="lb-count"></span>
+      <div class="lb-ctrl">
+        <button class="lb-btn" id="lb-prev" type="button" aria-label="Previous artwork">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M9 2 4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="lb-btn" id="lb-next" type="button" aria-label="Next artwork">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="m5 2 5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var reduceQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var reduced = function () { return reduceQuery.matches; };
+
+  /* ---------------- Image load fade ---------------- */
+  document.querySelectorAll(".art img, .inl img").forEach(function (img) {
+    if (img.complete && img.naturalWidth) {
+      img.classList.add("loaded");
+    } else {
+      img.addEventListener("load", function () { img.classList.add("loaded"); }, { once: true });
+      img.addEventListener("error", function () { img.classList.add("loaded"); }, { once: true });
+    }
+  });
+
+  /* ---------------- Headline word reveal ---------------- */
+  var headline = document.getElementById("headline");
+  function splitWords(node) {
+    Array.prototype.slice.call(node.childNodes).forEach(function (child) {
+      if (child.nodeType === Node.TEXT_NODE) {
+        var parts = child.textContent.split(/(\s+)/);
+        var frag = document.createDocumentFragment();
+        parts.forEach(function (part) {
+          if (!part) return;
+          if (/^\s+$/.test(part)) {
+            frag.appendChild(document.createTextNode(part));
+          } else {
+            var span = document.createElement("span");
+            span.className = "w";
+            span.textContent = part;
+            frag.appendChild(span);
+          }
+        });
+        node.replaceChild(frag, child);
+      } else if (child.nodeType === Node.ELEMENT_NODE && child.tagName !== "BR") {
+        child.classList.add("w");
+      }
+    });
+  }
+  if (headline) {
+    splitWords(headline);
+    headline.querySelectorAll(".w").forEach(function (w, i) {
+      w.style.setProperty("--d", (i * 55) + "ms");
+    });
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { headline.classList.add("revealed"); });
+    });
+  }
+
+  /* ---------------- Inline image parallax (pointer) ---------------- */
+  if (headline && !reduced()) {
+    var inlNodes = Array.prototype.slice.call(headline.querySelectorAll(".inl"));
+    headline.addEventListener("pointermove", function (e) {
+      if (e.pointerType === "touch") return;
+      var r = headline.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width - 0.5;
+      var y = (e.clientY - r.top) / r.height - 0.5;
+      inlNodes.forEach(function (el, i) {
+        var k = i === 0 ? -16 : 20;
+        el.style.setProperty("--px", (x * k).toFixed(1) + "px");
+        el.style.setProperty("--py", (y * k * 0.6).toFixed(1) + "px");
+      });
+    });
+    headline.addEventListener("pointerleave", function () {
+      inlNodes.forEach(function (el) {
+        el.style.setProperty("--px", "0px");
+        el.style.setProperty("--py", "0px");
+      });
+    });
+  }
+
+  /* ---------------- Gallery scroll reveal (IntersectionObserver) ---------------- */
+  var arts = Array.prototype.slice.call(document.querySelectorAll(".art"));
+  arts.forEach(function (a, i) { a.style.setProperty("--d", (i * 95) + "ms"); });
+  if (reduced() || !("IntersectionObserver" in window)) {
+    arts.forEach(function (a) { a.classList.add("in"); });
+  } else {
+    var io = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in");
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    arts.forEach(function (a) { io.observe(a); });
+  }
+
+  /* ---------------- Gallery drag to pan (mouse) ---------------- */
+  var track = document.getElementById("track");
+  var down = false, startX = 0, startScroll = 0, dragged = false;
+  if (track) {
+    track.addEventListener("pointerdown", function (e) {
+      if (e.pointerType !== "mouse") return;
+      down = true;
+      dragged = false;
+      startX = e.clientX;
+      startScroll = track.scrollLeft;
+      track.classList.add("grabbing");
+    });
+    window.addEventListener("pointermove", function (e) {
+      if (!down) return;
+      var dx = e.clientX - startX;
+      if (Math.abs(dx) > 4) dragged = true;
+      track.scrollLeft = startScroll - dx;
+    });
+    window.addEventListener("pointerup", function () {
+      if (!down) return;
+      down = false;
+      track.classList.remove("grabbing");
+    });
+    track.addEventListener("click", function (e) {
+      if (dragged) {
+        e.preventDefault();
+        e.stopPropagation();
+        dragged = false;
+      }
+    }, true);
+    track.addEventListener("dragstart", function (e) { e.preventDefault(); });
+  }
+
+  /* ---------------- Badge: next artwork ---------------- */
+  var badge = document.getElementById("badge");
+  if (badge && track) {
+    badge.addEventListener("click", function () {
+      var items = Array.prototype.slice.call(track.children);
+      var trackRect = track.getBoundingClientRect();
+      var max = track.scrollWidth - track.clientWidth;
+      var next = items.filter(function (it) {
+        return (it.getBoundingClientRect().left - trackRect.left) > 6;
+      })[0];
+      var target;
+      if (next) {
+        target = track.scrollLeft + (next.getBoundingClientRect().left - trackRect.left);
+        if (target > max + 2) target = 0;
+      } else {
+        target = 0;
+      }
+      track.scrollTo({ left: target, behavior: reduced() ? "auto" : "smooth" });
+    });
+  }
+
+  /* ---------------- CTA magnetik (fisika mikro, pointer presisi) ---------------- */
+  var magnet = document.querySelector(".btn-magnet");
+  if (magnet && !reduced()) {
+    magnet.addEventListener("pointermove", function (e) {
+      if (e.pointerType === "touch") return;
+      var r = magnet.getBoundingClientRect();
+      var mx = (e.clientX - (r.left + r.width / 2)) * 0.3;
+      var my = (e.clientY - (r.top + r.height / 2)) * 0.45;
+      magnet.style.setProperty("--mx", mx.toFixed(1) + "px");
+      magnet.style.setProperty("--my", my.toFixed(1) + "px");
+    });
+    magnet.addEventListener("pointerleave", function () {
+      magnet.style.setProperty("--mx", "0px");
+      magnet.style.setProperty("--my", "0px");
+    });
+  }
+
+  /* ---------------- Indikator posisi galeri ---------------- */
+  var fill = document.getElementById("progress-fill");
+  function updateProgress() {
+    if (!track || !fill) return;
+    var max = track.scrollWidth - track.clientWidth;
+    var vp = track.scrollWidth ? track.clientWidth / track.scrollWidth : 1;
+    var p = max > 2 ? Math.min(1, Math.max(0, track.scrollLeft / max)) : 0;
+    fill.style.transform = "scaleX(" + (vp + (1 - vp) * p).toFixed(4) + ")";
+  }
+  if (track && fill) {
+    track.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress);
+    document.querySelectorAll(".art img").forEach(function (img) {
+      if (!img.complete) img.addEventListener("load", updateProgress, { once: true });
+    });
+    updateProgress();
+    requestAnimationFrame(updateProgress);
+  }
+
+  /* ---------------- Lightbox ---------------- */
+  var lb = document.getElementById("lightbox");
+  var lbImg = document.getElementById("lb-img");
+  var lbTitle = document.getElementById("lb-title");
+  var lbCount = document.getElementById("lb-count");
+  var lbClose = document.getElementById("lb-close");
+  var lbPrev = document.getElementById("lb-prev");
+  var lbNext = document.getElementById("lb-next");
+  var lbIndex = 0;
+  var lastFocused = null;
+
+  function renderLb() {
+    var fig = arts[lbIndex];
+    var img = fig.querySelector("img");
+    lbImg.src = img.currentSrc || img.src;
+    lbImg.alt = img.alt;
+    lbTitle.textContent = fig.dataset.title || "";
+    lbCount.textContent = (lbIndex + 1) + " / " + arts.length;
+  }
+  function openLb(i) {
+    if (!lb) return;
+    lastFocused = document.activeElement;
+    lbIndex = i;
+    renderLb();
+    lb.hidden = false;
+    requestAnimationFrame(function () { lb.classList.add("open"); });
+    document.body.style.overflow = "hidden";
+    lbClose.focus();
+  }
+  function closeLb() {
+    if (!lb) return;
+    lb.classList.remove("open");
+    document.body.style.overflow = "";
+    setTimeout(function () { lb.hidden = true; }, reduced() ? 0 : 400);
+    if (lastFocused) lastFocused.focus();
+  }
+  function stepLb(dir) {
+    lbIndex = (lbIndex + dir + arts.length) % arts.length;
+    renderLb();
+  }
+
+  if (lb && arts.length) {
+    arts.forEach(function (fig, i) {
+      fig.setAttribute("tabindex", "0");
+      fig.setAttribute("role", "button");
+      fig.setAttribute("aria-label", "View " + (fig.dataset.title || "artwork") + " larger");
+      fig.addEventListener("click", function () { if (!dragged) openLb(i); });
+      fig.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLb(i); }
+      });
+    });
+    lbClose.addEventListener("click", closeLb);
+    lbPrev.addEventListener("click", function () { stepLb(-1); });
+    lbNext.addEventListener("click", function () { stepLb(1); });
+    lb.addEventListener("click", function (e) { if (e.target === lb) closeLb(); });
+    document.addEventListener("keydown", function (e) {
+      if (lb.hidden) return;
+      if (e.key === "Escape") closeLb();
+      if (e.key === "ArrowLeft") stepLb(-1);
+      if (e.key === "ArrowRight") stepLb(1);
+      if (e.key === "Tab") {
+        var focusables = lb.querySelectorAll("button");
+        var first = focusables[0];
+        var last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>

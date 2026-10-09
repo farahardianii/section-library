@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crafted with Care - Section</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f8f6f3 0%, #f0ede8 100%);
+            overflow-x: hidden;
+        }
+
+        .section {
+            width: 100%;
+            max-width: 100%;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 60px 80px;
+            background: linear-gradient(160deg, 
+                #e8f5e9 0%, 
+                #fff9c4 20%, 
+                #f3e5f5 40%, 
+                #e0f2f1 60%, 
+                #fff8e1 80%, 
+                #f1f8e9 100%);
+            overflow: hidden;
+        }
+
+        /* Animated gradient blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #c8e6c9 0%, transparent 70%);
+            top: -10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .blob-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #fff59d 0%, transparent 70%);
+            bottom: -5%;
+            left: 20%;
+            animation-delay: -5s;
+        }
+
+        .blob-3 {
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, #e1bee7 0%, transparent 70%);
+            top: 10%;
+            right: -5%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(20px, 10px) scale(1.02); }
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            gap: 80px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Left side - Visual */
+        .visual-side {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            min-height: 600px;
+        }
+
+        .capsules-wrapper {
+            position: relative;
+            width: 500px;
+            height: 500px;
+        }
+
+        .capsule {
+            position: absolute;
+            border-radius: 100px;
+            overflow: hidden;
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.1),
+                0 0 0 1px rgba(255,255,255,0.3),
+                inset 0 0 30px rgba(255,255,255,0.2);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+        }
+
+        .capsule::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 100px;
+            padding: 3px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.1));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .capsule img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .capsule:hover {
+            transform: scale(1.08) rotate(0deg) !important;
+            z-index: 10 !important;
+            box-shadow: 
+                0 30px 80px rgba(0,0,0,0.15),
+                0 0 0 1px rgba(255,255,255,0.5),
+                inset 0 0 40px rgba(255,255,255,0.3);
+        }
+
+        .capsule:hover img {
+            transform: scale(1.15);
+        }
+
+        .capsule-1 {
+            width: 200px;
+            height: 120px;
+            top: 80px;
+            left: 20px;
+            transform: rotate(-15deg);
+            z-index: 3;
+            background: linear-gradient(135deg, #a8d5a2 0%, #c8e6c9 50%, #a5d6a7 100%);
+        }
+
+        .capsule-2 {
+            width: 220px;
+            height: 130px;
+            top: 180px;
+            left: 120px;
+            transform: rotate(-5deg);
+            z-index: 2;
+            background: linear-gradient(135deg, #fff59d 0%, #fff9c4 50%, #fff176 100%);
+        }
+
+        .capsule-3 {
+            width: 240px;
+            height: 140px;
+            top: 280px;
+            left: 60px;
+            transform: rotate(8deg);
+            z-index: 1;
+            background: linear-gradient(135deg, #e1bee7 0%, #f3e5f5 50%, #ce93d8 100%);
+        }
+
+        /* Icon with connector line */
+        .icon-wrapper {
+            position: absolute;
+            top: 20px;
+            left: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: bounce 3s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .connector-line {
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to bottom, #666, transparent);
+            margin-top: -2px;
+        }
+
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            border: 2px solid #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .icon-box:hover {
+            transform: scale(1.1);
+            border-color: #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .icon-box svg {
+            width: 28px;
+            height: 28px;
+            stroke: #444;
+            stroke-width: 1.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Right side - Content */
+        .content-side {
+            flex: 1;
+            max-width: 550px;
+            padding-left: 40px;
+            border-left: 2px solid rgba(0,0,0,0.08);
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 24px;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .tag:hover {
+            background: rgba(255,255,255,0.9);
+            transform: translateX(5px);
+        }
+
+        .tag-dot {
+            width: 8px;
+            height: 8px;
+            background: #81c784;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.8); }
+        }
+
+        h1 {
+            font-size: 52px;
+            font-weight: 600;
+            color: #1a1a1a;
+            line-height: 1.15;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .description {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 28px;
+            background: transparent;
+            border: 2px solid #333;
+            border-radius: 100px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #1a1a1a;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 100px;
+        }
+
+        .cta-button:hover::before {
+            transform: scaleX(1);
+        }
+
+        .cta-button:hover {
+            color: #fff;
+            border-color: #1a1a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .cta-button span,
+        .cta-button svg {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover svg {
+            transform: translate(3px, -3px);
+        }
+
+        /* Particle effects on hover */
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        @keyframes particle-burst {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
+
+        /* Scroll indicator */
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.4;
+            animation: fade-in-up 1s ease 1s both;
+        }
+
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 0.4; transform: translateX(-50%) translateY(0); }
+        }
+
+        .scroll-hint span {
+            font-size: 12px;
+            color: #666;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, #666, transparent);
+            animation: scroll-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes scroll-pulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(0.5); }
+            50% { opacity: 1; transform: scaleY(1); }
+        }
+
+        /* Entrance animations */
+        .animate-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slide-up 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes slide-up {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .section { padding: 40px; }
+            .container { flex-direction: column; gap: 60px; }
+            .content-side { border-left: none; border-top: 2px solid rgba(0,0,0,0.08); padding-left: 0; padding-top: 40px; text-align: center; }
+            h1 { font-size: 40px; }
+            .visual-side { min-height: 400px; }
+            .capsules-wrapper { transform: scale(0.8); }
+        }
+
+        @media (max-width: 640px) {
+            .section { padding: 30px 20px; }
+            h1 { font-size: 32px; }
+            .description { font-size: 16px; }
+            .capsules-wrapper { transform: scale(0.6); }
+        }
+
+        /* Tooltip on capsule hover */
+        .capsule-tooltip {
+            position: absolute;
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .capsule:hover .capsule-tooltip {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <section class="section">
+        <!-- Background blobs -->
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+
+        <div class="container">
+            <!-- Left: Visual -->
+            <div class="visual-side">
+                <div class="capsules-wrapper">
+                    <!-- Icon with connector -->
+                    <div class="icon-wrapper">
+                        <div class="icon-box">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                                <path d="M2 12l10 5 10-5"/>
+                            </svg>
+                        </div>
+                        <div class="connector-line"></div>
+                    </div>
+
+                    <!-- Capsule 1 -->
+                    <div class="capsule capsule-1 animate-in delay-2">
+                        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop" alt="Team collaboration">
+                        <div class="capsule-tooltip">Collaboration</div>
+                    </div>
+
+                    <!-- Capsule 2 -->
+                    <div class="capsule capsule-2 animate-in delay-3">
+                        <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=400&h=300&fit=crop" alt="Development">
+                        <div class="capsule-tooltip">Development</div>
+                    </div>
+
+                    <!-- Capsule 3 -->
+                    <div class="capsule capsule-3 animate-in delay-4">
+                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop" alt="Analytics">
+                        <div class="capsule-tooltip">Analytics</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Content -->
+            <div class="content-side">
+                <div class="tag animate-in delay-1">
+                    <span class="tag-dot"></span>
+                    <span>Built for modern teams</span>
+                </div>
+
+                <h1 class="animate-in delay-2">Crafted with care</h1>
+
+                <p class="description animate-in delay-3">
+                    Intuitive workflows that adapt to how you work. Seamless integrations with the tools you already love. Every detail designed to help your team move faster together.
+                </p>
+
+                <a href="#" class="cta-button animate-in delay-4" id="ctaBtn">
+                    <span>Explore features</span>
+                    <svg viewBox="0 0 24 24">
+                        <path d="M7 17L17 7M17 7H7M17 7v10"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll hint -->
+        <div class="scroll-hint">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <script>
+        // Particle burst effect on button click
+        const ctaBtn = document.getElementById('ctaBtn');
+        
+        ctaBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const rect = this.getBoundingClientRect();
+            const colors = ['#81c784', '#fff59d', '#e1bee7', '#a5d6a7', '#ffcc80'];
+            
+            for (let i = 0; i < 12; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.left = (rect.left + rect.width / 2) + 'px';
+                particle.style.top = (rect.top + rect.height / 2) + 'px';
+                particle.style.setProperty('--tx', (Math.random() - 0.5) * 200 + 'px');
+                particle.style.setProperty('--ty', (Math.random() - 0.5) * 200 + 'px');
+                particle.style.animation = `particle-burst 0.8s ease-out forwards`;
+                particle.style.animationDelay = (Math.random() * 0.2) + 's';
+                
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 1000);
+            }
+        });
+
+        // Parallax effect on mouse move
+        const section = document.querySelector('.section');
+        const capsules = document.querySelectorAll('.capsule');
+        const blobs = document.querySelectorAll('.blob');
+
+        section.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const { innerWidth, innerHeight } = window;
+            
+            const xPercent = (clientX / innerWidth - 0.5) * 2;
+            const yPercent = (clientY / innerHeight - 0.5) * 2;
+
+            // Move capsules slightly
+            capsules.forEach((capsule, index) => {
+                const factor = (index + 1) * 8;
+                const currentTransform = capsule.style.transform;
+                capsule.style.transform = `translate(${xPercent * factor}px, ${yPercent * factor}px) rotate(${capsule.classList.contains('capsule-1') ? -15 : capsule.classList.contains('capsule-2') ? -5 : 8}deg)`;
+            });
+
+            // Move blobs slowly
+            blobs.forEach((blob, index) => {
+                const factor = (index + 1) * 15;
+                blob.style.transform = `translate(${xPercent * factor}px, ${yPercent * factor}px)`;
+            });
+        });
+
+        // Reset on mouse leave
+        section.addEventListener('mouseleave', () => {
+            capsules.forEach((capsule, index) => {
+                const rotations = [-15, -5, 8];
+                capsule.style.transform = `rotate(${rotations[index]}deg)`;
+                capsule.style.transition = 'transform 0.5s ease';
+            });
+            
+            blobs.forEach(blob => {
+                blob.style.transform = '';
+                blob.style.transition = 'transform 0.5s ease';
+            });
+        });
+
+        // Reset transition on mouse enter
+        section.addEventListener('mouseenter', () => {
+            capsules.forEach(capsule => {
+                capsule.style.transition = 'transform 0.1s ease';
+            });
+            blobs.forEach(blob => {
+                blob.style.transition = 'transform 0.1s ease';
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-in').forEach(el => {
+            el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+
+        // Capsule click effect
+        capsules.forEach(capsule => {
+            capsule.addEventListener('click', function() {
+                // Ripple effect
+                const ripple = document.createElement('div');
+                ripple.style.cssText = `
+                    position: absolute;
+                    inset: 0;
+                    border-radius: 100px;
+                    background: radial-gradient(circle at center, rgba(255,255,255,0.5) 0%, transparent 70%);
+                    animation: ripple 0.6s ease-out forwards;
+                    pointer-events: none;
+                `;
+                
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes ripple {
+                        from { transform: scale(0.5); opacity: 1; }
+                        to { transform: scale(1.5); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                    style.remove();
+                }, 600);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Join Our Kitchen - Rasa Nusantara</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Design tokens ---------- */
+  :root {
+    /* Dark food photography background — colors tuned for dark overlay */
+    --bg-1: #f5ead0;
+    --bg-2: #ecdcbc;
+    --bg-3: #e8d4b0;
+    --ink: #f7efe0;           /* light cream text on dark bg */
+    --ink-soft: #d4c9b3;      /* soft cream for secondary text */
+    --line: #d9c9a8;
+    --accent: #e8943c;        /* turmeric — pops on dark bg */
+    --accent-deep: #c14a2b;   /* chili red */
+    --accent-warm: #e8943c;
+    --accent-green: #a3b56a;
+    --shadow-tile: 0 8px 24px rgba(0,0,0,.35), 0 2px 4px rgba(0,0,0,.18);
+    --shadow-tile-hover: 0 24px 48px rgba(0,0,0,.50), 0 6px 12px rgba(0,0,0,.25);
+  }
+
+  /* ---------- Reset ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ---------- Page wrapper: food photography background ---------- */
+  .page {
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 32px;
+    position: relative;
+    /* Food photography — dark, moody overhead flat-lay of dishes */
+    background:
+      url('https://images.unsplash.com/photo-1504674900-b2b6e62f3b02?q=80&w=1920&auto=format&fit=crop')
+      center / cover
+      no-repeat
+      fixed;
+    background-color: #1a1208;
+  }
+
+  /* Dark overlay for readability — warm tint to match food theme */
+  .page::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 50%, rgba(28,20,16,.45) 0%, rgba(28,20,16,.78) 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Warm color tint over the photo — ties everything to food palette */
+  .page::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, rgba(193,74,43,.12) 0%, transparent 50%, rgba(232,148,60,.10) 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ---------- Radial stage ---------- */
+  .stage {
+    position: relative;
+    width: min(1100px, 100%);
+    aspect-ratio: 11 / 7;
+    max-width: 1100px;
+    z-index: 3;
+  }
+
+  /* ---------- Center cluster ---------- */
+  .center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 5;
+    width: min(440px, 82%);
+    pointer-events: none;
+    /* breathing room from tiles */
+    padding: 8px 0;
+  }
+  .center > * { pointer-events: auto; }
+
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp .8s ease-out .1s forwards;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+    display: inline-block;
+    opacity: 0.6;
+  }
+
+  .heading {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(46px, 5.5vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    margin: 0 0 24px 0;
+    color: var(--ink);
+    opacity: 0;
+    animation: fadeUp .9s cubic-bezier(.16,1,.3,1) .25s forwards;
+  }
+  .heading em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--accent);
+  }
+
+  .desc {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 360px;
+    margin: 0 auto 32px auto;
+    opacity: 0;
+    animation: fadeUp .9s cubic-bezier(.16,1,.3,1) .4s forwards;
+  }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 28px;
+    border-radius: 999px;
+    background: var(--accent);       /* turmeric pop on dark bg */
+    color: #2a1f15;                  /* dark text on bright button */
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeUp .9s cubic-bezier(.16,1,.3,1) .55s forwards;
+    transition: transform .25s ease, box-shadow .35s ease, background .3s ease;
+    box-shadow: 0 4px 20px rgba(232,148,60,.35);
+  }
+  .cta::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,.28), transparent 50%);
+    opacity: 0;
+    transition: opacity .35s ease;
+    pointer-events: none;
+  }
+  .cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(232,148,60,.50);
+    background: #f0a850;
+  }
+  .cta:hover::after { opacity: 1; }
+  .cta:active { transform: translateY(0); }
+  .cta svg { transition: transform .25s ease; }
+  .cta:hover svg { transform: translateX(3px); }
+
+  /* ---------- Tile base ---------- */
+  .tile {
+    position: absolute;
+    width: 128px;
+    aspect-ratio: 1 / 1.15;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-tile);
+    cursor: pointer;
+    transform: translate(-50%, -50%) scale(.85);
+    opacity: 0;
+    transition:
+      transform .6s cubic-bezier(.16,1,.3,1),
+      box-shadow .4s ease,
+      z-index 0s;
+    will-change: transform;
+    border: 3px solid rgba(255,255,255,.45);
+  }
+  .tile.in { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  .tile:hover {
+    z-index: 10;
+    box-shadow: var(--shadow-tile-hover);
+    border-color: rgba(255,255,255,.80);
+  }
+  .tile:hover .tile-img { transform: scale(1.08); }
+  .tile:hover .tile-tag { opacity: 1; transform: translateY(0); }
+  .tile:hover .tile-name { opacity: 1; transform: translateY(0); }
+
+  .tile-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .8s cubic-bezier(.16,1,.3,1);
+  }
+
+  .tile-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,.6) 100%);
+    pointer-events: none;
+  }
+
+  .tile-name {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    right: 14px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .35s ease .05s, transform .35s ease .05s;
+    pointer-events: none;
+    line-height: 1.2;
+  }
+  .tile-name small {
+    display: block;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-top: 4px;
+  }
+
+  .tile-tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.94);
+    color: var(--accent-deep);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity .3s ease, transform .3s ease;
+    pointer-events: none;
+    backdrop-filter: blur(4px);
+  }
+
+  /* ---------- Tile positions (radial) — adjusted for better spacing ---------- */
+  /* Spread wider, more even gaps, avoid center cluster overlap */
+  .tile { left: 50%; top: 50%; }
+
+  .tile.p1 { left: 28%;  top: 19%; } /* top-left */
+  .tile.p2 { left: 50%;  top: 13%; } /* top-center */
+  .tile.p3 { left: 72%;  top: 19%; } /* top-right */
+  .tile.p4 { left: 15%;  top: 49%; } /* mid-left */
+  .tile.p5 { left: 85%;  top: 49%; } /* mid-right */
+  .tile.p6 { left: 28%;  top: 81%; } /* bottom-left */
+  .tile.p7 { left: 50%;  top: 87%; } /* bottom-center */
+  .tile.p8 { left: 72%;  top: 81%; } /* bottom-right */
+
+  /* ---------- Stagger entrance ---------- */
+  .p1 { transition-delay: .05s; }
+  .p2 { transition-delay: .12s; }
+  .p3 { transition-delay: .19s; }
+  .p4 { transition-delay: .26s; }
+  .p5 { transition-delay: .33s; }
+  .p6 { transition-delay: .40s; }
+  .p7 { transition-delay: .47s; }
+  .p8 { transition-delay: .54s; }
+
+  /* ---------- Subtle floating motion after entrance ---------- */
+  @keyframes floatA {
+    0%,100% { transform: translate(-50%, calc(-50% - 0px)); }
+    50%     { transform: translate(-50%, calc(-50% - 5px)); }
+  }
+  @keyframes floatB {
+    0%,100% { transform: translate(-50%, calc(-50% - 0px)); }
+    50%     { transform: translate(-50%, calc(-50% + 5px)); }
+  }
+  .tile.in.floatA { animation: floatA 6s ease-in-out infinite; }
+  .tile.in.floatB { animation: floatB 7s ease-in-out infinite; }
+  .tile.in:hover  { animation: none; transform: translate(-50%, -50%) scale(1.08); }
+
+  /* ---------- Animated entrance ---------- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 880px) {
+    .page { padding: 48px 20px; }
+    .stage {
+      aspect-ratio: auto;
+      min-height: 780px;
+    }
+    .tile { width: 104px; border-width: 2.5px; }
+    .tile.p1 { left: 16%; top: 12%; }
+    .tile.p2 { left: 50%; top: 8%; }
+    .tile.p3 { left: 84%; top: 12%; }
+    .tile.p4 { left: 8%;  top: 40%; }
+    .tile.p5 { left: 92%; top: 40%; }
+    .tile.p6 { left: 20%; top: 78%; }
+    .tile.p7 { left: 50%; top: 88%; }
+    .tile.p8 { left: 80%; top: 78%; }
+  }
+  @media (max-width: 560px) {
+    .page { padding: 32px 12px; }
+    .heading { font-size: 42px; }
+    .desc { font-size: 14px; margin-bottom: 26px; }
+    .tile { width: 84px; border-radius: 14px; border-width: 2px; }
+    .tile-name { font-size: 11px; bottom: 10px; left: 10px; right: 10px; }
+    .tile-name small { font-size: 9px; }
+    .tile-tag { font-size: 8.5px; padding: 4px 8px; }
+    .center { width: 88%; }
+    .eyebrow { font-size: 10px; margin-bottom: 16px; }
+    .cta { padding: 13px 24px; font-size: 11px; }
+  }
+
+  /* ---------- Reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .tile, .center > * { animation: none !important; opacity: 1 !important; transform: translate(-50%, -50%) scale(1) !important; }
+    .eyebrow, .heading, .desc, .cta {
+      opacity: 1 !important;
+      transform: none !important;
+      animation: none !important;
+    }
+    .tile:hover { transform: translate(-50%, -50%) scale(1.04) !important; }
+    .deco { animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<main class="page">
+
+  <section class="stage" id="stage">
+
+    <!-- Center cluster -->
+    <div class="center">
+      <div class="eyebrow">We're hiring</div>
+      <h1 class="heading">Taste <em>our</em> kitchen</h1>
+      <p class="desc">
+        Chefs, servers, and dishwashers who care about a hot plate arriving on time. Not demos, not trends.
+      </p>
+      <button class="cta" id="cta">
+        See open roles
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 7H13M13 7L7.5 1.5M13 7L7.5 12.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Tiles (8 portraits in radial layout) -->
+    <article class="tile p1 floatA" data-name="Pak Budi" data-role="Head Chef">
+      <img class="tile-img" src="https://i.pravatar.cc/240?img=12" alt="Pak Budi" />
+      <div class="tile-overlay"></div>
+      <span class="tile-tag">Chef</span>
+      <div class="tile-name">Pak Budi<small>Head Chef</small></div>
+    </article>
+
+    <article class="tile p2 floatB" data-name="Sari" data-role="Pastry Lead">
+      <img class="tile-img" src="https://i.pravatar.cc/240?img=47" alt="Sari" />
+      <div class="tile-overlay"></div>
+      <span class="tile-tag">Pastry</span>
+      <div class="tile-name">Sari<small>Pastry Lead</small></div>
+    </article>
+
+    <article class="tile p3 floatA" data-name="Andini" data-role="Floor Manager">
+      <img class="tile-img" src="https://i.pravatar.cc/240?img=44" alt="Andini" />
+      <div class="tile-overlay"></div>
+      <span class="tile-tag">Service</span>
+      <div class="tile-name">Andini<small>Floor Manager</small></div>
+    </article>
+
+    <article class="tile p4 floatB" data-name="Rian" data-role="Sous Chef">
+      <img class="tile-img" src="https://i.pravatar.cc/240?img=15" alt="Rian" />
+      <div class="tile-overlay"></div>
+      <span class="tile-tag">Chef</span>
+      <div class="tile-name">Rian<small>Sous Chef</small></div>
+    </article>
+
+    <article class="tile p5 floatA" data-name="Made" data-role="Bartender">
+      <img class="tile-img" src="https://i.pravatar.cc/240?img=33" alt="Made" />
+      <div class="tile-overlay"></div>
+      <span class="tile-tag">Bar</span>
+      <div class="tile-name">Made<small>Bartender</small></div>
+    </article>
+
+    <article class="tile p6 floatB" data-name="Lia" data-role="Pastry Cook">
+      <img class="tile-img" src="https://i.pravatar.cc/240?img=49" alt="Lia" />
+      <div class="tile-overlay"></div>
+      <span class="tile-tag">Pastry</span>
+      <div class="tile-name">Lia<small>Pastry Cook</small></div>
+    </article>
+
+    <article class="tile p7 floatA" data-name="Agus" data-role="Line Cook">
+      <img class="tile-img" src="https://i.pravatar.cc/240?img=68" alt="Agus" />
+      <div class="tile-overlay"></div>
+      <span class="tile-tag">Chef</span>
+      <div class="tile-name">Agus<small>Line Cook</small></div>
+    </article>
+
+    <article class="tile p8 floatB" data-name="Dewa" data-role="Server Lead">
+      <img class="tile-img" src="https://i.pravatar.cc/240?img=11" alt="Dewa" />
+      <div class="tile-overlay"></div>
+      <span class="tile-tag">Service</span>
+      <div class="tile-name">Dewa<small>Server Lead</small></div>
+    </article>
+
+  </section>
+</main>
+
+<script>
+  /* ----- Stagger entrance ----- */
+  const tiles = document.querySelectorAll('.tile');
+  tiles.forEach((t, i) => setTimeout(() => t.classList.add('in'), 200 + i * 80));
+
+  /* ----- Cursor-follow radial gradient on the CTA ----- */
+  const cta = document.getElementById('cta');
+  cta.addEventListener('pointermove', (e) => {
+    const r = cta.getBoundingClientRect();
+    cta.style.setProperty('--mx', `${e.clientX - r.left}px`);
+    cta.style.setProperty('--my', `${e.clientY - r.top}px`);
+  });
+
+  /* ----- Subtle parallax: tiles drift away from cursor ----- */
+  const stage = document.getElementById('stage');
+  stage.addEventListener('pointermove', (e) => {
+    const r = stage.getBoundingClientRect();
+    const cx = (e.clientX - r.left) / r.width - 0.5;
+    const cy = (e.clientY - r.top)  / r.height - 0.5;
+    tiles.forEach(t => {
+      if (t.matches(':hover')) return;
+      const depth = t.classList.contains('floatA') ? 8 : 12;
+      const tx = (-cx * depth).toFixed(2);
+      const ty = (-cy * depth).toFixed(2);
+      t.style.setProperty('--px', `${tx}px`);
+      t.style.setProperty('--py', `${ty}px`);
+    });
+  });
+  stage.addEventListener('pointerleave', () => {
+    tiles.forEach(t => {
+      t.style.setProperty('--px', '0px');
+      t.style.setProperty('--py', '0px');
+    });
+  });
+
+  /* ----- Apply parallax on top of float animations ----- */
+  const styleEl = document.createElement('style');
+  styleEl.textContent = `
+    .tile.in.floatA {
+      animation: floatAPar 6s ease-in-out infinite;
+    }
+    .tile.in.floatB {
+      animation: floatBPar 7s ease-in-out infinite;
+    }
+    @keyframes floatAPar {
+      0%,100% { transform: translate(calc(-50% + var(--px, 0px)), calc(-50% - 0px + var(--py, 0px))); }
+      50%     { transform: translate(calc(-50% + var(--px, 0px)), calc(-50% - 5px + var(--py, 0px))); }
+    }
+    @keyframes floatBPar {
+      0%,100% { transform: translate(calc(-50% + var(--px, 0px)), calc(-50% - 0px + var(--py, 0px))); }
+      50%     { transform: translate(calc(-50% + var(--px, 0px)), calc(-50% + 5px + var(--py, 0px))); }
+    }
+  `;
+  document.head.appendChild(styleEl);
+
+  /* ----- Tile click: subtle pulse ----- */
+  tiles.forEach(t => {
+    t.addEventListener('click', () => {
+      t.animate(
+        [
+          { transform: 'translate(-50%, -50%) scale(1.08)' },
+          { transform: 'translate(-50%, -50%) scale(0.96)' },
+          { transform: 'translate(-50%, -50%) scale(1.04)' }
+        ],
+        { duration: 420, easing: 'cubic-bezier(.16,1,.3,1)' }
+      );
+    });
+  });
+</script>
+
+</body>
+</html>

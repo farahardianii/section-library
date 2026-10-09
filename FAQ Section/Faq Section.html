@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FAQ — Straight answers, zero fluff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#e6e8e1;
+    --card:#f4f5f0;
+    --card-dark:#d5d9cd;
+    --ink:#12160f;
+    --muted:#565c50;
+    --muted-2:#666c5f;
+    --accent:#2b5f4b;
+    --accent-deep:#23503f;
+    --accent-ink:#f4f5f0;
+    --chev:#e0e3d9;
+
+    --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+    --sans:"DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+
+    /* vertical rhythm */
+    --s1:8px; --s2:12px; --s3:16px; --s4:24px; --s5:32px; --s6:48px; --s7:64px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(110% 80% at 88% -10%, rgba(43,95,75,.09), transparent 62%),
+      radial-gradient(80% 60% at 0% 100%, rgba(43,95,75,.06), transparent 60%),
+      var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:15px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    padding:80px 40px 96px;
+    min-height:100vh;
+  }
+
+  .wrap{max-width:1140px;margin:0 auto}
+
+  /* ---------- HEADER BAND ---------- */
+  .head{
+    display:grid;
+    grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
+    gap:72px;
+    align-items:end;
+    padding-bottom:60px;
+    border-bottom:1px solid rgba(18,22,15,.13);
+  }
+  .eyebrow{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:28px;
+  }
+
+  h1{
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:clamp(44px,5.4vw,68px);
+    line-height:1.0;
+    letter-spacing:-.015em;
+    margin-bottom:26px;
+  }
+  h1 em{font-style:italic;color:var(--accent)}
+  .lead{
+    font-size:15px;
+    line-height:1.7;
+    color:var(--muted);
+    max-width:440px;
+  }
+
+  .cta-card{
+    background:var(--card-dark);
+    border:1px solid rgba(18,22,15,.07);
+    border-radius:18px;
+    padding:34px 34px 36px;
+    box-shadow:0 24px 50px -36px rgba(18,22,15,.6);
+  }
+  .cta-card h2{
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:27px;
+    line-height:1.15;
+    letter-spacing:-.01em;
+    margin-bottom:14px;
+  }
+  .cta-card p{
+    font-size:14px;
+    line-height:1.7;
+    color:var(--muted);
+    margin-bottom:28px;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    text-decoration:none;
+    font-family:var(--sans);
+    font-size:14px;
+    font-weight:500;
+    letter-spacing:.01em;
+    color:var(--accent-ink);
+    transition:transform .25s ease;
+  }
+  .btn .label{
+    background:var(--accent);
+    padding:12px 24px;
+    border-radius:999px;
+    line-height:1.2;
+    transition:background .25s ease, box-shadow .25s ease;
+  }
+  .btn:hover{transform:translateY(-1px)}
+  .btn:hover .label{
+    background:var(--accent-deep);
+    box-shadow:0 12px 24px -14px rgba(35,80,63,.95);
+  }
+  .btn:active{transform:translateY(0)}
+
+  /* ---------- FAQ ---------- */
+  .faq-section{
+    max-width:860px;
+    margin:0 auto;
+    padding-top:64px;
+  }
+  .faq-top{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:24px;
+    margin-bottom:30px;
+  }
+  .faq-top h3{
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:26px;
+    letter-spacing:-.01em;
+    line-height:1.1;
+  }
+  .faq-top .count{
+    font-size:11.5px;
+    font-weight:500;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--muted-2);
+    white-space:nowrap;
+  }
+
+  .faq{display:flex;flex-direction:column;gap:14px}
+  .item{
+    background:var(--card);
+    border:1px solid rgba(18,22,15,.06);
+    border-radius:16px;
+    overflow:hidden;
+    transition:background .25s ease, box-shadow .3s ease, transform .3s ease, border-color .3s ease;
+  }
+  .item:hover{
+    background:#f8f9f5;
+    box-shadow:0 18px 36px -30px rgba(18,22,15,.75);
+  }
+  .item.open{
+    border-color:rgba(43,95,75,.28);
+    box-shadow:0 26px 52px -36px rgba(18,22,15,.8);
+    transform:translateY(-1px);
+  }
+  .q{
+    width:100%;
+    background:none;
+    border:0;
+    cursor:pointer;
+    text-align:left;
+    font:inherit;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    gap:22px;
+    padding:26px 26px 26px 28px;
+  }
+  .num{
+    font-family:var(--sans);
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.1em;
+    color:var(--muted-2);
+    flex:none;
+    width:26px;
+    transition:color .25s ease;
+  }
+  .item:hover .num,
+  .item.open .num{color:var(--accent)}
+  .q span.t{
+    font-family:var(--serif);
+    font-size:22px;
+    line-height:1.3;
+    letter-spacing:-.005em;
+    flex:1;
+  }
+  .chev{
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    background:var(--chev);
+    display:grid;
+    place-items:center;
+    flex:none;
+    transition:background .25s ease, transform .35s cubic-bezier(.2,.7,.3,1);
+  }
+  .chev svg{transition:transform .35s cubic-bezier(.2,.7,.3,1), stroke .25s ease}
+  .item.open .chev{background:var(--accent);transform:rotate(180deg)}
+  .item.open .chev svg{stroke:var(--accent-ink)}
+
+  .a{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows .4s cubic-bezier(.22,.7,.28,1);
+  }
+  .item.open .a{grid-template-rows:1fr}
+  .a > div{overflow:hidden}
+  .a p{
+    padding:0 88px 30px 76px;
+    font-size:14.5px;
+    line-height:1.75;
+    color:var(--muted-2);
+    max-width:660px;
+  }
+
+  /* ---------- FOOT NOTE ---------- */
+  .foot{
+    max-width:860px;
+    margin:44px auto 0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+    flex-wrap:wrap;
+    padding-top:26px;
+    border-top:1px solid rgba(18,22,15,.12);
+    font-size:11.5px;
+    font-weight:500;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--muted-2);
+  }
+  .chips{display:flex;gap:26px;flex-wrap:wrap}
+  .chips span{display:flex;align-items:center;gap:8px}
+  .chips i{width:5px;height:5px;border-radius:50%;background:var(--accent);display:block}
+  .foot a{
+    color:var(--accent);
+    text-decoration:none;
+    font-weight:700;
+    letter-spacing:.08em;
+    border-bottom:1px solid rgba(43,95,75,.35);
+    padding-bottom:3px;
+    transition:border-color .25s ease, opacity .25s ease;
+  }
+  .foot a:hover{border-color:var(--accent);opacity:.8}
+
+  @media (max-width:900px){
+    body{padding:56px 24px 76px}
+    .head{grid-template-columns:1fr;gap:44px;align-items:start;padding-bottom:46px}
+    .lead{max-width:none}
+    .faq-section{padding-top:48px}
+    .q span.t{font-size:20px}
+    .a p{padding-right:28px;padding-left:28px}
+    .foot{margin-top:34px;gap:18px}
+  }
+  @media (max-width:520px){
+    .q{gap:14px;padding:22px 18px 22px 20px}
+    .num{display:none}
+    .faq-top{flex-direction:column;gap:8px;align-items:flex-start}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- HEADER -->
+    <header class="head">
+      <div>
+        <div class="eyebrow">Before You Commit</div>
+        <h1>Straight answers,<br><em>zero fluff</em></h1>
+        <p class="lead">How we scope the work, what it costs, who owns what afterwards, and the numbers we put in front of you every week.</p>
+      </div>
+
+      <div class="cta-card">
+        <h2>Still weighing it up?</h2>
+        <p>Book a 30-minute call with an operations lead. We'll map your bottlenecks live and tell you honestly whether we're the right fit.</p>
+        <a class="btn" href="#">
+          <span class="label">Request a callback</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- FAQ -->
+    <section class="faq-section">
+      <div class="faq-top">
+        <h3>Frequently asked questions</h3>
+        <div class="count">05 questions</div>
+      </div>
+
+      <div class="faq" id="faq">
+        <article class="item open">
+          <button class="q" aria-expanded="true">
+            <span class="num">01</span>
+            <span class="t">Where does an engagement actually begin?</span>
+            <span class="chev" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#12160f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </button>
+          <div class="a"><div><p>With a two-week diagnostic. We sit with your team, map the real workflow instead of the documented one, and hand back a prioritised list of fixes ranked by effort versus impact — you own that analysis whether we continue or not.</p></div></div>
+        </article>
+
+        <article class="item">
+          <button class="q" aria-expanded="false">
+            <span class="num">02</span>
+            <span class="t">Do we need to replace the tools we already use?</span>
+            <span class="chev" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#12160f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </button>
+          <div class="a"><div><p>Rarely. Most inefficiency lives in handoffs, approvals and duplicate data entry — not in the software. We reconfigure what you have first and only recommend a switch when the cost of staying is provably higher.</p></div></div>
+        </article>
+
+        <article class="item">
+          <button class="q" aria-expanded="false">
+            <span class="num">03</span>
+            <span class="t">How is pricing structured?</span>
+            <span class="chev" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#12160f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </button>
+          <div class="a"><div><p>A fixed fee per phase, agreed before each phase starts. No hourly billing and no change-order surprises — if scope shifts, we re-quote in writing before any work continues.</p></div></div>
+        </article>
+
+        <article class="item">
+          <button class="q" aria-expanded="false">
+            <span class="num">04</span>
+            <span class="t">Who owns the work once you leave?</span>
+            <span class="chev" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#12160f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </button>
+          <div class="a"><div><p>You do — entirely. Every process document, dashboard and SOP is built inside your own systems and handed over with a training session, so nothing keeps depending on us being in the room.</p></div></div>
+        </article>
+
+        <article class="item">
+          <button class="q" aria-expanded="false">
+            <span class="num">05</span>
+            <span class="t">How quickly do results show up?</span>
+            <span class="chev" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#12160f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </button>
+          <div class="a"><div><p>Quick wins usually land in the first 30 days — shorter queues, fewer duplicate tickets, clearer ownership. Structural gains compound over the following quarter, tracked against the baseline we set on day one.</p></div></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- FOOT -->
+    <div class="foot">
+      <div class="chips">
+        <span><i></i> Reply within 1 business day</span>
+        <span><i></i> No obligation</span>
+        <span><i></i> NDA on request</span>
+      </div>
+      <a href="#">Ask something else →</a>
+    </div>
+
+  </div>
+
+<script>
+  document.querySelectorAll('#faq .q').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var item = btn.closest('.item');
+      var isOpen = item.classList.contains('open');
+      document.querySelectorAll('#faq .item').forEach(function(i){
+        i.classList.remove('open');
+        i.querySelector('.q').setAttribute('aria-expanded','false');
+      });
+      if(!isOpen){
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded','true');
+      }
+    });
+  });
+</script>
+</body>
+</html>

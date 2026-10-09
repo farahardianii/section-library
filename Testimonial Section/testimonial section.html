@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Creative Process — Interactive Showcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+    color: #1a1a2e;
+    background: #faf9f6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+  img { max-width: 100%; display: block; }
+
+  /* ---------- Section ---------- */
+  .showcase {
+    width: 100%;
+    background: #faf9f6;
+    padding: 104px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .showcase__inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ---------- Eyebrow ---------- */
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .eyebrow__text {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+    color: #1a1a2e;
+    text-transform: uppercase;
+  }
+  /* ---------- Heading ---------- */
+  .heading {
+    font-size: clamp(28px, 3.4vw, 40px);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    color: #1a1a2e;
+    margin-bottom: 52px;
+    max-width: 720px;
+  }
+  .heading em {
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    color: #e85d2f;
+  }
+
+  /* ---------- Main layout ---------- */
+  .layout {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) 340px 170px;
+    column-gap: 40px;
+    align-items: start;
+  }
+
+  /* ---------- Stage selector column ---------- */
+  .stages {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-top: 4px;
+    position: relative;
+    align-self: start;
+  }
+  .stages::before {
+    content: "";
+    position: absolute;
+    left: 27px;
+    top: 30px;
+    bottom: 30px;
+    width: 2px;
+    background: #e3dfd6;
+    z-index: 0;
+  }
+  .stage-dot {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    background: #eef0ed;
+    position: relative;
+    padding: 0;
+    transition:
+      transform 380ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      border-color 220ms ease,
+      box-shadow 360ms ease,
+      opacity 220ms ease;
+    opacity: 0.6;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .stage-dot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.7) brightness(0.95);
+    transition: filter 380ms ease, transform 380ms ease;
+  }
+  .stage-dot:hover {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  .stage-dot:hover img { filter: saturate(1) brightness(1); }
+  .stage-dot.is-active {
+    border-color: #e85d2f;
+    opacity: 1;
+    transform: scale(1.12);
+    box-shadow: 0 8px 28px rgba(232, 93, 47, 0.28);
+  }
+  .stage-dot.is-active img { filter: saturate(1) brightness(1); }
+  .stage-dot:focus-visible {
+    outline: none;
+    border-color: #e85d2f;
+    box-shadow: 0 0 0 4px rgba(232, 93, 47, 0.18);
+  }
+
+  /* ---------- Content panel ----------
+     Cards are stacked in the same grid cell, so the panel is always
+     as tall as the tallest card. Nothing can overlap or clip. */
+  .content-panel {
+    display: grid;
+    position: relative;
+    min-width: 0;
+  }
+  .stage-card {
+    grid-area: 1 / 1;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(14px);
+    pointer-events: none;
+    transition:
+      opacity 480ms ease,
+      transform 480ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      visibility 0s linear 480ms;
+  }
+  .stage-card.is-active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+    transition:
+      opacity 480ms ease 60ms,
+      transform 480ms cubic-bezier(0.2, 0.7, 0.2, 1) 60ms,
+      visibility 0s;
+  }
+
+  /* ---------- Stage number badge ---------- */
+  .stage-card__num {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: #e85d2f;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  /* ---------- Stage title ---------- */
+  .stage-card__title {
+    font-size: clamp(22px, 2.4vw, 28px);
+    line-height: 1.25;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ---------- Stage description ---------- */
+  .stage-card__desc {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #4a4a5e;
+    font-weight: 400;
+    margin-bottom: 26px;
+    max-width: 62ch;
+  }
+
+  /* ---------- Meta tags ---------- */
+  .stage-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 30px;
+  }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #3a3a4e;
+    background: #efede6;
+    padding: 6px 13px;
+    border-radius: 999px;
+    transition: background 260ms ease, color 260ms ease, transform 260ms ease;
+    cursor: default;
+  }
+  .tag:hover {
+    background: #e85d2f;
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  /* ---------- Metrics row ---------- */
+  .metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 40px;
+    padding-top: 24px;
+    border-top: 1px solid #e3dfd6;
+  }
+  .metric__value {
+    font-size: 28px;
+    font-weight: 800;
+    color: #1a1a2e;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .metric__value .unit {
+    font-size: 14px;
+    font-weight: 500;
+    color: #e85d2f;
+    margin-left: 2px;
+  }
+  .metric__label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #7a7a8e;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 6px;
+  }
+
+  /* ---------- Visual wrapper ---------- */
+  .visual-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+  }
+  .visual {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #eef0ed;
+    position: relative;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  }
+  .visual__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.06);
+    transition:
+      opacity 700ms ease,
+      transform 1000ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .visual__img.is-active {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .visual::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(26, 26, 46, 0.38) 0%, transparent 45%);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .visual__label {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 480ms ease 200ms, transform 480ms ease 200ms;
+  }
+  .visual__label.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .visual__label-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* ---------- Big decorative numeral ---------- */
+  .big-num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(88px, 9vw, 156px);
+    line-height: 1;
+    color: #e85d2f;
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: -0.02em;
+    user-select: none;
+    text-align: center;
+    padding-top: 4px;
+    transition: transform 480ms ease;
+    position: relative;
+    min-width: 0;
+  }
+  .big-num.is-pulse { animation: numpulse 700ms ease; }
+  @keyframes numpulse {
+    0%   { transform: scale(1) rotate(0deg); }
+    40%  { transform: scale(1.08) rotate(-3deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+
+  /* ---------- Progress track ---------- */
+  .progress-track {
+    display: flex;
+    gap: 6px;
+    margin-top: 44px;
+    align-items: center;
+  }
+  .progress-track__bar {
+    flex: 1;
+    height: 4px;
+    background: #e3dfd6;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transform-origin: center;
+    transition: background 300ms ease, transform 200ms ease;
+  }
+  .progress-track__bar:hover { transform: scaleY(1.8); }
+  .progress-track__bar.is-active { background: #e85d2f; }
+  .progress-track__bar.is-active::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.45);
+    transform-origin: left;
+    animation: fillbar 6s linear forwards;
+  }
+  .progress-track__bar.is-done {
+    background: #e85d2f;
+    opacity: 0.4;
+  }
+  .progress-track__bar.is-done::after { display: none; }
+  .showcase.is-timer-paused .progress-track__bar.is-active::after {
+    animation-play-state: paused;
+  }
+  @keyframes fillbar {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+
+  /* ---------- Controls row ---------- */
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 22px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  /* ---------- Nav buttons ---------- */
+  .nav-btns { display: flex; gap: 10px; }
+  .nav-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid #e3dfd6;
+    background: #fff;
+    color: #1a1a2e;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: all 280ms ease;
+    user-select: none;
+  }
+  .nav-btn:hover {
+    border-color: #e85d2f;
+    color: #e85d2f;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(232, 93, 47, 0.15);
+  }
+  .nav-btn:active { transform: translateY(0) scale(0.95); }
+  .nav-btn:focus-visible {
+    outline: none;
+    border-color: #e85d2f;
+    box-shadow: 0 0 0 4px rgba(232, 93, 47, 0.18);
+  }
+
+  /* ---------- Auto-play toggle ---------- */
+  .autoplay {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #7a7a8e;
+    cursor: pointer;
+    user-select: none;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: #efede6;
+    border: none;
+    font-family: inherit;
+    transition: background 200ms ease, color 200ms ease;
+  }
+  .autoplay:hover { background: #e8e5dc; color: #1a1a2e; }
+  .autoplay:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(232, 93, 47, 0.18);
+  }
+  .autoplay__icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #e85d2f;
+    position: relative;
+    flex-shrink: 0;
+    transition: background 200ms ease;
+  }
+  .autoplay__icon::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 2px solid #e85d2f;
+    opacity: 0.5;
+    animation: ring 2000ms ease-out infinite;
+  }
+  .autoplay.is-paused .autoplay__icon::after { display: none; }
+  .autoplay.is-paused .autoplay__icon { background: #b8b0a0; }
+  @keyframes ring {
+    0%   { transform: scale(0.8); opacity: 0.6; }
+    100% { transform: scale(2.2); opacity: 0;   }
+  }
+
+  /* ---------- Swipe hint (mobile) ---------- */
+  .swipe-hint {
+    display: none;
+    font-size: 11px;
+    color: #9a9a8e;
+    text-align: center;
+    margin-top: 16px;
+    opacity: 0.7;
+  }
+
+  /* ---------- Background blobs ----------
+     Wrapper = stage drift (slow transition)
+     Inner    = mouse parallax (fast transition) */
+  .blob-wrap {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    transition: transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .blob-wrap--1 { width: 420px; height: 420px; top: -120px; right: -120px; }
+  .blob-wrap--2 { width: 320px; height: 320px; bottom: -90px; left: -90px; }
+  .blob {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.07;
+    transition: transform 300ms ease-out;
+  }
+  .blob--1 { background: #e85d2f; }
+  .blob--2 { background: #1a1a2e; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1180px) {
+    .layout {
+      grid-template-columns: 64px minmax(0, 1fr) 320px;
+      column-gap: 32px;
+    }
+    .big-num { display: none; }
+  }
+
+  @media (max-width: 960px) {
+    .layout {
+      grid-template-columns: 56px minmax(0, 1fr);
+      column-gap: 24px;
+      row-gap: 28px;
+      grid-template-areas:
+        "stages visual"
+        "stages content";
+    }
+    .stages { grid-area: stages; }
+    .stages::before { left: 27px; }
+    .content-panel { grid-area: content; }
+    .visual-wrap { grid-area: visual; }
+    .visual { aspect-ratio: 16 / 10; max-height: 340px; }
+    .stage-card__desc { max-width: none; }
+  }
+
+  @media (max-width: 560px) {
+    .showcase { padding: 64px 20px; }
+    .layout {
+      grid-template-columns: 48px minmax(0, 1fr);
+      column-gap: 16px;
+      row-gap: 24px;
+    }
+    .stage-dot { width: 44px; height: 44px; }
+    .stages { gap: 12px; }
+    .stages::before { left: 23px; top: 26px; bottom: 26px; }
+    .stage-card__desc { font-size: 15px; }
+    .heading { font-size: 24px; margin-bottom: 36px; }
+    .metrics { gap: 14px 24px; }
+    .metric__value { font-size: 22px; }
+    .visual { aspect-ratio: 4 / 3; }
+    .controls { justify-content: center; }
+    .swipe-hint { display: block; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <section class="showcase" aria-label="Creative process showcase">
+    <div class="blob-wrap blob-wrap--1" id="blob1"><div class="blob blob--1"></div></div>
+    <div class="blob-wrap blob-wrap--2" id="blob2"><div class="blob blob--2"></div></div>
+
+    <div class="showcase__inner">
+
+      <div class="eyebrow">
+        <span class="eyebrow__text">From Concept to Launch</span>
+      </div>
+
+      <h2 class="heading">
+        Five stages. One <em>creative journey</em>. Watch how ideas become reality.
+      </h2>
+
+      <div class="layout" role="region" aria-live="polite">
+
+        <div class="stages" id="stages" role="tablist" aria-label="Select a creative stage"></div>
+
+        <div class="content-panel" id="contentPanel"></div>
+
+        <div class="visual-wrap">
+          <div class="visual" aria-hidden="true"></div>
+        </div>
+
+        <div class="big-num" id="bigNum" aria-hidden="true">01</div>
+
+      </div>
+
+      <div class="progress-track" id="progressTrack" aria-hidden="true"></div>
+
+      <div class="controls">
+        <div class="nav-btns">
+          <button class="nav-btn" id="prevBtn" type="button" aria-label="Previous stage">&#8592;</button>
+          <button class="nav-btn" id="nextBtn" type="button" aria-label="Next stage">&#8594;</button>
+        </div>
+        <button class="autoplay" id="autoplay" type="button" aria-pressed="true">
+          <span class="autoplay__icon"></span>
+          <span class="autoplay__label">Auto-playing · click to pause</span>
+        </button>
+      </div>
+
+      <p class="swipe-hint">Swipe left/right or use arrow keys to navigate</p>
+
+    </div>
+  </section>
+
+<script>
+  const stages = [
+    {
+      num: "01",
+      title: "Discovery & Research",
+      desc: "We dig deep into your brand, audience, and market landscape. Every project starts with questions — the right ones — so the strategy that follows is built on evidence, not assumptions. We interview stakeholders, audit competitors, and map the terrain before a single pixel is placed.",
+      tags: ["Stakeholder Interviews", "Market Audit", "User Research", "Competitor Analysis"],
+      thumb:  "https://picsum.photos/seed/stage1avatar/120/120.jpg",
+      visual: "https://picsum.photos/seed/stage1main/640/860.jpg",
+      label: "Phase 01 — Discovery",
+      icon: "&#128269;",
+      metrics: [
+        { value: "12", unit: "+", label: "Stakeholders" },
+        { value: "3", unit: "wk", label: "Deep Dive" }
+      ]
+    },
+    {
+      num: "02",
+      title: "Concept & Strategy",
+      desc: "From research comes direction. We sketch the big picture — positioning, narrative, visual language — and pressure-test it against your goals. This is where the soul of the project takes shape: not in pixels, but in the idea that makes someone lean in and pay attention.",
+      tags: ["Brand Positioning", "Creative Direction", "Mood Boards", "Narrative Framework"],
+      thumb:  "https://picsum.photos/seed/stage2avatar/120/120.jpg",
+      visual: "https://picsum.photos/seed/stage2main/640/860.jpg",
+      label: "Phase 02 — Strategy",
+      icon: "&#128161;",
+      metrics: [
+        { value: "5", unit: "", label: "Directions" },
+        { value: "1", unit: "", label: "North Star" }
+      ]
+    },
+    {
+      num: "03",
+      title: "Design & Prototyping",
+      desc: "Ideas become tangible. We design in high fidelity, prototype interactions, and refine relentlessly. Every screen, every component, every micro-interaction is intentional. You'll see the product working — not just how it looks, but how it feels in the hand before we commit to build.",
+      tags: ["UI Design", "Interaction Design", "Prototyping", "Design System"],
+      thumb:  "https://picsum.photos/seed/stage3avatar/120/120.jpg",
+      visual: "https://picsum.photos/seed/stage3main/640/860.jpg",
+      label: "Phase 03 — Design",
+      icon: "&#127912;",
+      metrics: [
+        { value: "48", unit: "", label: "Screens" },
+        { value: "100", unit: "%", label: "Interactive" }
+      ]
+    },
+    {
+      num: "04",
+      title: "Build & Refine",
+      desc: "Engineering takes the baton. Clean code, thoughtful architecture, and a culture of review. We ship in increments, test on real devices, and sweat the details that nobody notices until they're missing. The prototype becomes a living, breathing product — performant and maintainable.",
+      tags: ["Frontend Engineering", "Backend Development", "QA Testing", "Performance Tuning"],
+      thumb:  "https://picsum.photos/seed/stage4avatar/120/120.jpg",
+      visual: "https://picsum.photos/seed/stage4main/640/860.jpg",
+      label: "Phase 04 — Build",
+      icon: "&#9881;",
+      metrics: [
+        { value: "99", unit: "%", label: "Test Coverage" },
+        { value: "0.8", unit: "s", label: "Load Time" }
+      ]
+    },
+    {
+      num: "05",
+      title: "Launch & Evolve",
+      desc: "We don't just ship and disappear. The launch is the beginning of the next chapter — we monitor, measure, and iterate. Real users reveal opportunities the prototype never could. We stay close, respond to signals, and keep making the product better long after the confetti settles.",
+      tags: ["Deployment", "Analytics Setup", "A/B Testing", "Continuous Iteration"],
+      thumb:  "https://picsum.photos/seed/stage5avatar/120/120.jpg",
+      visual: "https://picsum.photos/seed/stage5main/640/860.jpg",
+      label: "Phase 05 — Launch",
+      icon: "&#128640;",
+      metrics: [
+        { value: "24", unit: "h", label: "Go-Live" },
+        { value: "98", unit: "%", label: "Uptime" }
+      ]
+    }
+  ];
+
+  // ---------- DOM refs ----------
+  const stagesEl     = document.getElementById("stages");
+  const panelEl      = document.getElementById("contentPanel");
+  const visualEl     = document.querySelector(".visual");
+  const progressEl   = document.getElementById("progressTrack");
+  const bigNumEl     = document.getElementById("bigNum");
+  const autoplayEl   = document.getElementById("autoplay");
+  const autoplayLbl  = autoplayEl.querySelector(".autoplay__label");
+  const prevBtn      = document.getElementById("prevBtn");
+  const nextBtn      = document.getElementById("nextBtn");
+  const blob1        = document.getElementById("blob1");
+  const blob2        = document.getElementById("blob2");
+  const showcaseEl   = document.querySelector(".showcase");
+
+  let current    = 0;
+  let timer      = null;
+  let userPaused = false;
+  let hovered    = false;
+  const INTERVAL = 6000;
+
+  // ---------- Build DOM ----------
+  function build() {
+    stages.forEach((s, i) => {
+      const btn = document.createElement("button");
+      btn.className = "stage-dot" + (i === 0 ? " is-active" : "");
+      btn.type = "button";
+      btn.setAttribute("role", "tab");
+      btn.setAttribute("aria-label", `View stage ${s.num}: ${s.title}`);
+      btn.setAttribute("aria-selected", i === 0 ? "true" : "false");
+      btn.dataset.index = i;
+      btn.innerHTML = `<img src="${s.thumb}" alt="" loading="lazy" />`;
+      btn.addEventListener("click", () => select(i, true));
+      stagesEl.appendChild(btn);
+    });
+
+    stages.forEach((s, i) => {
+      const card = document.createElement("article");
+      card.className = "stage-card" + (i === 0 ? " is-active" : "");
+      card.dataset.index = i;
+      card.setAttribute("role", "tabpanel");
+      card.setAttribute("aria-hidden", i === 0 ? "false" : "true");
+
+      const tagsHtml = s.tags.map(t => `<span class="tag">${t}</span>`).join("");
+      const metricsHtml = s.metrics.map(m =>
+        `<div class="metric">
+           <div class="metric__value">${m.value}<span class="unit">${m.unit}</span></div>
+           <div class="metric__label">${m.label}</div>
+         </div>`
+      ).join("");
+
+      card.innerHTML = `
+        <span class="stage-card__num">Stage ${s.num}</span>
+        <h3 class="stage-card__title">${s.title}</h3>
+        <p class="stage-card__desc">${s.desc}</p>
+        <div class="stage-card__tags">${tagsHtml}</div>
+        <div class="metrics">${metricsHtml}</div>
+      `;
+      panelEl.appendChild(card);
+    });
+
+    stages.forEach((s, i) => {
+      const img = document.createElement("img");
+      img.className = "visual__img" + (i === 0 ? " is-active" : "");
+      img.src = s.visual;
+      img.alt = `Visual for ${s.title}`;
+      img.loading = "lazy";
+      img.setAttribute("aria-hidden", i === 0 ? "false" : "true");
+      visualEl.appendChild(img);
+    });
+
+    const label = document.createElement("div");
+    label.className = "visual__label is-visible";
+    label.id = "visualLabel";
+    label.innerHTML = `
+      <span id="visualLabelText">${stages[0].label}</span>
+      <span class="visual__label-icon">${stages[0].icon}</span>
+    `;
+    visualEl.appendChild(label);
+
+    stages.forEach((_, i) => {
+      const bar = document.createElement("div");
+      bar.className = "progress-track__bar" + (i === 0 ? " is-active" : "");
+      bar.dataset.index = i;
+      bar.addEventListener("click", () => select(i, true));
+      progressEl.appendChild(bar);
+    });
+  }
+
+  // ---------- Select stage ----------
+  function select(index, fromUser) {
+    if (index === current && !fromUser) return;
+    current = (index + stages.length) % stages.length;
+
+    stagesEl.querySelectorAll(".stage-dot").forEach((el, i) => {
+      const active = i === current;
+      el.classList.toggle("is-active", active);
+      el.setAttribute("aria-selected", active ? "true" : "false");
+    });
+
+    panelEl.querySelectorAll(".stage-card").forEach((el, i) => {
+      const active = i === current;
+      el.classList.toggle("is-active", active);
+      el.setAttribute("aria-hidden", active ? "false" : "true");
+    });
+
+    visualEl.querySelectorAll(".visual__img").forEach((el, i) => {
+      const active = i === current;
+      el.classList.toggle("is-active", active);
+      el.setAttribute("aria-hidden", active ? "false" : "true");
+    });
+
+    const labelEl   = document.getElementById("visualLabel");
+    const labelText = document.getElementById("visualLabelText");
+    const labelIcon = labelEl.querySelector(".visual__label-icon");
+    labelEl.classList.remove("is-visible");
+    setTimeout(() => {
+      labelText.textContent = stages[current].label;
+      labelIcon.innerHTML = stages[current].icon;
+      labelEl.classList.add("is-visible");
+    }, 200);
+
+    progressEl.querySelectorAll(".progress-track__bar").forEach((el, i) => {
+      el.classList.remove("is-active", "is-done");
+      if (i < current) el.classList.add("is-done");
+      else if (i === current) {
+        void el.offsetWidth;
+        el.classList.add("is-active");
+      }
+    });
+
+    bigNumEl.textContent = stages[current].num;
+    bigNumEl.classList.remove("is-pulse");
+    void bigNumEl.offsetWidth;
+    bigNumEl.classList.add("is-pulse");
+
+    const angle = (current / stages.length) * 360;
+    blob1.style.transform = `translate(${Math.cos(angle * Math.PI / 180) * 40}px, ${Math.sin(angle * Math.PI / 180) * 40}px)`;
+    blob2.style.transform = `translate(${Math.cos((angle + 180) * Math.PI / 180) * 40}px, ${Math.sin((angle + 180) * Math.PI / 180) * 40}px)`;
+
+    if (fromUser) restartTimer();
+  }
+
+  // ---------- Playback (timer + progress bar stay in sync) ----------
+  function restartBar() {
+    const activeBar = progressEl.querySelector(".progress-track__bar.is-active");
+    if (activeBar) {
+      activeBar.classList.remove("is-active");
+      void activeBar.offsetWidth;
+      activeBar.classList.add("is-active");
+    }
+  }
+
+  function syncPlayback() {
+    const shouldPlay = !userPaused && !hovered && !document.hidden;
+    showcaseEl.classList.toggle("is-timer-paused", !shouldPlay);
+
+    if (shouldPlay && !timer) {
+      restartBar();
+      timer = setInterval(() => select(current + 1, false), INTERVAL);
+    } else if (!shouldPlay && timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+  }
+
+  function restartTimer() {
+    if (timer) { clearInterval(timer); timer = null; }
+    syncPlayback();
+  }
+
+  autoplayEl.addEventListener("click", () => {
+    userPaused = !userPaused;
+    autoplayEl.classList.toggle("is-paused", userPaused);
+    autoplayEl.setAttribute("aria-pressed", userPaused ? "false" : "true");
+    autoplayLbl.textContent = userPaused
+      ? "Paused · click to resume"
+      : "Auto-playing · click to pause";
+    syncPlayback();
+  });
+
+  document.addEventListener("visibilitychange", syncPlayback);
+
+  // ---------- Nav buttons ----------
+  prevBtn.addEventListener("click", () => select(current - 1, true));
+  nextBtn.addEventListener("click", () => select(current + 1, true));
+
+  // ---------- Keyboard navigation (scoped to this section) ----------
+  document.addEventListener("keydown", (e) => {
+    const within = hovered || showcaseEl.contains(document.activeElement);
+    if (!within) return;
+
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") {
+      e.preventDefault();
+      select(current + 1, true);
+    } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+      e.preventDefault();
+      select(current - 1, true);
+    } else if (e.key === " " && e.target === document.body) {
+      e.preventDefault();
+      autoplayEl.click();
+    }
+  });
+
+  // ---------- Touch / swipe (horizontal only) ----------
+  let touchStartX = 0, touchStartY = 0;
+  showcaseEl.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+  showcaseEl.addEventListener("touchend", (e) => {
+    const dx = touchStartX - e.changedTouches[0].screenX;
+    const dy = touchStartY - e.changedTouches[0].screenY;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx > 0) select(current + 1, true);
+      else select(current - 1, true);
+    }
+  }, { passive: true });
+
+  // ---------- Pause on hover ----------
+  showcaseEl.addEventListener("mouseenter", () => { hovered = true;  syncPlayback(); });
+  showcaseEl.addEventListener("mouseleave", () => { hovered = false; syncPlayback(); });
+
+  // ---------- Mouse parallax on blobs (inner layer) ----------
+  showcaseEl.addEventListener("mousemove", (e) => {
+    const rect = showcaseEl.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    blob1.firstElementChild.style.transform = `translate(${x * 30}px, ${y * 30}px)`;
+    blob2.firstElementChild.style.transform = `translate(${x * -30}px, ${y * -30}px)`;
+  });
+
+  // ---------- Init ----------
+  build();
+  syncPlayback();
+</script>
+</body>
+</html>
