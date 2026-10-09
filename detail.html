@@ -3,387 +3,563 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Section Detail — Galerie Meridian</title>
+    <title>Section Detail — Section Library</title>
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
     <style>
         :root {
-            --bg: #fafafa;
-            --text: #16161a;
-            --muted: #55555d;
-            --panel: #ffffff;
-            --border: #e0e0e0;
-            --accent: #9e451f;
-            --accent-dark: #7b351a;
-            --gutter: clamp(24px, 4vw, 64px);
-            --radius: 12px;
-            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --surface-subtle: #f1f5f9;
+            --border: #e2e8f0;
+            --border-hover: #cbd5e1;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --text-subtle: #94a3b8;
+            --brand: #0f172a;
+            --brand-accent: #2563eb;
+            --brand-accent-soft: #eff6ff;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-full: 9999px;
+            --shadow-subtle: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+            --shadow-card: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+            --shadow-hover: 0 20px 25px -5px rgba(15, 23, 42, 0.08);
+            --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { box-sizing: border-box; margin: 0; }
-
-        html { font-size: 16px; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
-            font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
+            font-family: var(--font-sans);
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
 
-        a { color: inherit; text-decoration: none; }
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
 
-        /* ===== Page Shell ===== */
-        .page-shell { max-width: 1000px; margin: 0 auto; padding: var(--gutter); }
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 clamp(16px, 3vw, 32px);
+        }
 
-        /* ===== Header / Back Button ===== */
-        .page-header {
+        /* Top Bar */
+        .site-nav {
+            background: rgba(248, 250, 252, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 40;
+        }
+
+        .nav-inner {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 40px;
+            justify-content: space-between;
+            height: 64px;
         }
 
         .back-link {
-            color: var(--muted);
-            font-size: 14px;
-            transition: color 0.2s var(--ease);
-        }
-
-        .back-link:hover { color: var(--text); }
-
-        .back-link svg { width: 16px; height: 16px; fill: current; }
-
-        /* ===== Section Banner ===== */
-        .section-banner {
-            border-radius: var(--radius);
-            overflow: hidden;
-            margin-bottom: 40px;
-        }
-
-        .section-banner img {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            display: block;
-        }
-
-        @media (max-width: 640px) {
-            .section-banner img { height: 250px; }
-        }
-
-        /* ===== Section Info ===== */
-        .section-info {
-            margin-bottom: 32px;
-        }
-
-        .section-info .category-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--accent);
-            background: #f5f5f0;
-            border-radius: 999px;
-            margin-bottom: 16px;
-        }
-
-        .section-info h1 {
-            font-family: "Playfair Display", Georgia, serif;
-            font-size: clamp(32px, 4vw, 44px);
-            font-weight: 500;
-            line-height: 1.3;
-            letter-spacing: -0.01em;
-            margin-bottom: 12px;
-        }
-
-        .section-info .meta {
-            color: var(--muted);
-            font-size: 14px;
-        }
-
-        .section-info .meta span { margin-right: 24px; }
-
-        /* ===== Description ===== */
-        .section-desc {
-            color: var(--muted);
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 32px;
-        }
-
-        /* ===== Actions ===== */
-        .actions {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-        }
-
-        .action-btn {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 24px;
             font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            color: var(--text-main);
+            transform: translateX(-2px);
+        }
+
+        /* Detail Header */
+        .detail-header {
+            padding: 32px 0 24px 0;
+        }
+
+        .header-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .cat-tag {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            background: #e0e7ff;
+            color: #4338ca;
+        }
+
+        .detail-title {
+            font-family: var(--font-serif);
+            font-size: clamp(28px, 4vw, 42px);
             font-weight: 500;
-            border-radius: var(--radius);
-            transition: all 0.2s var(--ease);
-            cursor: pointer;
+            line-height: 1.2;
+            color: var(--text-main);
+            margin-bottom: 8px;
         }
 
-        .action-btn--preview {
-            background: var(--panel);
+        .detail-desc {
+            font-size: 15.5px;
+            color: var(--text-muted);
+            max-width: 720px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .tag-pill {
+            font-size: 12px;
+            font-weight: 500;
+            padding: 3px 10px;
+            background: var(--surface);
             border: 1px solid var(--border);
-            color: var(--text);
+            border-radius: var(--radius-sm);
+            color: var(--text-muted);
         }
 
-        .action-btn--preview:hover {
-            border-color: var(--accent);
-            box-shadow: 0 4px 12px -2px rgba(22, 22, 26, 0.1);
-        }
-
-        .action-btn--copy {
-            background: var(--accent);
-            color: var(--bg);
-        }
-
-        .action-btn--copy:hover {
-            background: var(--accent-dark);
-            transform: translateY(-2px);
-        }
-
-        .action-btn--back {
-            background: transparent;
-            color: var(--muted);
-            padding: 12px 20px;
+        /* Showcase Shell */
+        .showcase-shell {
+            background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            margin-bottom: 64px;
+            display: flex;
+            flex-direction: column;
+            height: 780px;
         }
 
-        .action-btn--back:hover {
-            border-color: var(--accent);
-            color: var(--text);
+        /* Shell Control Bar */
+        .shell-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: var(--surface-subtle);
+            border-bottom: 1px solid var(--border);
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
-        /* ===== Code Copy Modal ===== */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            z-index: 100;
-            display: none;
+        .tab-group {
+            display: flex;
+            gap: 4px;
+        }
+
+        .tab-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+        }
+
+        .tab-btn.active {
+            background: #ffffff;
+            color: var(--brand-accent);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .viewport-switcher {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            padding: 2px;
+            border-radius: var(--radius-sm);
+            gap: 2px;
+        }
+
+        .vp-btn {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 6px;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition);
+        }
+
+        .vp-btn:hover {
+            color: var(--text-main);
+        }
+
+        .vp-btn.active {
+            background: var(--brand-accent-soft);
+            color: var(--brand-accent);
+        }
+
+        .shell-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-copy {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 7px 16px;
+            background: var(--brand);
+            color: #ffffff;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .btn-copy:hover {
+            background: var(--brand-accent);
+        }
+
+        .btn-copy.copied {
+            background: #15803d !important;
+        }
+
+        .btn-open-raw {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 7px 12px;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: #ffffff;
+            transition: var(--transition);
+        }
+
+        .btn-open-raw:hover {
+            color: var(--text-main);
+            border-color: var(--border-hover);
+        }
+
+        /* Panels */
+        .shell-viewport {
+            flex: 1;
+            position: relative;
+            background: #f8fafc;
+            overflow: hidden;
+        }
+
+        .panel-preview {
+            width: 100%;
+            height: 100%;
+            display: flex;
             align-items: center;
             justify-content: center;
+            padding: 16px;
         }
 
-        .modal-overlay.active { display: flex; }
-
-        .modal {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 32px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            text-align: left;
+        .iframe-container {
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            transition: width 0.3s ease;
         }
 
-        .modal h3 {
-            font-family: "Playfair Display", Georgia, serif;
-            font-size: 24px;
-            margin-top: 0;
-            margin-bottom: 24px;
+        .preview-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
         }
 
-        .modal .code {
-            background: #f5f5f0;
-            border-radius: var(--radius);
+        .panel-code {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            color: #e2e8f0;
+            overflow: auto;
             padding: 24px;
-            font-family: "SF Mono", "Monaco", "Inconsolata", monospace;
+            font-family: var(--font-mono);
             font-size: 13px;
             line-height: 1.6;
-            overflow-x: auto;
-            color: var(--text);
+            white-space: pre;
+            tab-size: 2;
         }
 
-        .modal .code pre {
-            margin: 0;
-            padding: 12px;
-            overflow-x: auto;
+        .panel-code.active {
+            display: block;
         }
 
-        .modal-close {
-            position: absolute;
-            top: 12px;
-            right: 16px;
-            width: 24px;
-            height: 24px;
-            border: none;
-            background: transparent;
-            color: var(--muted);
-            font-size: 24px;
-            cursor: pointer;
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #0f172a;
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: var(--radius-md);
+            font-size: 13.5px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 120;
         }
 
-        .modal-close:hover { color: var(--text); }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
 
-        /* ===== Reduced motion ===== */
-        @media (prefers-reduced-motion: reduce) {
-            .action-btn:hover { transform: none; }
+        /* Footer */
+        .site-footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border);
+            background: var(--surface);
+            padding: 24px 0;
+            font-size: 13.5px;
+            color: var(--text-muted);
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== Page Shell ===== -->
-    <div class="page-shell">
-
-        <!-- ===== Header / Back ===== -->
-        <header class="page-header">
-            <a href="library.html" class="back-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="current" stroke-width="1.5">
-                    <path d="M15 18l-6-6-6 6"/><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+    <!-- Site Nav -->
+    <header class="site-nav">
+        <div class="container nav-inner">
+            <a href="index.html" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                 Back to Library
             </a>
+
+            <a href="https://github.com/farahardianii/section-library" target="_blank" rel="noopener" class="btn-open-raw">
+                GitHub Repo
+            </a>
+        </div>
+    </header>
+
+    <!-- Detail Header -->
+    <main class="container">
+        <header class="detail-header">
+            <div class="header-meta">
+                <span class="cat-tag" id="catBadge">Hero</span>
+            </div>
+            <h1 class="detail-title" id="sectionTitle">Loading Section...</h1>
+            <p class="detail-desc" id="sectionDesc"></p>
+            <div class="tag-list" id="tagList"></div>
         </header>
 
-        <!-- ===== Section Banner ===== -->
-        <figure class="section-banner">
-            <img src="https://picsum.photos/seed/meridian-ink/800/600.jpg" alt="Galerie Meridian section preview" />
-        </figure>
+        <!-- Showcase Shell -->
+        <section class="showcase-shell">
+            <div class="shell-bar">
+                <!-- Tab Switching -->
+                <div class="tab-group">
+                    <button class="tab-btn active" id="tabBtnPreview">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        Live Preview
+                    </button>
+                    <button class="tab-btn" id="tabBtnCode">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                        Source Code
+                    </button>
+                </div>
 
-        <!-- ===== Section Info ===== -->
-        <section class="section-info">
-            <span class="category-badge">Hero</span>
-            <h1>Galerie Meridian</h1>
-            <div class="meta">
-                <span>Category: Hero</span>
-                <span>8 sections</span>
+                <!-- Viewport Switcher -->
+                <div class="viewport-switcher" id="viewportSwitcher">
+                    <button class="vp-btn active" data-width="100%">Desktop</button>
+                    <button class="vp-btn" data-width="768px">Tablet</button>
+                    <button class="vp-btn" data-width="375px">Mobile</button>
+                </div>
+
+                <!-- Actions -->
+                <div class="shell-actions">
+                    <a id="btnOpenRaw" href="#" target="_blank" rel="noopener" class="btn-open-raw">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                        Open Raw File
+                    </a>
+                    <button class="btn-copy" id="btnCopyCode">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        <span>Copy Code</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Viewport Panels -->
+            <div class="shell-viewport">
+                <div class="panel-preview" id="panelPreview">
+                    <div class="iframe-container" id="iframeContainer">
+                        <iframe id="previewIframe" class="preview-iframe" title="Section Live Preview"></iframe>
+                    </div>
+                </div>
+
+                <pre class="panel-code" id="panelCode"><code>Loading code...</code></pre>
             </div>
         </section>
+    </main>
 
-        <!-- ===== Description ===== -->
-        <p class="section-desc">
-            Editorial hero gallery with monochromatic palette and asymmetric layout. Features a rotating gallery with radial badge and progress indicator. Designed in a premium-minimal aesthetic with serif display typography and a singular accent color.
-        </p>
-
-        <!-- ===== Actions ===== -->
-        <div class="actions">
-            <button class="action-btn action-btn--preview" onclick="window.open('Hero Section.html', '_blank')">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M9 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Preview Section
-            </button>
-
-            <button class="action-btn action-btn--copy" onclick="copySectionCode('Hero Section.html')">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <rect x="9" y="9" width="9" height="9" rx="2" ry="2"/><path d="M5 15l7-7 7 7"/></svg>
-                Copy Code
-            </button>
-
-            <button class="action-btn action-btn--back" onclick="window.history.back()">
-                Back
-            </button>
-        </div>
-
-        <!-- ===== Copy Code Modal ===== -->
-        <div class="modal-overlay" id="copyModal" role="dialog" aria-modal="true" aria-label="Copy section code">
-            <div class="modal" role="document">
-                <button class="modal-close" aria-label="Close" onclick="closeCopyModal()">&times;</button>
-                <h3>Copy Section Code</h3>
-                <div class="code">
-                    <pre><code><!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Galerie Meridian</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600&1,400;1,500&display=swap" rel="stylesheet" />
-    <style>
-        :root {
-            --bg: #f7f7f5;
-            --text: #16161a;
-            --muted: #55555d;
-            --panel: #ececea;
-            --btn-bg: #16161a;
-            --btn-fg: #f7f7f5;
-            --line: rgba(22, 22, 26, 0.14);
-            --skel: #e3e3e0;
-            --shadow: 0 18px 40px -18px rgba(22, 22, 26, 0.35);
-            --tint: rgba(22, 22, 26, 0.035);
-            --accent: #9e451f;
-        }
-    </style>
-</head>
-<body>
-    <!-- section content -->
-</body>
-</html></code></pre>
-                </div>
-                <button class="modal-close" aria-label="Close" onclick="closeCopyModal()">Close</button>
-            </div>
-        </div>
-
+    <!-- Toast -->
+    <div class="toast" id="toastMessage">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span id="toastText">Code copied to clipboard!</span>
     </div>
 
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container" style="display: flex; justify-content: space-between;">
+            <p>Section Library — MIT License</p>
+            <p><a href="index.html" style="text-decoration: underline;">Back to Overview</a></p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="sections-data.js"></script>
     <script>
-        // Copy code functionality
-        function copySectionCode(filename) {
-            // Read the file and copy its content - for demo, copy a representative snippet
-            const code = `<!-- ${filename} section -->
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>${filename}</title>
-</head>
-<body>
-    <!-- Section content -->
-</body>
-</html>`;
+        document.addEventListener('DOMContentLoaded', async () => {
+            const params = new URLSearchParams(window.location.search);
+            const sectionId = params.get('id') || 'meridian-hero';
+            const allSections = window.sections || [];
 
-            navigator.clipboard.writeText(code).then(() => {
-                showCopyModal();
-            });
-        }
+            const section = allSections.find(s => s.id === sectionId || s.key === sectionId) || allSections[0];
 
-        function showCopyModal() {
-            const modal = document.getElementById('copyModal');
-            modal.classList.add('active');
-            // Focus trap could be added here
-        }
+            if (!section) return;
 
-        function closeCopyModal() {
-            const modal = document.getElementById('copyModal');
-            modal.classList.remove('active');
-        }
+            document.title = `${section.name} — Section Library`;
+            document.getElementById('sectionTitle').textContent = section.name;
+            document.getElementById('sectionDesc').textContent = section.description;
+            document.getElementById('catBadge').textContent = section.category;
+            document.getElementById('btnOpenRaw').href = section.link;
 
-        // Close modal on overlay click
-        document.getElementById('copyModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('copyModal')) {
-                closeCopyModal();
+            const tagList = document.getElementById('tagList');
+            tagList.innerHTML = (section.tags || []).map(t => `<span class="tag-pill">${t}</span>`).join('');
+
+            const previewIframe = document.getElementById('previewIframe');
+            previewIframe.src = section.link;
+
+            // Load raw code
+            const panelCode = document.getElementById('panelCode');
+            let rawCode = '';
+            try {
+                const res = await fetch(section.link);
+                if (res.ok) {
+                    rawCode = await res.text();
+                    panelCode.textContent = rawCode;
+                } else {
+                    rawCode = '<!-- Unable to load code file directly. Click Open Raw File above. -->';
+                    panelCode.textContent = rawCode;
+                }
+            } catch (e) {
+                rawCode = `<!-- Error loading code: ${e.message} -->`;
+                panelCode.textContent = rawCode;
             }
-        });
 
-        // Close on Escape
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeCopyModal();
+            // Tabs
+            const tabBtnPreview = document.getElementById('tabBtnPreview');
+            const tabBtnCode = document.getElementById('tabBtnCode');
+            const panelPreview = document.getElementById('panelPreview');
+            const vpSwitcher = document.getElementById('viewportSwitcher');
+
+            tabBtnPreview.addEventListener('click', () => {
+                tabBtnPreview.classList.add('active');
+                tabBtnCode.classList.remove('active');
+                panelPreview.style.display = 'flex';
+                panelCode.classList.remove('active');
+                vpSwitcher.style.display = 'flex';
+            });
+
+            tabBtnCode.addEventListener('click', () => {
+                tabBtnCode.classList.add('active');
+                tabBtnPreview.classList.remove('active');
+                panelPreview.style.display = 'none';
+                panelCode.classList.add('active');
+                vpSwitcher.style.display = 'none';
+            });
+
+            // Viewport Switcher
+            const iframeContainer = document.getElementById('iframeContainer');
+            document.querySelectorAll('.vp-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.vp-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    iframeContainer.style.width = btn.dataset.width;
+                });
+            });
+
+            // Copy Code
+            const btnCopyCode = document.getElementById('btnCopyCode');
+            const toast = document.getElementById('toastMessage');
+            btnCopyCode.addEventListener('click', () => {
+                if (!rawCode) return;
+                navigator.clipboard.writeText(rawCode).then(() => {
+                    btnCopyCode.classList.add('copied');
+                    btnCopyCode.querySelector('span').textContent = '✓ Copied!';
+                    toast.classList.add('show');
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                        btnCopyCode.classList.remove('copied');
+                        btnCopyCode.querySelector('span').textContent = 'Copy Code';
+                    }, 2200);
+                });
+            });
         });
     </script>
-
 </body>
 </html>

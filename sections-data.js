@@ -1,172 +1,233 @@
-// Section library data - extracted from existing section files
-// Keeps references intact without rewriting implementations
-// Uses global window variables for vanilla JS compatibility
+// Section Library Data — Curated Reusable UI Sections
+// All paths point to genuine standalone vanilla HTML files in the repository.
+// Supports both browser global (window.sections) and ES modules if imported.
 
-window.categories = [
-  { key: "hero", name: "Hero", count: 8 },
-  { key: "about", name: "About", count: 1 },
-  { key: "features", name: "Features", count: 2 },
-  { key: "cta", name: "CTA", count: 1 },
-  { key: "faq", name: "FAQ", count: 1 },
-  { key: "team", name: "Team", count: 1 },
-  { key: "blog", name: "Blog", count: 1 },
-  { key: "testimonial", name: "Testimonial", count: 1 },
-];
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) {
+    module.exports = factory();
+  } else if (typeof define === 'function' && define.amd) {
+    define([], factory);
+  } else {
+    const data = factory();
+    root.categories = data.categories;
+    root.sections = data.sections;
+    root.getSectionById = data.getSectionById;
+  }
+})(typeof self !== 'undefined' ? self : this, function () {
 
-window.sections = [
-  // Hero sections (from Hero Section folder + sections/hero subfolder)
-  {
-    id: "hero-1",
-    key: "hero",
-    name: "Galerie Meridian",
-    description: "Editorial hero gallery with monochromatic palette and asymmetric layout",
-    category: "hero",
-    preview: "https://picsum.photos/seed/meridian-ink/400/600.jpg",
-    file: "Hero Section.html",
-    link: "Hero Section.html"
-  },
-  {
-    id: "hero-2",
-    key: "hero",
-    name: "SUNUP — Joy Run Club",
-    description: "Running event website with countdown, wave system, and city series",
-    category: "hero",
-    preview: "https://picsum.photos/seed/sunup/400/600.jpg",
-    file: "sections/hero/sunup-joy-run-club/index.html",
-    link: "sections/hero/sunup-joy-run-club/index.html"
-  },
-  {
-    id: "hero-3",
-    key: "hero",
-    name: "Destinations",
-    description: "Carousel-style travel destination showcase with diagonal imagery",
-    category: "hero",
-    preview: "https://picsum.photos/seed/destinations/400/600.jpg",
-    file: "sections/hero/destinations-v2/index.html",
-    link: "sections/hero/destinations-v2/index.html"
-  },
-  {
-    id: "hero-4",
-    key: "hero",
-    name: "Hero Section 4",
-    description: "Hero exploration with Galerie Meridian design reference",
-    category: "hero",
-    preview: "https://picsum.photos/seed/hero4/400/600.jpg",
-    file: "Hero Section 4.html",
-    link: "Hero Section 4.html"
-  },
-  {
-    id: "hero-5",
-    key: "hero",
-    name: "Hero Section 5",
-    description: "Hero exploration variant",
-    category: "hero",
-    preview: "https://picsum.photos/seed/hero5/400/600.jpg",
-    file: "Hero Section 5.html",
-    link: "Hero Section 5.html"
-  },
-  {
-    id: "hero-6",
-    key: "hero",
-    name: "Hero Section 6",
-    description: "Hero exploration variant",
-    category: "hero",
-    preview: "https://picsum.photos/seed/hero6/400/600.jpg",
-    file: "Hero Section 6.html",
-    link: "Hero Section 6.html"
-  },
+  const categories = [
+    { key: "all", name: "All Sections", icon: "grid" },
+    { key: "hero", name: "Hero", icon: "sparkles", count: 7 },
+    { key: "features", name: "Features", icon: "layers", count: 2 },
+    { key: "about", name: "About", icon: "compass", count: 1 },
+    { key: "cta", name: "CTA", icon: "zap", count: 1 },
+    { key: "faq", name: "FAQ", icon: "help-circle", count: 1 },
+    { key: "team", name: "Team", icon: "users", count: 1 },
+    { key: "blog", name: "Blog", icon: "book-open", count: 1 },
+    { key: "testimonial", name: "Testimonial", icon: "message-square", count: 1 },
+    // Planned / Roadmap
+    { key: "pricing", name: "Pricing", comingSoon: true },
+    { key: "contact", name: "Contact", comingSoon: true },
+    { key: "footer", name: "Footer", comingSoon: true },
+    { key: "navbar", name: "Navbar", comingSoon: true },
+    { key: "stats", name: "Stats", comingSoon: true },
+    { key: "gallery", name: "Gallery", comingSoon: true },
+    { key: "newsletter", name: "Newsletter", comingSoon: true },
+    { key: "process", name: "Process", comingSoon: true },
+    { key: "comparison", name: "Comparison", comingSoon: true }
+  ];
 
-  // About section
-  {
-    id: "about-1",
-    key: "about",
-    name: "Excellence Section",
-    description: "Premium brand positioning section with high-end visual design",
-    category: "about",
-    preview: "https://picsum.photos/seed/about/400/600.jpg",
-    file: "About Section.html",
-    link: "About Section.html"
-  },
+  const sections = [
+    // ---------------- HERO ----------------
+    {
+      id: "meridian-hero",
+      key: "hero",
+      name: "Galerie Meridian",
+      description: "Editorial hero gallery with monochromatic palette, rotating display, and asymmetric typographic layout.",
+      category: "hero",
+      preview: "https://picsum.photos/seed/meridian-ink/640/400.jpg",
+      file: "Hero Section/Hero Section.html",
+      link: "Hero Section/Hero Section.html",
+      tags: ["Editorial", "Monochrome", "Asymmetric", "Gallery"]
+    },
+    {
+      id: "sunup-joy-run",
+      key: "hero",
+      name: "SUNUP — Joy Run Club",
+      description: "Vibrant community running event hero with live countdown, wave system, and dynamic city series badge.",
+      category: "hero",
+      preview: "https://picsum.photos/seed/sunup/640/400.jpg",
+      file: "sections/hero/sunup-joy-run-club/index.html",
+      link: "sections/hero/sunup-joy-run-club/index.html",
+      tags: ["Community", "Event", "Countdown", "Bold"]
+    },
+    {
+      id: "destinations-slider",
+      key: "hero",
+      name: "Destinations — Travel Slider",
+      description: "Immersive carousel travel showcase with diagonal visual layout, responsive slider controls, and full imagery.",
+      category: "hero",
+      preview: "https://picsum.photos/seed/destinations/640/400.jpg",
+      file: "sections/hero/destinations-v2/index.html",
+      link: "sections/hero/destinations-v2/index.html",
+      tags: ["Travel", "Carousel", "Slider", "Photography"]
+    },
+    {
+      id: "nimbus-ai",
+      key: "hero",
+      name: "Nimbus — AI Workspace",
+      description: "Modern SaaS AI workspace hero with glassmorphic cards, metrics counter, and floating capability badges.",
+      category: "hero",
+      preview: "https://picsum.photos/seed/nimbus/640/400.jpg",
+      file: "Hero Section/Hero Section 2.html",
+      link: "Hero Section/Hero Section 2.html",
+      tags: ["SaaS", "AI", "Glassmorphic", "Product"]
+    },
+    {
+      id: "trendzone-fashion",
+      key: "hero",
+      name: "TrendZone — Bold Fashion",
+      description: "High-contrast editorial street fashion hero with bold headline typography and layered promotional badges.",
+      category: "hero",
+      preview: "https://picsum.photos/seed/fashion/640/400.jpg",
+      file: "Hero Section/Hero Section 4.html",
+      link: "Hero Section/Hero Section 4.html",
+      tags: ["Fashion", "E-commerce", "Editorial", "Bold"]
+    },
+    {
+      id: "minimalist-hero",
+      key: "hero",
+      name: "Minimalist Modern Hero",
+      description: "Clean startup hero with refined typography, dual call-to-actions, and trust partner logos.",
+      category: "hero",
+      preview: "https://picsum.photos/seed/minimal/640/400.jpg",
+      file: "Hero Section/Minimalist Modern Hero.html",
+      link: "Hero Section/Minimalist Modern Hero.html",
+      tags: ["Minimalist", "Modern", "Clean", "Startup"]
+    },
+    {
+      id: "axiom-neo-minimal",
+      key: "hero",
+      name: "AXIOM // ZERO — Cryptographic Compute",
+      description: "Web3 verifiable compute hero with calibrated dark ground, monospace data stream, and electric blue accent.",
+      category: "hero",
+      preview: "https://picsum.photos/seed/crypto/640/400.jpg",
+      file: "web3-neo-minimal/index.html",
+      link: "web3-neo-minimal/index.html",
+      tags: ["Web3", "Neo-minimal", "Dark", "Developer"]
+    },
 
-  // Feature sections
-  {
-    id: "feature-1",
-    key: "features",
-    name: "Crafted with Care",
-    description: "Modern team workflow section with animated capsules and particles",
-    category: "features",
-    preview: "https://picsum.photos/seed/feature1/400/600.jpg",
-    file: "feature section.html",
-    link: "feature section.html"
-  },
-  {
-    id: "feature-2",
-    key: "features",
-    name: "Feature Section 2",
-    description: "Second feature section variant",
-    category: "features",
-    preview: "https://picsum.photos/seed/feature2/400/600.jpg",
-    file: "feature section 2.html",
-    link: "feature section 2.html"
-  },
+    // ---------------- ABOUT ----------------
+    {
+      id: "excellence-about",
+      key: "about",
+      name: "Excellence — About Section",
+      description: "Luxury brand positioning section with architectural backdrop, mission narrative, and key metric counters.",
+      category: "about",
+      preview: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=640&q=80",
+      file: "About Section/About Section.html",
+      link: "About Section/About Section.html",
+      tags: ["Luxury", "Story", "Architecture", "Metrics"]
+    },
 
-  // CTA section
-  {
-    id: "cta-1",
-    key: "cta",
-    name: "CTA Section",
-    description: "Indonesian food-themed hiring section with radial tile layout",
-    category: "cta",
-    preview: "https://picsum.photos/seed/cta/400/600.jpg",
-    file: "CTA Section.html",
-    link: "CTA Section.html"
-  },
+    // ---------------- FEATURES ----------------
+    {
+      id: "crafted-features",
+      key: "features",
+      name: "Crafted with Care",
+      description: "Modern team workflow section with animated interactive capsules, particle burst effects, and clean card nodes.",
+      category: "features",
+      preview: "https://picsum.photos/seed/crafted/640/400.jpg",
+      file: "Feature Section/feature section.html",
+      link: "Feature Section/feature section.html",
+      tags: ["Interactive", "Workflow", "Animation", "Cards"]
+    },
+    {
+      id: "lumiere-features",
+      key: "features",
+      name: "Lumière — Features Grid",
+      description: "Refined aesthetic feature grid with subtle hover glows, icon pill accents, and benefit bullet points.",
+      category: "features",
+      preview: "https://picsum.photos/seed/lumiere/640/400.jpg",
+      file: "Feature Section/feature section 2.html",
+      link: "Feature Section/feature section 2.html",
+      tags: ["Grid", "Minimal", "Glow", "Bento"]
+    },
 
-  // FAQ section
-  {
-    id: "faq-1",
-    key: "faq",
-    name: "FAQ Section",
-    description: "Straight answers FAQ with accordion-style disclosure",
-    category: "faq",
-    preview: "https://picsum.photos/seed/faq/400/600.jpg",
-    file: "Faq Section.html",
-    link: "Faq Section.html"
-  },
+    // ---------------- CTA ----------------
+    {
+      id: "rasa-nusantara-cta",
+      key: "cta",
+      name: "Join Our Kitchen — Rasa Nusantara",
+      description: "Warm cultural culinary recruitment banner with radial decorative badges and conversion-driven cards.",
+      category: "cta",
+      preview: "https://picsum.photos/seed/kitchen/640/400.jpg",
+      file: "CTA Section/CTA Section.html",
+      link: "CTA Section/CTA Section.html",
+      tags: ["Culinary", "Recruitment", "Warm", "Conversion"]
+    },
 
-  // Team section
-  {
-    id: "team-1",
-    key: "team",
-    name: "Team Section",
-    description: "Profile grid with department filtering and radial card layout",
-    category: "team",
-    preview: "https://picsum.photos/seed/team/400/600.jpg",
-    file: "Team Section.html",
-    link: "Team Section.html"
-  },
+    // ---------------- FAQ ----------------
+    {
+      id: "straight-answers-faq",
+      key: "faq",
+      name: "FAQ — Straight Answers",
+      description: "Accessible, smooth accordion disclosure with category filtering and zero unnecessary fluff.",
+      category: "faq",
+      preview: "https://picsum.photos/seed/faq-clean/640/400.jpg",
+      file: "FAQ Section/Faq Section.html",
+      link: "FAQ Section/Faq Section.html",
+      tags: ["Accordion", "Support", "Questions", "Clean"]
+    },
 
-  // Blog section
-  {
-    id: "blog-1",
-    key: "blog",
-    name: "Blog Section",
-    description: "Writing archive with category filtering and article grid",
-    category: "blog",
-    preview: "https://picsum.photos/seed/blog/400/600.jpg",
-    file: "Blog Section.html",
-    link: "Blog Section.html"
-  },
+    // ---------------- TEAM ----------------
+    {
+      id: "team-mission",
+      key: "team",
+      name: "The Faces Behind Our Mission",
+      description: "Leadership & team roster grid with interactive department filter pills and modal biography triggers.",
+      category: "team",
+      preview: "https://picsum.photos/seed/team-clean/640/400.jpg",
+      file: "Team Section/Team Section.html",
+      link: "Team Section/Team Section.html",
+      tags: ["Team", "Department Filter", "Profiles", "Avatars"]
+    },
 
-  // Testimonial section
-  {
-    id: "testimonial-1",
-    key: "testimonial",
-    name: "Testimonial Section",
-    description: "Creative process showcase with five-stage journey visualization",
-    category: "testimonial",
-    preview: "https://picsum.photos/seed/testimonial/400/600.jpg",
-    file: "testimonial section.html",
-    link: "testimonial section.html"
-  },
-];
+    // ---------------- BLOG ----------------
+    {
+      id: "quiet-hours-blog",
+      key: "blog",
+      name: "Quiet Hours Journal",
+      description: "Editorial publication grid with featured lead story, reading time indicators, and tag filters.",
+      category: "blog",
+      preview: "https://picsum.photos/seed/journal/640/400.jpg",
+      file: "Blog Section/Blog Section.html",
+      link: "Blog Section/Blog Section.html",
+      tags: ["Editorial", "Magazine", "Typography", "Grid"]
+    },
+
+    // ---------------- TESTIMONIAL ----------------
+    {
+      id: "creative-process-testimonial",
+      key: "testimonial",
+      name: "Creative Process & Proof",
+      description: "Interactive customer journey showcase featuring a five-stage timeline, verified quote cards, and social proof.",
+      category: "testimonial",
+      preview: "https://picsum.photos/seed/proof/640/400.jpg",
+      file: "Testimonial Section/testimonial section.html",
+      link: "Testimonial Section/testimonial section.html",
+      tags: ["Social Proof", "Timeline", "Reviews", "Journey"]
+    }
+  ];
+
+  // Helper function
+  function getSectionById(id) {
+    return sections.find(s => s.id === id || s.key === id);
+  }
+
+  return {
+    categories,
+    sections,
+    getSectionById
+  };
+});
