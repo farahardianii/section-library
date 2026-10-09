@@ -337,6 +337,7 @@
       bg: "#eef1f6", line: "#d9e0e8", dot: "#c9d2dc",
       main: P + "5034620/pexels-photo-5034620.jpeg?auto=compress&cs=tinysrgb&w=1600",
       mainPos: "50% 86%",
+      mainVideo: "../assets/Video%20santorini.mp4",
       prev: P + "26946364/pexels-photo-26946364.jpeg?auto=compress&cs=tinysrgb&w=1600",
       prevPos: "50% 42%"
     },
@@ -374,7 +375,8 @@
       main: P + "13811649/pexels-photo-13811649.jpeg?auto=compress&cs=tinysrgb&w=1600",
       mainPos: "50% 62%",
       prev: P + "5034620/pexels-photo-5034620.jpeg?auto=compress&cs=tinysrgb&w=1600",
-      prevPos: "45% 55%"
+      prevPos: "45% 55%",
+      prevVideo: "../assets/Video%20santorini.mp4"
     }
   ];
 
@@ -392,7 +394,7 @@
   });
 
   var n = SLIDES.length;
-  var cur = 0, shots = [], dots = [], lock = 0, queued = null;
+  var cur = 0, shots = [], dots = [], lock = 0, queued = null, vids = [];
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var QS = new URLSearchParams(location.search);
 
@@ -409,15 +411,33 @@
       rev.className = "reveal";
       var par = document.createElement("div");
       par.className = "par";
-      var img = document.createElement("img");
-      img.className = "img";
-      img.alt = "";
-      img.decoding = "async";
-      img.loading = "eager";
-      img.src = kind === "main" ? s.main : s.prev;
-      img.style.setProperty("--pos", kind === "main" ? s.mainPos : s.prevPos);
+      var vid = kind === "main" ? s.mainVideo : s.prevVideo;
+      var m;
+      if (vid) {
+        m = document.createElement("video");
+        m.className = "img";
+        m.src = vid;
+        m.poster = kind === "main" ? s.main : s.prev;
+        m.autoplay = true;
+        m.loop = true;
+        m.muted = true;
+        m.playsInline = true;
+        m.setAttribute("muted", "");
+        m.setAttribute("playsinline", "");
+        m.setAttribute("disablepictureinpicture", "");
+        m.preload = "auto";
+        vids.push(m);
+      } else {
+        m = document.createElement("img");
+        m.className = "img";
+        m.alt = "";
+        m.decoding = "async";
+        m.loading = "eager";
+        m.src = kind === "main" ? s.main : s.prev;
+      }
+      m.style.setProperty("--pos", kind === "main" ? s.mainPos : s.prevPos);
 
-      par.appendChild(img); rev.appendChild(par); fig.appendChild(rev);
+      par.appendChild(m); rev.appendChild(par); fig.appendChild(rev);
       if (i === 0) fig.classList.add("is-active");
       media.insertBefore(fig, dotsBox);
       pair.push(fig);
@@ -447,6 +467,16 @@
     r.setProperty("--dot", s.dot);
   }
   theme(0);
+  playVids(0);
+
+  /* ---- video playback ---- */
+  function playVids(i) {
+    vids.forEach(function (v) {
+      var on = shots[i].some(function (f) { return f.contains(v); });
+      if (on) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+      else v.pause();
+    });
+  }
 
   /* ---- autoplay progress ---- */
   function prog() {
@@ -469,6 +499,7 @@
     inn.forEach(function (f) { f.classList.remove("is-leaving"); });
     out.forEach(function (f) { f.classList.add("is-leaving"); });
     inn.forEach(function (f) { f.classList.add("is-active"); });
+    playVids(i);
 
     setTimeout(function () {
       out.forEach(function (f) { f.classList.remove("is-active", "is-leaving"); });
@@ -568,6 +599,8 @@
   stage.addEventListener("mouseleave", function () { setPaused(false); });
   document.addEventListener("visibilitychange", function () {
     setPaused(document.hidden);
+    if (document.hidden) vids.forEach(function (v) { v.pause(); });
+    else playVids(cur);
   });
   restart();
   prog();
