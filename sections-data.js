@@ -17,7 +17,7 @@
 
   const categories = [
     { key: "all", name: "All Sections", icon: "grid" },
-    { key: "hero", name: "Hero", icon: "sparkles", count: 8 },
+    { key: "hero", name: "Hero", icon: "sparkles", count: 9 },
     { key: "features", name: "Features", icon: "layers", count: 2 },
     { key: "about", name: "About", icon: "compass", count: 1 },
     { key: "cta", name: "CTA", icon: "zap", count: 1 },
@@ -126,6 +126,17 @@
       file: "sections/hero/asme-liquid-glass/index.html",
       link: "sections/hero/asme-liquid-glass/index.html",
       tags: ["Video", "Glassmorphism", "Interactive", "Dark"]
+    },
+    {
+      id: "ideas-in-motion",
+      key: "hero",
+      name: "Ideas in Motion",
+      description: "Fullscreen overlap-typography hero with expanding image reveal, pointer parallax + 3D tilt, magnetic pill CTA, and detail modal.",
+      category: "hero",
+      preview: "assets/Ideas%20in%20motion.png",
+      file: "Hero Section/Hero Section Aries.html",
+      link: "Hero Section/Hero Section Aries.html",
+      tags: ["Typography", "Interactive", "Modal", "Image"]
     },
 
     // ---------------- ABOUT ----------------
