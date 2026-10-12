@@ -17,7 +17,7 @@
 
   const categories = [
     { key: "all", name: "All Sections", icon: "grid" },
-    { key: "hero", name: "Hero", icon: "sparkles", count: 10 },
+    { key: "hero", name: "Hero", icon: "sparkles", count: 11 },
     { key: "features", name: "Features", icon: "layers", count: 2 },
     { key: "about", name: "About", icon: "compass", count: 1 },
     { key: "cta", name: "CTA", icon: "zap", count: 1 },
@@ -148,6 +148,17 @@
       file: "sections/hero/neon-eyewear/index.html",
       link: "sections/hero/neon-eyewear/index.html",
       tags: ["Eyewear", "Dark", "Interactive", "Fan Cards"]
+    },
+    {
+      id: "potret-lab-film",
+      key: "hero",
+      name: "Potret Lab — Film Strip Portraits",
+      description: "Wavy 35mm film-strip portrait hero with draggable reels, active-frame color, EXIF footer metadata, and film-frame lightbox.",
+      category: "hero",
+      preview: "assets/golden%20hour.jpg",
+      file: "sections/hero/potret-lab-film/index.html",
+      link: "sections/hero/potret-lab-film/index.html",
+      tags: ["Photography", "Film", "Interactive", "Lightbox"]
     },
 
     // ---------------- ABOUT ----------------
