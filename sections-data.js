@@ -17,7 +17,7 @@
 
   const categories = [
     { key: "all", name: "All Sections", icon: "grid" },
-    { key: "hero", name: "Hero", icon: "sparkles", count: 9 },
+    { key: "hero", name: "Hero", icon: "sparkles", count: 10 },
     { key: "features", name: "Features", icon: "layers", count: 2 },
     { key: "about", name: "About", icon: "compass", count: 1 },
     { key: "cta", name: "CTA", icon: "zap", count: 1 },
@@ -137,6 +137,17 @@
       file: "Hero Section/Hero Section Aries.html",
       link: "Hero Section/Hero Section Aries.html",
       tags: ["Typography", "Interactive", "Modal", "Image"]
+    },
+    {
+      id: "neon-eyewear",
+      key: "hero",
+      name: "Neon Eyewear — That Stands Out",
+      description: "Dark fan-cards eyewear hero with local eyewear imagery, click-to-focus glow, pointer parallax, and magnetic Enter Store drawer.",
+      category: "hero",
+      preview: "assets/eyewear%203.png",
+      file: "sections/hero/neon-eyewear/index.html",
+      link: "sections/hero/neon-eyewear/index.html",
+      tags: ["Eyewear", "Dark", "Interactive", "Fan Cards"]
     },
 
     // ---------------- ABOUT ----------------
