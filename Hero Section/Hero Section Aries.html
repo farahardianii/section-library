@@ -3,8 +3,9 @@
   Hero Section — Ideas in Motion (layout referensi: https://aries-agency.webflow.io/)
   Vanilla HTML/CSS/JS satu file. Tanpa framework, tanpa navbar.
 
-  Refinement (match visual reference — chrome sculpture 1672x941):
+  Refinement (match visual reference — Futuristic VR 1672x941):
   - Type: Satoshi (400 body / 500 label+button / 700 headline), headline uppercase
+    putih dengan soft shadow agar terbaca di atas imagery neon,
     dikecilkan agar tidak mendominasi hero
   - Komposisi: bingkai gambar 16:9 mengikuti rasio asli aset + object-position
     42% supaya sculpture & plinth selalu terlihat, bukan terpotong
@@ -114,7 +115,8 @@
     font-size:clamp(2.75rem,7.5vw,6.75rem);
     line-height:.96;
     letter-spacing:-.02em;
-    color:var(--ink);
+    color:#ffffff;
+    text-shadow:0 2px 28px rgba(10,8,20,.45), 0 1px 3px rgba(10,8,20,.5);
     text-wrap:balance;
     transform:translate(var(--hx,0px),var(--hy,0px));
     transition:transform .25s ease-out;
@@ -240,7 +242,7 @@
   <section class="full-hero" id="hero" aria-label="Hero — Ideas in Motion">
     <div class="hero-square-wrap" aria-hidden="true">
       <div class="hero-square" id="heroSquare">
-        <img id="heroImg" src="../assets/Ideas%20in%20motion.png" alt="" fetchpriority="high" />
+        <img id="heroImg" src="../assets/Futuristic%20VR.png" alt="" fetchpriority="high" />
       </div>
     </div>
 
@@ -271,7 +273,7 @@
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
     </button>
     <div class="modal-media">
-      <img src="../assets/Ideas%20in%20motion.png" alt="Ideas in Motion" loading="lazy" />
+      <img src="../assets/Futuristic%20VR.png" alt="Ideas in Motion" loading="lazy" />
     </div>
     <div class="modal-body">
       <p class="modal-kicker">Featured work</p>

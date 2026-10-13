@@ -133,7 +133,7 @@
       name: "Ideas in Motion",
       description: "Fullscreen overlap-typography hero with expanding image reveal, pointer parallax + 3D tilt, magnetic pill CTA, and detail modal.",
       category: "hero",
-      preview: "assets/Ideas%20in%20motion.png",
+      preview: "assets/Futuristic%20VR.png",
       file: "Hero Section/Hero Section Aries.html",
       link: "Hero Section/Hero Section Aries.html",
       tags: ["Typography", "Interactive", "Modal", "Image"]
