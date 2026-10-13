@@ -17,7 +17,7 @@
 
   const categories = [
     { key: "all", name: "All Sections", icon: "grid" },
-    { key: "hero", name: "Hero", icon: "sparkles", count: 6 },
+    { key: "hero", name: "Hero", icon: "sparkles", count: 11 },
     { key: "features", name: "Features", icon: "layers", count: 2 },
     { key: "about", name: "About", icon: "compass", count: 2 },
     { key: "cta", name: "CTA", icon: "zap", count: 1 },
@@ -104,6 +104,61 @@
       file: "web3-neo-minimal/index.html",
       link: "web3-neo-minimal/index.html",
       tags: ["Web3", "Neo-minimal", "Dark", "Developer"]
+    },
+    {
+      id: "asme-ideas-hero",
+      key: "hero",
+      name: "Asme — Ideas, without limits",
+      description: "Clean fullscreen image hero with bottom-center serif headline, magnetic glass CTA, pointer parallax, and glow follower.",
+      category: "hero",
+      preview: "https://picsum.photos/seed/ideas-orange/640/400.jpg",
+      file: "sections/hero/asme-dark-hero/index.html",
+      link: "sections/hero/asme-dark-hero/index.html",
+      tags: ["Editorial", "Image", "Interactive", "Premium"]
+    },
+    {
+      id: "asme-liquid-glass",
+      key: "hero",
+      name: "Asme — Liquid Glass Video Hero",
+      description: "Fullscreen local video hero with bottom-left serif headline, staggered mask reveal, pointer parallax, and magnetic glass CTA.",
+      category: "hero",
+      preview: "https://picsum.photos/seed/asme-gold/640/400.jpg",
+      file: "sections/hero/asme-liquid-glass/index.html",
+      link: "sections/hero/asme-liquid-glass/index.html",
+      tags: ["Video", "Glassmorphism", "Interactive", "Dark"]
+    },
+    {
+      id: "ideas-in-motion",
+      key: "hero",
+      name: "Ideas in Motion",
+      description: "Fullscreen overlap-typography hero with expanding image reveal, pointer parallax + 3D tilt, magnetic pill CTA, and detail modal.",
+      category: "hero",
+      preview: "assets/Futuristic%20VR.png",
+      file: "Hero Section/Hero Section Aries.html",
+      link: "Hero Section/Hero Section Aries.html",
+      tags: ["Typography", "Interactive", "Modal", "Image"]
+    },
+    {
+      id: "neon-eyewear",
+      key: "hero",
+      name: "Neon Eyewear — That Stands Out",
+      description: "Dark fan-cards eyewear hero with local eyewear imagery, click-to-focus glow, pointer parallax, and magnetic Enter Store drawer.",
+      category: "hero",
+      preview: "assets/eyewear%203.png",
+      file: "sections/hero/neon-eyewear/index.html",
+      link: "sections/hero/neon-eyewear/index.html",
+      tags: ["Eyewear", "Dark", "Interactive", "Fan Cards"]
+    },
+    {
+      id: "potret-lab-film",
+      key: "hero",
+      name: "Potret Lab — Film Strip Portraits",
+      description: "Wavy 35mm film-strip portrait hero with draggable reels, active-frame color, EXIF footer metadata, and film-frame lightbox.",
+      category: "hero",
+      preview: "assets/golden%20hour.jpg",
+      file: "sections/hero/potret-lab-film/index.html",
+      link: "sections/hero/potret-lab-film/index.html",
+      tags: ["Photography", "Film", "Interactive", "Lightbox"]
     },
 
     // ---------------- ABOUT ----------------

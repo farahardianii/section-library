@@ -1,0 +1,349 @@
+<!doctype html>
+<!--
+  Section: Asme Ideas Hero — full-screen (100vh, no scroll) clean image hero.
+  Vanilla HTML/CSS/JS standalone, satu file, langsung dibuka di browser.
+  Fullscreen background foto, tanpa navbar, judul serif bawah-tengah
+  "Ideas, without limits" + satu tombol pill "explore our works".
+
+  Background: assets/Orange potrait.png
+  (path relatif dari file ini: ../../../assets/Orange%20potrait.png).
+
+  Design read: clean editorial agency hero, sage + signal-orange,
+  serif display + sans netral.
+  Interaction: pointer parallax (foto vs konten), magnetic button,
+  word-by-word headline reveal, orange glow follower.
+  Semua nonaktif otomatis di prefers-reduced-motion / pointer kasar.
+  Fonts: Inter (UI) + Fraunces (display).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark" />
+<title>Asme — Ideas, without limits</title>
+<meta name="description" content="Asme clean hero: fullscreen image background, explore our works." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* ================= TOKENS ================= */
+  :root {
+    --background: #000000;
+    --foreground: #ffffff;
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-serif: "Fraunces", Georgia, "Times New Roman", serif;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+    overflow: hidden;
+  }
+  ::selection { background: #fff; color: #000; }
+  :focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 6px; }
+  button { font: inherit; color: inherit; background: none; border: 0; }
+  a { color: inherit; }
+
+  /* ================= APP SHELL (main) ================= */
+  .stage {
+    position: relative;
+    background: #000;
+    height: 100vh;
+    height: 100svh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* ================= BACKGROUND PHOTO ================= */
+  .bg-photo {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    /* fallback ground kalau file gambar belum disimpan */
+    background:
+      radial-gradient(120% 90% at 50% 20%, #7d8b81 0%, #5f6f66 45%, #3c4742 100%);
+  }
+  .bg-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    display: block;
+    transform: scale(1.08) translate3d(calc(var(--px, 0) * -18px), calc(var(--py, 0) * -14px), 0);
+    will-change: transform;
+  }
+  .bg-scrim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.02) 30%, rgba(0,0,0,0.10) 52%, rgba(0,0,0,0.62) 100%);
+  }
+
+  /* ================= HERO (bottom-center) ================= */
+  .hero {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 24px 24px clamp(48px, 9vh, 104px);
+    min-height: 0;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 64rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 32px;
+  }
+  .headline {
+    font-family: var(--font-serif);
+    font-optical-sizing: auto;
+    font-size: clamp(2.75rem, 8vw, 5.5rem);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.05;
+    margin: 0;
+    max-width: 56rem;
+    color: #fff;
+    text-wrap: balance;
+    text-shadow: 0 2px 34px rgba(0, 0, 0, 0.45);
+    animation: heroIn 1s var(--ease) 0.1s both;
+  }
+  .headline em { font-style: italic; }
+  .headline .br-d { display: none; }
+  @media (min-width: 768px) { .headline .br-d { display: block; } }
+  @keyframes heroIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  .works-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 34px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.35s var(--ease), background 0.25s ease, border-color 0.25s ease;
+    animation: fadeUp 0.9s var(--ease) 0.4s both;
+  }
+  .works-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.6); }
+  .works-btn:active { transform: translateY(0) scale(0.97); }
+  .works-btn svg { width: 16px; height: 16px; transition: transform 0.3s var(--ease); }
+  .works-btn:hover svg { transform: translateX(4px); }
+
+  @media (max-width: 640px) {
+    .hero { padding-bottom: clamp(40px, 7vh, 64px); }
+    .hero-inner { gap: 28px; }
+  }
+
+  /* ================= POINTER INTERACTION ================= */
+  .stage { --px: 0; --py: 0; }
+  /* parallax konten (properti 'translate' terpisah dari 'transform'
+     agar tidak bentrok dengan entrance animation) */
+  .hero-inner {
+    translate: calc(var(--px, 0) * 10px) calc(var(--py, 0) * 8px);
+    will-change: translate;
+  }
+  /* magnetic button */
+  .works-btn { translate: var(--mx, 0px) var(--my, 0px); will-change: translate; }
+  /* word-by-word headline reveal (di-split via JS; tanpa JS fallback heroIn) */
+  .headline.split { animation: none; }
+  .headline .w {
+    display: inline-block;
+    opacity: 0;
+    translate: 0 0.45em;
+  }
+  .headline.split .w {
+    animation: wordIn 0.9s var(--ease) forwards;
+    animation-delay: var(--d, 0ms);
+  }
+  @keyframes wordIn { to { opacity: 1; translate: 0 0; } }
+  /* cahaya oranye mengikuti pointer */
+  .glow {
+    position: fixed;
+    left: 0; top: 0;
+    width: min(60vmax, 560px);
+    aspect-ratio: 1;
+    z-index: 5;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    background: radial-gradient(circle, rgba(255, 92, 0, 0.28) 0%, rgba(255, 92, 0, 0.08) 40%, transparent 68%);
+    mix-blend-mode: soft-light;
+  }
+  .glow.on { opacity: 1; }
+
+  /* ================= REDUCED MOTION ================= */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    .headline, .headline .w, .works-btn { opacity: 1 !important; transform: none !important; translate: none !important; }
+    .glow { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<main class="stage" aria-label="Asme ideas hero">
+  <!-- Background photo -->
+  <div class="bg-photo" aria-hidden="true">
+    <img id="bgPhoto" src="../../../assets/Orange%20potrait.png" alt="" fetchpriority="high" />
+  </div>
+  <div class="bg-scrim" aria-hidden="true"></div>
+  <div class="glow" id="glow" aria-hidden="true"></div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <h1 class="headline">Ideas,<br class="br-d" /> <em>without limits</em></h1>
+      <a class="works-btn" href="#">explore our works
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  /* Fallback: kalau file gambar belum disimpan, sembunyikan <img>
+     agar gradient ground di .bg-photo yang tampil. */
+  var img = document.getElementById("bgPhoto");
+  function hide() { img.style.display = "none"; }
+  img.addEventListener("error", hide);
+  if (img.complete && img.naturalWidth === 0) hide();
+
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fine = window.matchMedia("(pointer: fine)").matches;
+
+  /* ---------- Headline: split kata, reveal stagger ---------- */
+  var h1 = document.querySelector(".headline");
+  if (h1 && !reduce) {
+    let n = 0;
+    function wrapWords(node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (child) {
+        if (child.nodeType === Node.TEXT_NODE) {
+          var frag = document.createDocumentFragment();
+          child.textContent.split(/(\s+)/).forEach(function (part) {
+            if (!part) return;
+            if (/^\s+$/.test(part)) {
+              frag.appendChild(document.createTextNode(" "));
+            } else {
+              var s = document.createElement("span");
+              s.className = "w";
+              s.textContent = part;
+              s.style.setProperty("--d", (150 + n * 90) + "ms");
+              n += 1;
+              frag.appendChild(s);
+            }
+          });
+          node.replaceChild(frag, child);
+        } else if (child.nodeType === Node.ELEMENT_NODE && child.tagName !== "BR") {
+          wrapWords(child);
+        }
+      });
+    }
+    wrapWords(h1);
+    h1.classList.add("split");
+  }
+
+  /* ---------- Pointer: parallax + magnetic button + glow ---------- */
+  var stage = document.querySelector(".stage");
+  var btn = document.querySelector(".works-btn");
+  var glow = document.getElementById("glow");
+
+  if (stage && !reduce && fine) {
+    var tx = 0, ty = 0, cx = 0, cy = 0;
+    var mx = 0, my = 0, cmx = 0, cmy = 0;
+    var gx = 0, gy = 0, cgx = 0, cgy = 0;
+    var raf = null;
+
+    function loop() {
+      cx += (tx - cx) * 0.06;
+      cy += (ty - cy) * 0.06;
+      cmx += (mx - cmx) * 0.18;
+      cmy += (my - cmy) * 0.18;
+      cgx += (gx - cgx) * 0.12;
+      cgy += (gy - cgy) * 0.12;
+      stage.style.setProperty("--px", cx.toFixed(4));
+      stage.style.setProperty("--py", cy.toFixed(4));
+      if (btn) {
+        btn.style.setProperty("--mx", cmx.toFixed(2) + "px");
+        btn.style.setProperty("--my", cmy.toFixed(2) + "px");
+      }
+      if (glow) {
+        glow.style.transform =
+          "translate3d(" + cgx.toFixed(1) + "px," + cgy.toFixed(1) + "px,0) translate(-50%,-50%)";
+      }
+      if (Math.abs(tx - cx) > 0.0005 || Math.abs(ty - cy) > 0.0005 ||
+          Math.abs(mx - cmx) > 0.05 || Math.abs(gx - cgx) > 0.5) {
+        raf = requestAnimationFrame(loop);
+      } else {
+        raf = null;
+      }
+    }
+    function kick() { if (raf === null) raf = requestAnimationFrame(loop); }
+
+    stage.addEventListener("pointermove", function (ev) {
+      if (ev.pointerType === "touch") return;
+      var r = stage.getBoundingClientRect();
+      tx = ((ev.clientX - r.left) / r.width) * 2 - 1;
+      ty = ((ev.clientY - r.top) / r.height) * 2 - 1;
+      gx = ev.clientX;
+      gy = ev.clientY;
+      if (glow && !glow.classList.contains("on")) glow.classList.add("on");
+      if (btn) {
+        var b = btn.getBoundingClientRect();
+        var dx = ev.clientX - (b.left + b.width / 2);
+        var dy = ev.clientY - (b.top + b.height / 2);
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        var range = 160;
+        if (dist < range) {
+          var pull = 1 - dist / range;
+          mx = dx * 0.35 * pull;
+          my = dy * 0.35 * pull;
+        } else {
+          mx = 0;
+          my = 0;
+        }
+      }
+      kick();
+    });
+    stage.addEventListener("pointerleave", function () {
+      tx = 0; ty = 0; mx = 0; my = 0;
+      if (glow) glow.classList.remove("on");
+      kick();
+    });
+  }
+})();
+</script>
+</body>
+</html>

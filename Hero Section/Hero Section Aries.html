@@ -1,0 +1,394 @@
+<!doctype html>
+<!--
+  Hero Section — Ideas in Motion (layout referensi: https://aries-agency.webflow.io/)
+  Vanilla HTML/CSS/JS satu file. Tanpa framework, tanpa navbar.
+
+  Refinement editorial:
+  - Headline Satoshi 700 left-aligned (offset kiri dari tengah gambar agar tidak
+    menutupi wajah/visor), line-height .9, tanpa text-shadow
+  - CTA pill disejajarkan kiri mengikuti headline; parallax + magnetik dilembutkan
+  - Komposisi: bingkai gambar 16:9 mengikuti rasio asli aset + object-position
+    42% supaya sculpture & plinth selalu terlihat, bukan terpotong
+
+  Struktur:
+  - Full-size hero: gambar ../assets/Ideas in motion.png di tengah yang mengembang,
+    headline raksasa "IDEAS IN MOTION" uppercase overlap di atas gambar
+  - Satu tombol pill "View Details" yang membuka panel detail (modal)
+
+  Interaksi:
+  1. Load: gambar mengembang dari 0 + headline naik per baris
+  2. Pointer parallax: headline & gambar mengikuti kursor (lerp via rAF) + tilt 3D halus
+  3. Tombol magnetik: "View Details" tertarik ke arah kursor
+  4. Modal detail: buka/tutup dengan animasi, tutup via ✕ / backdrop / Escape
+-->
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="light" />
+<title>Ideas in Motion — Hero Section</title>
+<meta name="description" content="Hero section Ideas in Motion dalam satu file HTML." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#f4f3ef;
+    --surface:#ffffff;
+    --ink:#111111;
+    --muted:rgba(17,17,17,.64);
+    --muted-2:rgba(17,17,17,.48);
+    --line:rgba(17,17,17,.12);
+    --pill:#111111;
+    --pill-fg:#ffffff;
+    --radius-pill:999px;
+    --gutter:clamp(18px,4vw,48px);
+    --ease:cubic-bezier(.16,1,.3,1);
+    --font:"Satoshi","Montserrat",system-ui,-apple-system,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:var(--font);
+    background:var(--bg);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  /* paper + grain ground (non-negotiable: never plain white) */
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    pointer-events:none;z-index:0;
+    opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");
+  }
+  a{color:inherit}
+  button{font:inherit}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+  .skip{position:absolute;left:-9999px;top:10px;z-index:99;background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;text-decoration:none}
+  .skip:focus{left:10px}
+
+  /* ============ HERO FULL-SIZE ============ */
+  main{position:relative;z-index:1}
+  .full-hero{
+    position:relative;
+    min-height:100svh;
+    display:grid;place-items:center;
+    overflow:clip;
+    padding:clamp(20px,4vh,48px) var(--gutter) clamp(28px,5vh,56px);
+    isolation:isolate;
+    perspective:1200px;
+  }
+  /* kotak gambar yang mengembang dari 0vw/0vh seperti interaksi Webflow asli */
+  .hero-square-wrap{
+    position:absolute;inset:0;
+    display:grid;place-items:center;
+    z-index:0;
+  }
+  /* Gambar 16:9 mengikuti rasio asli aset (1672x941) agar Sculpture
+     tidak terpotong; max-height hanya memangkas ruang studio kosong */
+  .hero-square{
+    width:min(74vw,1060px);
+    aspect-ratio:16 / 9;
+    max-height:60vh;
+    width:var(--hs-w,min(74vw,1060px));
+    overflow:hidden;
+    background:#ddd;
+    transform:translate(var(--ix,0px),var(--iy,0px)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+    transition:transform .25s ease-out;
+    will-change:transform;
+  }
+  .hero-square img{
+    width:100%;height:100%;object-fit:cover;display:block;
+    object-position:50% 42%;
+    scale:1.12;
+    transition:scale .8s var(--ease);
+  }
+  .full-hero:hover .hero-square img{scale:1.18}
+  .home-hero{position:relative;z-index:1;justify-self:start;text-align:left;width:100%;max-width:min(92%,880px);margin-left:clamp(0px,5vw,90px);pointer-events:none}
+  .home-hero-heading{
+    margin:0;
+    font-weight:700;
+    text-transform:uppercase;
+    font-size:clamp(2.75rem,7.5vw,6.75rem);
+    line-height:.9;
+    letter-spacing:-.01em;
+    color:#ffffff;
+    text-shadow:0 1px 14px rgba(10,8,20,.32);
+    text-wrap:balance;
+    transform:translate(var(--hx,0px),var(--hy,0px));
+    transition:transform .25s ease-out;
+    will-change:transform;
+  }
+  .home-hero-heading .row{display:block;overflow:hidden}
+  .home-hero-heading .row>span{display:inline-block;translate:0 110%;animation:lineUp 1s var(--ease) forwards;animation-delay:var(--d,0ms)}
+  @keyframes lineUp{to{translate:0 0}}
+  .hero-side{
+    position:absolute;z-index:2;right:var(--gutter);
+    bottom:clamp(18px,5vh,48px);
+    text-align:right;font-size:12.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);
+  }
+  .hero-count{
+    position:absolute;z-index:2;left:var(--gutter);
+    bottom:clamp(18px,5vh,48px);
+    font-size:12.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  /* ============ TOMBOL VIEW DETAILS (magnetik) ============ */
+  .hero-cta{
+    position:relative;z-index:2;
+    margin-top:clamp(20px,3.5vh,34px);
+    display:flex;justify-content:flex-start;
+  }
+  .btn-dark{
+    display:inline-flex;align-items:center;gap:12px;
+    background:var(--pill);color:var(--pill-fg);
+    border:1px solid var(--pill);
+    border-radius:var(--radius-pill);
+    padding:7px 7px 7px 9px;
+    cursor:pointer;
+    transform:translate(var(--mx,0px),var(--my,0px));
+    transition:transform .35s var(--ease),background .3s,box-shadow .35s var(--ease);
+  }
+  .btn-dark:hover{background:#000;box-shadow:0 18px 40px -18px rgba(17,17,17,.5)}
+  .btn-dark:active{transform:translate(var(--mx,0px),var(--my,0px)) scale(.97)}
+  .btn-dark .arr{
+    width:44px;height:44px;border-radius:50%;
+    display:grid;place-items:center;flex:none;
+    border:1.5px solid rgba(255,255,255,.85);
+    transition:transform .4s var(--ease),background .3s,color .3s;
+  }
+  .btn-dark:hover .arr{transform:rotate(45deg);background:#fff;color:#111}
+  .btn-dark .arr svg{width:16px;height:16px}
+  .btn-dark .lbl{font-size:15px;font-weight:500;padding-right:20px}
+
+  /* ============ MODAL DETAIL ============ */
+  .modal{
+    position:fixed;inset:0;z-index:80;
+    display:grid;place-items:center;
+    padding:clamp(16px,4vw,48px);
+    background:rgba(17,17,17,.45);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    opacity:0;visibility:hidden;
+    transition:opacity .4s var(--ease),visibility .4s;
+  }
+  .modal.open{opacity:1;visibility:visible}
+  .modal[hidden]{display:none}
+  .modal-card{
+    position:relative;
+    width:min(880px,100%);
+    max-height:calc(100svh - 60px);
+    overflow:auto;
+    background:var(--bg);
+    border:1px solid var(--line);
+    border-radius:20px;
+    box-shadow:0 40px 100px -30px rgba(0,0,0,.5);
+    display:grid;grid-template-columns:1.05fr 1fr;
+    transform:translateY(26px) scale(.97);
+    transition:transform .5s var(--ease);
+  }
+  .modal.open .modal-card{transform:none}
+  .modal-media{background:#ddd;min-height:280px}
+  .modal-media img{width:100%;height:100%;object-fit:cover;display:block}
+  .modal-body{padding:clamp(24px,4vw,44px)}
+  .modal-kicker{margin:0 0 10px;font-size:11.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .modal-title{margin:0 0 12px;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:700;letter-spacing:-.02em;text-transform:uppercase;line-height:1}
+  .modal-text{margin:0 0 22px;font-size:14.5px;line-height:1.7;color:var(--muted)}
+  .modal-meta{margin:0 0 26px;padding:0;list-style:none;border-top:1px solid var(--line)}
+  .modal-meta li{
+    display:flex;justify-content:space-between;gap:16px;
+    padding:12px 2px;border-bottom:1px solid var(--line);
+    font-size:13.5px;
+  }
+  .modal-meta li span:first-child{color:var(--muted-2);font-weight:500;letter-spacing:.08em;text-transform:uppercase;font-size:11.5px}
+  .modal-meta li span:last-child{font-weight:500}
+  .modal-close{
+    position:absolute;top:14px;right:14px;z-index:2;
+    width:44px;height:44px;border-radius:50%;
+    display:grid;place-items:center;
+    background:var(--ink);color:#fff;border:0;cursor:pointer;
+    transition:transform .35s var(--ease);
+  }
+  .modal-close:hover{transform:rotate(90deg)}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:900px){
+    .hero-square{--hs-w:min(88vw,640px)}
+    .hero-side{display:none}
+    .modal-card{grid-template-columns:1fr}
+    .modal-media{max-height:240px}
+  }
+  @media (max-width:560px){
+    .home-hero-heading{font-size:clamp(2.6rem,16.5vw,4.2rem)}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
+    .home-hero-heading .row>span{translate:none}
+    .hero-square img{scale:1}
+    .full-hero:hover .hero-square img{scale:1}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#viewDetails">Lewati ke tombol detail</a>
+
+<main>
+  <!-- HERO: headline overlap gambar tengah -->
+  <section class="full-hero" id="hero" aria-label="Hero — Ideas in Motion">
+    <div class="hero-square-wrap" aria-hidden="true">
+      <div class="hero-square" id="heroSquare">
+        <img id="heroImg" src="../assets/Futuristic%20VR.png" alt="" fetchpriority="high" />
+      </div>
+    </div>
+
+    <div class="home-hero">
+      <h1 class="home-hero-heading" id="headline">
+        <span class="row"><span style="--d:60ms">Ideas</span></span>
+        <span class="row"><span style="--d:180ms">in Motion</span></span>
+      </h1>
+      <div class="hero-cta" style="pointer-events:auto">
+        <button class="btn-dark" id="viewDetails" type="button" aria-haspopup="dialog">
+          <span class="arr" aria-hidden="true">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M3 13 13 3M4 3h9v9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="lbl">View Details</span>
+        </button>
+      </div>
+    </div>
+
+    <p class="hero-count">01 / 01</p>
+    <p class="hero-side">Move your cursor</p>
+  </section>
+</main>
+
+<!-- MODAL DETAIL -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+  <div class="modal-card">
+    <button class="modal-close" id="modalClose" type="button" aria-label="Tutup detail">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 2l10 10M12 2 2 12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+    </button>
+    <div class="modal-media">
+      <img src="../assets/Futuristic%20VR.png" alt="Ideas in Motion" loading="lazy" />
+    </div>
+    <div class="modal-body">
+      <p class="modal-kicker">Featured work</p>
+      <h2 class="modal-title" id="modalTitle">Ideas in Motion</h2>
+      <p class="modal-text">A visual study of momentum — sketches, fragments, and half-finished thoughts captured mid-flight and composed into a single frame.</p>
+      <ul class="modal-meta">
+        <li><span>Year</span><span>2026</span></li>
+        <li><span>Medium</span><span>Digital collage</span></li>
+        <li><span>Status</span><span>On display</span></li>
+      </ul>
+      <button class="btn-dark" id="modalCta" type="button">
+        <span class="arr" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M3 13 13 3M4 3h9v9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="lbl">Start a Project</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var reduceQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var reduced = function(){ return reduceQuery.matches; };
+  var finePointer = window.matchMedia("(pointer: fine)").matches;
+
+  var hero = document.getElementById("hero");
+  var sq = document.getElementById("heroSquare");
+  var img = document.getElementById("heroImg");
+  var headline = document.getElementById("headline");
+
+  /* ---- 1. Intro: gambar mengembang dari 0 ---- */
+  if(reduced()){
+    sq.style.width = "min(74vw,1060px)";
+    img.style.scale = "1";
+  } else {
+    sq.animate(
+      [{ width:"0vw", height:"0vh" }, { width:"min(74vw,1060px)", height:"min(60vh,620px)" }],
+      { duration:1100, easing:"cubic-bezier(.16,1,.3,1)", fill:"backwards", delay:150 }
+    );
+  }
+
+  /* ---- 2. Pointer parallax + tilt 3D (lerp via rAF) ---- */
+  var tx = 0, ty = 0, cx = 0, cy = 0, rafOn = false;
+  function loop(){
+    cx += (tx - cx) * 0.08;
+    cy += (ty - cy) * 0.08;
+    if(Math.abs(tx - cx) < 0.01 && Math.abs(ty - cy) < 0.01){ rafOn = false; return; }
+    hero.style.setProperty("--hx", (cx * -8).toFixed(2) + "px");
+    hero.style.setProperty("--hy", (cy * -6).toFixed(2) + "px");
+    sq.style.setProperty("--ix", (cx * 12).toFixed(2) + "px");
+    sq.style.setProperty("--iy", (cy * 9).toFixed(2) + "px");
+    sq.style.setProperty("--ry", (cx * 2.5).toFixed(2) + "deg");
+    sq.style.setProperty("--rx", (cy * -2.5).toFixed(2) + "deg");
+    requestAnimationFrame(loop);
+  }
+  function kick(){ if(!rafOn){ rafOn = true; requestAnimationFrame(loop); } }
+  if(finePointer && !reduced()){
+    hero.addEventListener("pointermove", function(e){
+      var r = hero.getBoundingClientRect();
+      tx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+      ty = ((e.clientY - r.top) / r.height - 0.5) * 2;
+      kick();
+    });
+    hero.addEventListener("pointerleave", function(){ tx = 0; ty = 0; kick(); });
+  }
+
+  /* ---- 3. Tombol magnetik ---- */
+  var magnet = document.getElementById("viewDetails");
+  if(finePointer && !reduced()){
+    magnet.addEventListener("pointermove", function(e){
+      var r = magnet.getBoundingClientRect();
+      var mx = (e.clientX - (r.left + r.width / 2)) * 0.25;
+      var my = (e.clientY - (r.top + r.height / 2)) * 0.35;
+      magnet.style.setProperty("--mx", mx.toFixed(1) + "px");
+      magnet.style.setProperty("--my", my.toFixed(1) + "px");
+    });
+    magnet.addEventListener("pointerleave", function(){
+      magnet.style.setProperty("--mx", "0px");
+      magnet.style.setProperty("--my", "0px");
+    });
+  }
+
+  /* ---- 4. Modal detail ---- */
+  var modal = document.getElementById("modal");
+  var modalClose = document.getElementById("modalClose");
+  var lastFocused = null;
+  function openModal(){
+    lastFocused = document.activeElement;
+    modal.hidden = false;
+    requestAnimationFrame(function(){ modal.classList.add("open"); });
+    document.body.style.overflow = "hidden";
+    modalClose.focus();
+  }
+  function closeModal(){
+    modal.classList.remove("open");
+    document.body.style.overflow = "";
+    setTimeout(function(){ modal.hidden = true; }, reduced() ? 0 : 400);
+    if(lastFocused) lastFocused.focus();
+  }
+  magnet.addEventListener("click", openModal);
+  modalClose.addEventListener("click", closeModal);
+  modal.addEventListener("click", function(e){ if(e.target === modal) closeModal(); });
+  document.addEventListener("keydown", function(e){
+    if(modal.hidden) return;
+    if(e.key === "Escape") closeModal();
+    if(e.key === "Tab"){
+      var f = modal.querySelectorAll("button");
+      var first = f[0], last = f[f.length - 1];
+      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  });
+})();
+</script>
+</body>
+</html>
