@@ -23,7 +23,7 @@
     { key: "cta", name: "CTA", icon: "zap", count: 1 },
     { key: "faq", name: "FAQ", icon: "help-circle", count: 1 },
     { key: "team", name: "Team", icon: "users", count: 1 },
-    { key: "blog", name: "Blog", icon: "book-open", count: 1 },
+    { key: "blog", name: "Blog", icon: "book-open", count: 2 },
     { key: "testimonial", name: "Testimonial", icon: "message-square", count: 1 },
     // Planned / Roadmap
     { key: "pricing", name: "Pricing", comingSoon: true },
@@ -270,6 +270,17 @@
       file: "Blog Section/Blog Section.html",
       link: "Blog Section/Blog Section.html",
       tags: ["Editorial", "Magazine", "Typography", "Grid"]
+    },
+    {
+      id: "whenevr-blog",
+      key: "blog",
+      name: "Whenevr — Practical Blog",
+      description: "Centered blog header with featured road-trip story, three-card grid, pill tags and reading-time meta.",
+      category: "blog",
+      preview: "assets/blog%202.png",
+      file: "Blog Section/Blog Section - Whenevr Travel.html",
+      link: "Blog Section/Blog Section - Whenevr Travel.html",
+      tags: ["Blog", "Featured", "Grid", "Minimal"]
     },
 
     // ---------------- TESTIMONIAL ----------------
