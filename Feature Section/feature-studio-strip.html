@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Features — Studio Strip Section</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Inter',-apple-system,sans-serif;
+    background:#fafaf7;
+    background-image:radial-gradient(rgba(0,0,0,.06) 1px, transparent 1px);
+    background-size:22px 22px;
+    color:#0a0a0a;
+    -webkit-font-smoothing:antialiased;
+  }
+  .studio-features{
+    max-width:1280px;
+    margin:0 auto;
+    padding:72px 40px 0 40px;
+    overflow:hidden;
+  }
+  .eyebrow{
+    display:flex;align-items:center;gap:8px;
+    font-size:12.5px;font-weight:600;letter-spacing:-.01em;
+    margin-bottom:20px;
+  }
+  .eyebrow::before{
+    content:"";width:9px;height:9px;background:#e63a2e;display:inline-block;
+  }
+  .top-row{
+    display:flex;justify-content:space-between;align-items:flex-end;gap:40px;
+    margin-bottom:44px;
+  }
+  .headline{
+    font-size:clamp(28px,3.6vw,44px);
+    line-height:1.12;letter-spacing:-.04em;font-weight:600;
+    max-width:660px;
+  }
+  .headline .muted{color:#a3a3a3;font-weight:500}
+  .headline .w{display:inline-block;opacity:0;transform:translateY(14px);animation:rise .7s cubic-bezier(.16,1,.3,1) forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+  .side-link{flex-shrink:0;padding-bottom:8px}
+  .side-link a{
+    font-size:13px;font-weight:600;letter-spacing:.04em;
+    color:#0a0a0a;text-decoration:none;
+    border-bottom:1px dashed #c9c9c9;
+    padding-bottom:6px;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:.25s;
+  }
+  .side-link a:hover{gap:12px;border-color:#0a0a0a}
+
+  /* strip full-bleed seperti referensi — tanpa apapun di bawahnya */
+  .strip{
+    display:flex;gap:14px;
+    margin-left:-80px;margin-right:-80px;
+    padding:4px 80px 0 80px;
+  }
+  .card{
+    position:relative;
+    flex:1 1 0;min-width:0;height:440px;
+    border-radius:14px 14px 0 0;overflow:hidden;background:#e8e8e8;
+    cursor:pointer;isolation:isolate;
+    transition:flex .65s cubic-bezier(.16,1,.3,1), box-shadow .4s;
+    outline:none;
+  }
+  .card:hover,.card.active,.card:focus-visible{
+    flex:2.4 1 0;
+    box-shadow:0 24px 60px -20px rgba(0,0,0,.35);
+  }
+  .card:focus-visible{outline:2px solid #0a0a0a;outline-offset:3px}
+  .card img{
+    width:100%;height:100%;object-fit:cover;display:block;
+    transform:scale(1.04);
+    transition:transform .8s cubic-bezier(.16,1,.3,1);
+    pointer-events:none;
+  }
+  .card:hover img,.card.active img{transform:scale(1.1)}
+  .card::after{
+    content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+    mix-blend-mode:multiply;opacity:.35;transition:opacity .5s;
+  }
+  .card:nth-child(1)::after{background:rgba(255,60,90,.22)}
+  .card:nth-child(2)::after{background:rgba(200,180,150,.25)}
+  .card:nth-child(3)::after{background:rgba(140,140,220,.22)}
+  .card:nth-child(4)::after{background:rgba(255,180,80,.22)}
+  .card:nth-child(5)::after{background:rgba(80,170,140,.22)}
+  .card:hover::after,.card.active::after{opacity:0}
+  .shade{
+    position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:linear-gradient(to top, rgba(0,0,0,.52) 0%, rgba(0,0,0,.1) 42%, transparent 65%);
+    opacity:0;transition:opacity .45s;
+  }
+  .card:hover .shade,.card.active .shade{opacity:1}
+  .meta{
+    position:absolute;left:16px;right:16px;bottom:16px;z-index:2;
+    color:#fff;
+    opacity:0;transform:translateY(12px);transition:.4s cubic-bezier(.16,1,.3,1);
+  }
+  .card:hover .meta,.card.active .meta{opacity:1;transform:none}
+  .meta h3{font-size:15px;font-weight:700;letter-spacing:-.02em;line-height:1.2}
+  .meta p{font-size:12px;opacity:.85;margin-top:4px}
+
+  @media(max-width:900px){
+    .studio-features{padding:48px 20px 0 20px}
+    .top-row{flex-direction:column;align-items:flex-start;gap:20px}
+    .strip{
+      margin-left:-20px;margin-right:-20px;padding:0 20px;
+      overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;
+    }
+    .strip::-webkit-scrollbar{display:none}
+    .card{flex:0 0 72vw;height:380px;scroll-snap-align:center;border-radius:14px}
+    .card:hover,.card.active{flex:0 0 78vw}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none!important;animation:none!important}
+    .headline .w{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+<section class="studio-features" id="studioFeatures">
+  <div class="eyebrow">Campus life</div>
+  <div class="top-row">
+    <h2 class="headline" id="headline">
+      We make room to pause, focus, and play to help curious <span class="muted">minds fall in love with learning again.</span>
+    </h2>
+    <div class="side-link">
+      <a href="#">→ &nbsp; SEE STUDENT STORIES</a>
+    </div>
+  </div>
+
+  <div class="strip" id="strip" aria-label="Campus moments gallery">
+    <div class="card active" tabindex="0">
+      <img src="../assets/pic 1.png" alt="Mahasiswa duduk santai memegang kopi" draggable="false">
+      <div class="shade"></div>
+      <div class="meta"><h3>Pause & Recharge</h3><p>Coffee in hand, mind at ease</p></div>
+    </div>
+    <div class="card" tabindex="0">
+      <img src="../assets/pic 2.png" alt="Mahasiswa dikelilingi kertas dan buku yang melayang" draggable="false" loading="lazy">
+      <div class="shade"></div>
+      <div class="meta"><h3>Dream Out Loud</h3><p>Ideas floating everywhere</p></div>
+    </div>
+    <div class="card" tabindex="0">
+      <img src="../assets/pic 3.png" alt="Mahasiswa membaca buku oranye dengan jaket warna-warni" draggable="false" loading="lazy">
+      <div class="shade"></div>
+      <div class="meta"><h3>Read Deeply</h3><p>One book, full focus</p></div>
+    </div>
+    <div class="card" tabindex="0">
+      <img src="../assets/pic 4.png" alt="Mahasiswa dengan headphone dan laptop di antara confetti" draggable="false" loading="lazy">
+      <div class="shade"></div>
+      <div class="meta"><h3>Learn Joyfully</h3><p>Headphones on, confetti up</p></div>
+    </div>
+    <div class="card" tabindex="0">
+      <img src="../assets/pic 5.png" alt="Mahasiswa melayang sambil mengerjakan laptop" draggable="false" loading="lazy">
+      <div class="shade"></div>
+      <div class="meta"><h3>Find Your Flow</h3><p>Floating into deep work</p></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  const strip = document.getElementById('strip');
+  const cards = Array.from(strip.querySelectorAll('.card'));
+  let idx = 0, timer = null;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const h = document.getElementById('headline');
+  (function splitWords(){
+    const walker = document.createTreeWalker(h, NodeFilter.SHOW_TEXT);
+    const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(n=>{
+      const frag = document.createDocumentFragment();
+      n.textContent.split(/(\s+)/).forEach(part=>{
+        if(!part) return;
+        if(/^\s+$/.test(part)){ frag.appendChild(document.createTextNode(part)); return; }
+        const s = document.createElement('span'); s.className='w';
+        s.style.animationDelay = (Math.random()*0.4)+'s';
+        s.textContent = part; frag.appendChild(s);
+      });
+      n.replaceWith(frag);
+    });
+  })();
+
+  function setActive(i, scroll=true){
+    idx = (i + cards.length) % cards.length;
+    cards.forEach((c,k)=>c.classList.toggle('active', k===idx));
+    if(scroll && window.innerWidth<=900){
+      cards[idx].scrollIntoView({behavior: reduced?'auto':'smooth', inline:'center', block:'nearest'});
+    }
+  }
+
+  cards.forEach((c,k)=>{
+    c.addEventListener('mouseenter', ()=>{ stop(); setActive(k,false); });
+    c.addEventListener('click', ()=>{ stop(); setActive(k); start(); });
+    c.addEventListener('keydown', e=>{
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); setActive(k); }
+      if(e.key==='ArrowRight'){ stop(); setActive(idx+1); start(); }
+      if(e.key==='ArrowLeft'){ stop(); setActive(idx-1); start(); }
+    });
+    c.addEventListener('mousemove', e=>{
+      if(reduced) return;
+      const r = c.getBoundingClientRect();
+      const x = (e.clientX - r.left)/r.width - .5;
+      const y = (e.clientY - r.top)/r.height - .5;
+      c.querySelector('img').style.translate = `${x*14}px ${y*14}px`;
+    });
+    c.addEventListener('mouseleave', ()=>{ c.querySelector('img').style.translate = '0 0'; });
+  });
+
+  function start(){
+    if(reduced) return;
+    stop();
+    timer = setInterval(()=>setActive(idx+1,false), 3200);
+  }
+  function stop(){ if(timer) clearInterval(timer); timer=null; }
+  strip.addEventListener('mouseleave', start);
+  strip.addEventListener('mouseenter', stop);
+
+  setActive(0,false); start();
+})();
+</script>
+</body>
+</html>

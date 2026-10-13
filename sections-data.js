@@ -18,7 +18,7 @@
   const categories = [
     { key: "all", name: "All Sections", icon: "grid" },
     { key: "hero", name: "Hero", icon: "sparkles", count: 11 },
-    { key: "features", name: "Features", icon: "layers", count: 2 },
+    { key: "features", name: "Features", icon: "layers", count: 3 },
     { key: "about", name: "About", icon: "compass", count: 2 },
     { key: "cta", name: "CTA", icon: "zap", count: 1 },
     { key: "faq", name: "FAQ", icon: "help-circle", count: 1 },
@@ -207,6 +207,17 @@
       file: "Feature Section/feature section 2.html",
       link: "Feature Section/feature section 2.html",
       tags: ["Grid", "Minimal", "Glow", "Bento"]
+    },
+    {
+      id: "campus-life-strip",
+      key: "features",
+      name: "Campus Life — Studio Strip",
+      description: "Split-headline studio strip with five local campus-life portraits, hover-expand cards, parallax, and autoplay spotlight.",
+      category: "features",
+      preview: "assets/pic%201.png",
+      file: "Feature Section/feature-studio-strip.html",
+      link: "Feature Section/feature-studio-strip.html",
+      tags: ["Studio", "Gallery", "Interactive", "Photography"]
     },
 
     // ---------------- CTA ----------------
