@@ -19,7 +19,7 @@
     { key: "all", name: "All Sections", icon: "grid" },
     { key: "hero", name: "Hero", icon: "sparkles", count: 6 },
     { key: "features", name: "Features", icon: "layers", count: 2 },
-    { key: "about", name: "About", icon: "compass", count: 1 },
+    { key: "about", name: "About", icon: "compass", count: 2 },
     { key: "cta", name: "CTA", icon: "zap", count: 1 },
     { key: "faq", name: "FAQ", icon: "help-circle", count: 1 },
     { key: "team", name: "Team", icon: "users", count: 1 },
@@ -117,6 +117,17 @@
       file: "About Section/About Section.html",
       link: "About Section/About Section.html",
       tags: ["Luxury", "Story", "Architecture", "Metrics"]
+    },
+    {
+      id: "atelier-narrative-cards",
+      key: "about",
+      name: "Atelier — Narrative Cards About",
+      description: "Dark studio about section with split headline and four photographic portrait cards, each copy matched to its imagery.",
+      category: "about",
+      preview: "assets/about%201.png",
+      file: "sections/about/studio-services-dark/index.html",
+      link: "sections/about/studio-services-dark/index.html",
+      tags: ["Dark", "Studio", "Photography", "Cards"]
     },
 
     // ---------------- FEATURES ----------------
